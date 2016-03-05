@@ -1,4 +1,4 @@
 [submodule "_site"]
 	path = _site
-	url = git@github.com:yoshitsugu/yoshitsugu.github.io.git
+	url = https://github.com/yoshitsugu/yoshitsugu.github.io.git
         branch = master
