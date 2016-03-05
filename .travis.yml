@@ -1,0 +1,56 @@
+language: haskell
+
+sudo: false
+cache:
+  directories:
+    - $HOME/.stack
+
+branches:
+  only:
+    - source
+
+env:
+  global:
+    - GH_NAME="Travis on behalf of yoshitsugu"
+    - secure: "Qg79NUdH1PMfJr0kT5XN6uLGjDH5v+wmRrQf1zGpxigbv+OhyCpt7nChikdi8R6gmV12dV+DC028XA/kftE3XOUHcZN6CAk9oXKQ8loiuFYn6akkm1SlQMv6v4mwE4bnhwzqjL/3owMpmC15F7e+oOrtN71gHDBY2dJ/ppQhOUUkPYqcxuieceg4aat/03HZiBhaldWab/nPCvgG2A6cV7IfhjLrOhKDOdJLhDynGVwUYXL6dZzU8sMf6toLJt5KMsp+k1slTpnpSoUvnXOzOKPMh5K176ZShQxjzoDq9/P1azJoe4FXwsrzhg6zMoJd5OyiQXqgtRiNYfqfssEIHMKQMU1o96QsSZ1OiCpshsTUmGWM8KDQofDhYMgfFl0Gk2oXS8YbYnrsIzgPuWupbWUNTmoT7TJ/EEOIUfY7QWWmTUKRf5lihbBYS9KGJucKNkWkVbbKULWEhZa76637HGwCu7fEEi4P32v037m+BeuMq1dBHyK5ESvjAw9GNQDcshXsRreOo397O+sh0bp7D/kE9BIY9y+cg/TJxhMwQpnUeOdcWv2hidAISViZ9i3iy61+wFVEbowqxiT7qowWnbYAyZz6D/o42BWpXd0LgjQdvfoWha6QiHP/tSPeo2XhWYNaQ6LFLhFZP7Oq0upahrvLhWHcrWg8oZDGFFIhpaI="
+    - secure: "xfDGRTiLqF1pMCz2uDsfxrlDIXHkyl+1GCvEZi3iaGdFAzeHg8kXCxMkda6k8J0oqybL8aP3ZdoJeNolb8Z+m34XdBMcEeIBoR9LHIYxDEafqT9lmhObcTZXlxb4yMWywLRM9ITZLFkxCfyYV5buKBsumxinPLhJpND9Szjr62Vgyzv3e0fFaWteIdCBu1Ve/1sXuwI6s8f/NFaIOdxz42KBG4NcDrSpufQrI/AUAZS47Pj3TW6YWboMLGRzVYkLqLTLZVzOws2m997xpMN6N7wqMml1ZYVOnkRZXvC5/Nm6idigL3FXheMSb09euhWvFtyaAlVeMtHcD8hGZoneqKuF4lu21DlgueIDLDm4uzdOhE/5qYvv62T8oUH7WE4CW40ehd0pttyHqz16kGttgKLL5MKpHGcqTcCo9tENKwzt4gwq/+JR1+n3fz5kDkeMc6zdUaOpZFxBuhds6XSYvK4Tbm6z0KoKDE3Ij2setsIsIV1R3yUEFMrp6+zQMrR4UlpUBKVhzv2i776MAbxmyYCV3OWgzIODov46lIkvpZ4U/CzMYMFT9OnOuvv7rr60uaOAp8joh+EIRlZpA2ZfNOe0e0Uss5oF7Q9B5Z9Dwj88JP+WyhV99xRQJJKt5q7LOfqaLjgDSQUNrttIcPK7CsBdtHAQjtSR+zRvLsEaMj0="
+
+addons:
+  apt:
+    sources:
+      - hvr-ghc
+    packages:
+      - ghc-7.10.2
+
+before_install:
+  - mkdir -p ~/.local/bin
+  - export PATH=$HOME/.local/bin:$PATH
+  - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+  - git submodule foreach git checkout master
+  - gem install sass
+
+
+after_success:
+  - cd _site
+  - export REMOTE=$(git config remote.origin.url | sed 's/.*:\/\///')
+  - git status
+  - git remote add github https://${GH_TOKEN}@${REMOTE}
+  - git add *
+  - git status
+  - git commit -m "Built by Travis (build $TRAVIS_BUILD_NUMBER)"
+  - git push --quiet github master:master
+
+install:
+  - stack --no-terminal setup
+  - stack --no-terminal build
+
+before_script:
+  - git config --global user.name "$GH_NAME"
+  - git config --global user.email "$GH_EMAIL"
+
+script:
+  - stack build --no-terminal
+  - stack exec -- blog rebuild
+
+notifications:
+  email: false

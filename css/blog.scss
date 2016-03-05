@@ -1,0 +1,142 @@
+html {
+  min-height: 100%;
+  position: relative;
+}
+
+$mainColor: #237dac;
+$siteWidth: 920px;
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, "Arial", "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+  line-height: 1.8em;
+  margin-bottom: 6em;
+
+  .header-menu {
+    margin-left: 1em;
+  }
+  
+  a {
+    color: $mainColor;
+    text-decoration: none;
+    font-weight: bold;
+
+    &:hover, &:focus {
+               color: #2D3E4A;
+               -webkit-transition: color 0.5s ease;
+               -moz-transition: color 0.5s ease;
+               -o-transition: color 0.5s ease;
+    }
+  }
+  #container {
+    max-width: $siteWidth;
+    margin: 0 auto;
+    #header {
+      font-size: 1.2em;
+      #logo {
+        font-weight: bold;
+        text-transform: none;
+        color: $mainColor;
+        font-size: 1.3em;
+        padding: .5em 0;
+        padding-right: .3em;
+        .pure-menu-link {
+          padding: 0;
+          color: #555;
+        }
+        &:hover, a:hover{
+          background-color: transparent;
+        }
+        a:hover {
+          color: #999;
+        }
+
+      }
+      border-bottom: 2px #777 solid;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      margin-bottom: 40px;
+      a:hover {
+        -webkit-transition: background-color 0.5s ease;
+        -moz-transition: background-color 0.5s ease;
+        -o-transition: background-color 0.5s ease;
+      }
+    }
+    #content {
+      margin: 0 auto;
+      max-width: $siteWidth;
+      color: #222;
+      h1 {
+        color: $mainColor;
+        margin-top: 20px;
+        margin-bottom: 30px;
+      }
+      h2 {
+        margin-top: 40px;
+        margin-bottom: 20px;
+        color: darken($mainColor, 10%);
+      }
+      h3 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        color: #555;
+      }
+      .info {
+        text-align: right;
+        .date {
+          color: #999;
+        }
+        .tags {
+          color: #999;
+          a {
+            font-weight: normal;
+          }
+        }
+      }
+      .recent-post-title {
+        font-size: 1.3em;
+        margin-right: 1em;
+      }
+      li {
+        margin-bottom: .5em;
+      }
+      .recent-post {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        li {
+          margin-bottom: 40px;
+        }
+      }
+      code {
+        padding: .2em;
+        background-color: #eee;
+        border-radius: .2em;
+      }
+    }
+
+    pre.sourceCode {
+      padding-top: .5em;
+      padding-bottom: .5em;
+      border-radius: 5px;
+      background-color: #EEE;
+    }
+  }
+  #footer {
+    bottom: 0;
+    height: 5em;
+    position: absolute;
+    margin-top: 1em;
+    width: 100%;
+    text-align: center;
+    color: #666;
+    a {
+      color: #666;
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+
+}

@@ -1,0 +1,12 @@
+---
+title: Home
+---
+<ul class="recent-post">
+$for(posts)$
+  <li>
+    <a href="$url$" class="recent-post-title">$title$</a> - <span class="date">$date$</span>
+    $teaser$<br>
+    <a href=$url$">More</a>
+  </li>
+$endfor$
+</ul>
