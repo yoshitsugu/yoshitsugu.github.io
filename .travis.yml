@@ -35,7 +35,7 @@ before_install:
 after_success:
   - cd _site
   - export REMOTE=$(git config remote.origin.url | sed 's/.*:\/\///')
-  - git status
+  - git branch
   - git remote add github https://${GH_TOKEN}@${REMOTE}
   - git add *
   - git status
@@ -52,7 +52,7 @@ before_script:
 
 script:
   - stack build --no-terminal
-  - stack exec -- blog rebuild
+  - stack exec -- blog build
 
 notifications:
   email: false
