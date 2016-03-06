@@ -11,7 +11,7 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    match "*.html" $ do
+    match "google9af023e4743ca32a.html" $ do
         route   idRoute
         compile copyFileCompiler
 
@@ -24,6 +24,10 @@ main = hakyll $ do
     match "css/*.css" $ do
         route   idRoute
         compile compressCssCompiler
+
+    match "js/*.js" $ do
+        route   idRoute
+        compile copyFileCompiler
 
     create ["css/highlight.css"] $ do
       route   idRoute
