@@ -11,6 +11,10 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
+    match "*.html" $ do
+        route   idRoute
+        compile copyFileCompiler
+
     match "css/*.scss" $ do
         route $ setExtension "css"
         compile $ getResourceString
