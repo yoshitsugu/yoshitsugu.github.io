@@ -1,6 +1,7 @@
 ---
 title: About Me
 ---
+Kota Yoshitsugu (吉次 孝太)  
 Web Engineer in Tokyo, Japan.  
   
 Ruby / Ruby on Rails  

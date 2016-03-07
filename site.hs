@@ -5,13 +5,17 @@ import           Hakyll
 import qualified Text.Highlighting.Kate as K
 
 --------------------------------------------------------------------------------
+host :: String
+host = "https://yoshitsugu.net"
+
+
 main :: IO ()
 main = hakyll $ do
     match "images/*" $ do
         route   idRoute
         compile copyFileCompiler
 
-    match "google9af023e4743ca32a.html" $ do
+    match (fromList ["google9af023e4743ca32a.html", "robots.txt"]) $ do
         route   idRoute
         compile copyFileCompiler
 
@@ -92,6 +96,20 @@ main = hakyll $ do
                 >>= loadAndApplyTemplate "templates/default.html" indexCtx
                 >>= relativizeUrls
 
+    create ["sitemap.xml"] $ do
+         route   idRoute
+         compile $ do
+           posts <- recentFirst =<< loadAll "posts/*"
+           pages <- loadAll $ fromList ["index.html", "about.md"]
+           let allPosts = (return (pages ++ posts))
+           let sitemapCtx = mconcat
+                            [ listField "entries" pageCtx allPosts
+                            , constField "host" host
+                            , defaultContext
+                            ]
+           makeItem ""
+            >>= loadAndApplyTemplate "templates/sitemap.xml" sitemapCtx
+            >>= cleanIndexHtmls
 
     match "templates/*" $ compile templateCompiler
 
@@ -105,3 +123,18 @@ postCtx =
 postCtxWithTags :: Tags -> Context String
 postCtxWithTags tags = tagsField "tags" tags `mappend` postCtx
 
+pageCtx :: Context String
+pageCtx = mconcat
+    [ modificationTimeField "mtime" "%U"
+    , modificationTimeField "lastmod" "%Y-%m-%d"
+    , dateField "updated" "%Y-%m-%dT%H:%M:%SZ"
+    , constField "host" host
+    , dateField "date" "%B %e, %Y"
+    , defaultContext
+    ]
+
+cleanIndexHtmls :: Item String -> Compiler (Item String)
+cleanIndexHtmls = return . fmap (replaceAll pattern replacement)
+    where
+      pattern = "/index.html"
+      replacement = const "/"
