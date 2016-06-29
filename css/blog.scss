@@ -10,6 +10,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: Avenir, "Open Sans", "Helvetica Neue", Helvetica, "Arial", "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+  font-weight: 500;
   line-height: 1.8em;
   margin-bottom: 6em;
 
@@ -107,6 +108,9 @@ body {
         padding: 0;
         li {
           margin-bottom: 40px;
+          .date {
+            color: #999;
+          }
         }
       }
       code {
