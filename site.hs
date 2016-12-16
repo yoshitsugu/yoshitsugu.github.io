@@ -15,6 +15,10 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
+    match "images/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+
     match (fromList ["google9af023e4743ca32a.html", "robots.txt"]) $ do
         route   idRoute
         compile copyFileCompiler
