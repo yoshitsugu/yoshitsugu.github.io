@@ -18,8 +18,10 @@ addons:
     packages:
     - ghc-7.10.2
 before_install:
+- cd ~/.ssh
 - openssl aes-256-cbc -K $encrypted_394ee048f8a1_key -iv $encrypted_394ee048f8a1_iv
   -in github_deploy_key.enc -out github_deploy_key -d
+- cd ~/
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
 - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards
