@@ -31,9 +31,10 @@ before_install:
 - gem install sass
 after_success:
 - cd _site
-- export REMOTE=$(git config remote.origin.url | sed 's/.*:\/\///')
+- export REMOTE=$(git config remote.origin.url)
+- echo $REMOTE
 - git branch
-- git remote add github git://git@${REMOTE}
+- git remote add github ${REMOTE}
 - git add *
 - git status
 - git commit -m "Built by Travis (build $TRAVIS_BUILD_NUMBER)"
