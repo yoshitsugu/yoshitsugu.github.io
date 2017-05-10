@@ -20,6 +20,7 @@ addons:
 before_install:
 - openssl aes-256-cbc -K $encrypted_394ee048f8a1_key -iv $encrypted_394ee048f8a1_iv
   -in .travis/github_deploy_key.enc -out ~/.ssh/github_deploy_key -d
+- cat "Host github.com\n  IdentityFile ~/.ssh/github_deploy_key\n  LogLevel ERROR" >> ~/.ssh/config
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
 - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards
@@ -32,7 +33,7 @@ after_success:
 - cd _site
 - export REMOTE=$(git config remote.origin.url | sed 's/.*:\/\///')
 - git branch
-- git remote add github https://${REMOTE}
+- git remote add github git://git@${REMOTE}
 - git add *
 - git status
 - git commit -m "Built by Travis (build $TRAVIS_BUILD_NUMBER)"
