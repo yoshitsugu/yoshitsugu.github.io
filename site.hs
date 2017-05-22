@@ -44,7 +44,7 @@ main = hakyll $ do
     match (fromList ["about.md"]) $ do
         route   $ setExtension "html"
         compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
+            >>= loadAndApplyTemplate "templates/default.html" defaultCtx
             >>= relativizeUrls
 
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
@@ -56,7 +56,7 @@ main = hakyll $ do
             posts <- recentFirst =<< loadAll patt
             let tagCtx = constField "title" ("Posts tagged " ++ tag)
                       <> listField "posts" (postCtxWithTags tags) (return posts)
-                      <> defaultContext
+                      <> defaultCtx
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/tag.html" tagCtx
@@ -79,7 +79,7 @@ main = hakyll $ do
             let archiveCtx =
                     listField "posts" postCtx (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
-                    defaultContext
+                    defaultCtx
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
@@ -93,7 +93,7 @@ main = hakyll $ do
             let teaserCtx = teaserField "teaser" "content" `mappend` postCtx
                 indexCtx =
                     listField "posts" teaserCtx (return $ take 5 posts) `mappend`
-                    defaultContext
+                    defaultCtx
 
             getResourceBody
                 >>= applyAsTemplate indexCtx
@@ -119,10 +119,16 @@ main = hakyll $ do
 
 
 --------------------------------------------------------------------------------
+defaultCtx :: Context String
+defaultCtx =
+    constField "host" host `mappend`
+    defaultContext
+
 postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y" `mappend`
-    defaultContext
+    descriptionField "description" "content" `mappend`
+    defaultCtx
 
 postCtxWithTags :: Tags -> Context String
 postCtxWithTags tags = tagsField "tags" tags `mappend` postCtx
@@ -134,7 +140,7 @@ pageCtx = mconcat
     , dateField "updated" "%Y-%m-%dT%H:%M:%SZ"
     , constField "host" host
     , dateField "date" "%B %e, %Y"
-    , defaultContext
+    , defaultCtx
     ]
 
 cleanIndexHtmls :: Item String -> Compiler (Item String)
@@ -142,3 +148,18 @@ cleanIndexHtmls = return . fmap (replaceAll pattern replacement)
     where
       pattern = "/index.html"
       replacement = const "/"
+
+descriptionField :: String -> Snapshot -> Context String
+descriptionField = teaserFieldWithSeparatorStripped "<!--more-->"
+
+teaserFieldWithSeparatorStripped :: String 
+                         -> String         
+                         -> Snapshot       
+                         -> Context String 
+teaserFieldWithSeparatorStripped separator key snapshot = field key $ \item -> do
+    body <- itemBody <$> loadSnapshot (itemIdentifier item) snapshot
+    case needlePrefix separator body of
+        Nothing -> fail $
+            "Hakyll.Web.Template.Context: no teaser defined for " ++
+            show (itemIdentifier item)
+        Just t -> return $ stripTags t
