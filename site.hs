@@ -121,6 +121,7 @@ main = hakyll $ do
 --------------------------------------------------------------------------------
 defaultCtx :: Context String
 defaultCtx =
+    urlField "ogpurl" `mappend`
     constField "host" host `mappend`
     defaultContext
 
