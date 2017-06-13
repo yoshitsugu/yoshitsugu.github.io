@@ -16,7 +16,7 @@ addons:
     sources:
     - hvr-ghc
     packages:
-    - ghc-7.10.2
+    - ghc-8.0.2
 before_install:
 - openssl aes-256-cbc -K $encrypted_394ee048f8a1_key -iv $encrypted_394ee048f8a1_iv
   -in .travis/github_deploy_key.enc -out ~/.ssh/github_deploy_key -d
