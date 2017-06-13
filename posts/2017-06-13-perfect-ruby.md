@@ -34,7 +34,7 @@ Thread, Fiberあたりの並行処理の話は今まであまり必要になっ�
 
 ### Part3 メタプログラミング
 恥ずかしながら(なのかどうかはよくわからないが)[メタプログラミングRuby](https://www.oreilly.co.jp/books/9784873117430/)は読んだことがなく、メタプログラミングは普段あまりやらないので、結構知らないこと、もしくは今まであまり理解できていなかったことが書いてあった。ClassやModuleの構造を理解する上では非常に勉強になった。  
-そういえば、以下Animalモジュールのような動的なメソッド生成を行っているmoduleを見たことがある。DogではAnimalをextendして、`define_animal_methods` をよべばメソッドが展開されるという寸法である。
+そういえば、以下Animalモジュールのような動的なメソッド生成を行っているmoduleを見たことがある。DogではAnimalをextendして、`define_animal_methods` を呼べばメソッドが展開されるという寸法である。
 
 ```ruby
 module Animal
@@ -57,8 +57,8 @@ Dog.new.name
 #=> animal_name
 ```
 
-このAnimalの `block.call` しているところにblockを渡す方法でしばらく悩んだ。  
-結果的には以下のように `instance_method` で一旦退避させた上で、 `define_method` で定義するような荒技を使った。
+ここで、展開先のClassにおいて、Animalの `name` をoverrideするようなイメージで、 `block.call` しているところにblockを渡して新しい `name` メソッドにしたい。どうしたらいいだろうか。  
+自分は結果的には以下のように `instance_method` で一旦退避させた上で、 `define_method` で定義するような荒技を使った。
 
 ```ruby
 class Cat
@@ -79,7 +79,7 @@ Cat.new.name
 #    cat_name
 ```
 
-もっと簡単な方法があるような気もする。。  
+もっと簡単な方法があるような気もするが、どうだろうか。  
 また、関係ないが、 `method_missing` を使った[こういうアプローチ](http://qiita.com/pink_bangbi/items/274c8227a92826a269cb)は面白いと思う。自分でも何か考えてみたい。
 
 ### Part4 標準添付ライブラリ
