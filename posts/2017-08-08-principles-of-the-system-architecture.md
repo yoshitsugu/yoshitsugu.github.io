@@ -11,7 +11,7 @@ tags: Book Review
 
 ## 概要と感想
 
-### Chapter1. 小さくまとめてわかりやすくる
+### Chapter1. 小さくまとめてわかりやすくする
 - 変数や関数の名前づけなど、コードレベルの話。
 - Martin Fowler著の[リファクタリング](http://shop.ohmsha.co.jp/shopdetail/000000003881/)に書いてあるような内容が多かった。
 
