@@ -124,12 +124,21 @@ body {
           }
         }
       }
+      .teaser {
+        p {
+          margin: 0;
+        }
+        margin: 1rem 0 1.5rem 1rem;
+      }
+      .before-footer {
+        padding-bottom: 2rem;
+      }
       .recent-post-title {
         font-size: 1.3em;
-        margin-right: 1em;
+        margin-right: .5rem;
       }
       li {
-        margin-bottom: .5em;
+        margin-bottom: .5rem;
       }
       .recent-post {
         list-style: none;
@@ -148,7 +157,6 @@ body {
         border-radius: .2em;
       }
     }
-
     pre.sourceCode {
       padding: .5em 1em;
       border-radius: 5px;

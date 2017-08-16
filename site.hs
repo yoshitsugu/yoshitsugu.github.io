@@ -92,7 +92,7 @@ main = hakyll $ do
             posts <- recentFirst =<< loadAllSnapshots "posts/*" "content"
             let teaserCtx = teaserField "teaser" "content" `mappend` postCtx
                 indexCtx =
-                    listField "posts" teaserCtx (return $ take 5 posts) `mappend`
+                    listField "posts" teaserCtx (return $ take 10 posts) `mappend`
                     defaultCtx
 
             getResourceBody
@@ -153,10 +153,10 @@ cleanIndexHtmls = return . fmap (replaceAll pattern replacement)
 descriptionField :: String -> Snapshot -> Context String
 descriptionField = teaserFieldWithSeparatorStripped "<!--more-->"
 
-teaserFieldWithSeparatorStripped :: String 
-                         -> String         
-                         -> Snapshot       
-                         -> Context String 
+teaserFieldWithSeparatorStripped :: String
+                         -> String
+                         -> Snapshot
+                         -> Context String
 teaserFieldWithSeparatorStripped separator key snapshot = field key $ \item -> do
     body <- itemBody <$> loadSnapshot (itemIdentifier item) snapshot
     case needlePrefix separator body of
