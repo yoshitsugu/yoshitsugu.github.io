@@ -2,9 +2,9 @@ language: generic
 sudo: required
 cache:
   directories:
-    - $HOME/.ghc
-    - $HOME/.cabal
+    - $HOME/.local/bin
     - $HOME/.stack
+    - .stack-work
 branches:
   only:
     - source
@@ -19,7 +19,8 @@ before_install:
   - printf "Host github.com\n  IdentityFile ~/.ssh/github_deploy_key\n  LogLevel ERROR" >> ~/.ssh/config
   - mkdir -p ~/.local/bin
   - export PATH=$HOME/.local/bin:$PATH
-  - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+  -  - if [[ ! -x ~/.local/bin/stack ]]; then travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'; chmod a+x ~/.local/bin/stack; fi
+  - stack --version
   - git submodule init
   - git submodule update
   - git submodule foreach 'git checkout master; git pull'
@@ -39,6 +40,7 @@ after_success:
   - git push --quiet github master:master
 install:
   - stack --no-terminal setup
+  - stack exec -- ghc --version
   - stack --no-terminal build
   - stack exec -- blog build
 notifications:
