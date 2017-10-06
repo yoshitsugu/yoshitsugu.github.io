@@ -32,8 +32,8 @@ tags: Remote
 ### 参考
 以下、どちらも、基本的にはリモートワーク推進派の書籍なので、公平ではないことを断っておく。
   
-* [リモートチームでうまくいく](http://www.amazon.co.jp/gp/product/B01AXEXB94/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=B01AXEXB94&linkCode=as2&tag=ktystghatenab-22)
-* [強いチームはオフィスを捨てる](http://www.amazon.co.jp/gp/product/B00JFLJ13W/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=B00JFLJ13W&linkCode=as2&tag=ktystghatenab-22)
+* [リモートチームでうまくいく](http://www.amazon.co.jp/gp/product/B01AXEXB94/)
+* [強いチームはオフィスを捨てる](http://www.amazon.co.jp/gp/product/B00JFLJ13W/)
   
 ## 今の会社について
 [しくみ製作所株式会社](http://sikmi.com/)というところで働きはじめた。まだ今年で2年の若い会社で、いろいろ試行錯誤しながらすすめているフェーズだ。自分は今のところRuby on RailsでWebアプリを書いたり、Dockerをさわったりしている。初日から早速しっかり仕事できてよかった(皮肉ではない。念の為。)  
