@@ -6,13 +6,17 @@ html {
 
 $mainColor: #237dac;
 $siteWidth: 920px;
+$contentWidth: 780px;
 
 body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-family: Avenir, "Open Sans", "Helvetica Neue", Helvetica, "Arial", "Noto Sans JP", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+  @font-face {
+    font-family: YuGothicM;
+    src: local("Yu Gothic Medium");
+  }
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","游ゴシック Medium",YuGothic,YuGothicM,"Hiragino Kaku Gothic ProN",メイリオ,Meiryo,sans-serif;
   line-height: 1.8em;
   margin-bottom: 6em;
+  font-size: 14px;
   @media only screen and (max-width: 768px) {
     font-size: 90%;
   }
@@ -25,6 +29,7 @@ body {
     color: $mainColor;
     text-decoration: none;
     font-weight: bold;
+    word-break: break-all;
 
     &:hover, &:focus {
                color: #2D3E4A;
@@ -35,29 +40,30 @@ body {
   }
   #container {
     @media only screen and (max-width: 768px) {
-      max-width: 95%;
+      margin: 0 2rem;
     }
       
     max-width: $siteWidth;
     margin: 0 auto;
     #header {
+      max-width: $contentWidth;
+      margin: 0 auto;
       @media only screen and (max-width: 768px) {
         .pure-menu-link {
           font-size: 90%;
-          padding: .2em .2em;
+          padding: .2em .8em;
         }
       }
-      font-size: 1.2em;
+      font-size: 1em;
       #logo {
+        font-size: 1.2em;
         @media only screen and (max-width: 768px) {
-          font-size: 1.2em;
+          font-size: 1.1em;
         }
         font-weight: bold;
         text-transform: none;
         color: $mainColor;
-        font-size: 1.3em;
-        padding: .5em 0;
-        padding-right: .3em;
+        padding: .2rem 1rem .2rem 0;
         .pure-menu-link {
           padding: 0;
           color: #555;
@@ -72,7 +78,6 @@ body {
       border-bottom: 2px #777 solid;
       padding-top: 4px;
       padding-bottom: 4px;
-      margin-bottom: 40px;
       a:hover {
         -webkit-transition: background-color 0.5s ease;
         -moz-transition: background-color 0.5s ease;
@@ -80,27 +85,28 @@ body {
       }
     }
     #content {
-      
       margin: 0 auto;
-      max-width: $siteWidth;
+      max-width: $contentWidth;
       color: #222;
+      line-height: 2;
+      font-size: 1rem;
       h1 {
+        font-size: 1.6rem; 
         color: $mainColor;
-        margin-top: 20px;
-        margin-bottom: 30px;
+        margin: 1.5rem 0;
         @media only screen and (max-width: 768px) {
-          margin-top: .5em;
-          margin-bottom: .5em;
-          line-height: 1.2em;
+          margin: .8em 0;
+          line-height: 1.5em;
         }
       }
       h2 {
+        font-size: 1.1rem;
         margin-top: 40px;
         margin-bottom: 20px;
         color: darken($mainColor, 10%);
         @media only screen and (max-width: 768px) {
-          margin-top: .5em;
-          margin-bottom: .5em;
+          margin-top: .7em;
+          margin-bottom: .7em;
         }
       }
       h3 {
@@ -108,11 +114,12 @@ body {
         margin-bottom: 10px;
         color: #555;
         @media only screen and (max-width: 768px) {
-          margin-top: .2em;
-          margin-bottom: .2em;
+          margin-top: .3em;
+          margin-bottom: .3em;
         }
       }
       .info {
+        font-size: .9rem;
         text-align: right;
         .date {
           color: #999;
@@ -128,14 +135,25 @@ body {
         p {
           margin: 0;
         }
-        margin: 1rem 0 1.5rem 1rem;
+        a,
+        a:hover,
+        a:visited {
+          color: #2D3E4A;
+        }
+        @media only screen and (max-width: 768px) {
+          font-size: .9em;
+          line-height: 1.8rem;
+        }
+        margin: .2rem 0;
       }
       .before-footer {
         padding-bottom: 2rem;
       }
       .recent-post-title {
         font-size: 1.3em;
-        margin-right: .5rem;
+        @media only screen and (max-width: 768px) {
+          font-size: 1.2em;
+        }
       }
       li {
         margin-bottom: .5rem;
@@ -145,24 +163,37 @@ body {
         margin: 0;
         padding: 0;
         li {
-          margin-bottom: 40px;
+          margin-bottom: 1rem;
+          padding: .5rem 0;
           .date {
             color: #999;
+            font-size: .8rem;
+            @media only screen and (max-width: 768px) {
+              text-align: right;
+            }
           }
         }
       }
       code {
-        padding: .2em;
-        background-color: #eee;
+        padding: .2em .5em;
+        background-color: #fafbfc;
+        border: 1px solid #e1e4e8;
         border-radius: .2em;
-        font-family: Consolas, Monaco, monospace;
+        font-size: .9rem;
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        word-break: break-all;
+        &.sourceCode {
+          border: none;
+          padding: 0;
+        }
       }
     }
     pre.sourceCode {
       padding: .5em 1em;
-      border-radius: 5px;
-      background-color: #EEE;
-      font-family: Consolas, Monaco, monospace;
+      background-color: #fafbfc;
+      border: 1px solid #e1e4e8;
+      font-size: .9rem;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
     }
     .blog-img {
       max-width: 600px;
