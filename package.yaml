@@ -1,0 +1,23 @@
+name: yoshitsugu-github-io
+version: '0.1.0.2'
+synopsis: Hakyll project template from stack
+description: Please see README.md
+category: Blog
+author: Kota Yoshitsugu
+maintainer: zeroinon1206bass@gmail.com
+copyright:
+- '2016'
+- Kota Yoshitsugu
+license: MIT
+homepage: http://github.com/yoshitsugu/yoshitsugu-github-io
+git: git://github.com/yoshitsugu/yoshitsugu.github.io.git
+ghc-options:
+- -Wall
+- -threaded
+dependencies:
+- base ==4.*
+- hakyll ==4.*
+- highlighting-kate
+executables:
+  blog:
+    main: site.hs

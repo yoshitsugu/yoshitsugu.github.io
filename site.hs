@@ -5,8 +5,8 @@ import           Hakyll
 import qualified Text.Highlighting.Kate as K
 
 --------------------------------------------------------------------------------
-host :: String
-host = "https://yoshitsugu.net"
+hostName :: String
+hostName = "https://yoshitsugu.net"
 
 
 main :: IO ()
@@ -108,7 +108,7 @@ main = hakyll $ do
            let allPosts = (return (pages ++ posts))
            let sitemapCtx = mconcat
                             [ listField "entries" pageCtx allPosts
-                            , constField "host" host
+                            , constField "host" hostName
                             , defaultContext
                             ]
            makeItem ""
@@ -122,7 +122,7 @@ main = hakyll $ do
 defaultCtx :: Context String
 defaultCtx =
     urlField "ogpurl" `mappend`
-    constField "host" host `mappend`
+    constField "host" hostName `mappend`
     defaultContext
 
 postCtx :: Context String
@@ -139,7 +139,7 @@ pageCtx = mconcat
     [ modificationTimeField "mtime" "%U"
     , modificationTimeField "lastmod" "%Y-%m-%d"
     , dateField "updated" "%Y-%m-%dT%H:%M:%SZ"
-    , constField "host" host
+    , constField "host" hostName
     , dateField "date" "%B %e, %Y"
     , defaultCtx
     ]
