@@ -50,7 +50,7 @@ install:
 ```yaml
 install:
   - docker pull ${DEPLOYER_NAME}
-  - docker run -v $(pwd)/_site:/yoshitsugu.github.io/_site --rm ${DEPLOYER_NAME} bash -c "cd /yoshitsugu.github.io && LC_ALL=C.UTF-8 stack exec -- blog build"
+  - docker run -v $(pwd):/yoshitsugu.github.io --rm ${DEPLOYER_NAME} bash -c "cd /yoshitsugu.github.io && LC_ALL=C.UTF-8 stack exec -- blog build"
 ```
  
 
