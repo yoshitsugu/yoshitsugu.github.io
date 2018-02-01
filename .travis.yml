@@ -1,32 +1,23 @@
 language: generic
 sudo: required
-cache:
-  directories:
-    - $HOME/.local/bin
-    - $HOME/.stack
-    - .stack-work
 branches:
   only:
     - source
 env:
   global:
     - GH_NAME="Travis on behalf of yoshitsugu"
+    - DEPLOYER_NAME="yoshitsugu/yoshitsugu.github.io-deployer-docker"
     - secure: HNtT7b/LLWRBZ0RdJEMQ/XfCgkLkM7e2eryIHSnimJuieSfkE3SVr1QN3LkLImL+6WBol3+iCpoQuBYXmFvQL/MF/fpByq8wqtVbQTnbyGgLMiociL3FG7xw8Mma3TnG2kfBXiOY9A0q3rEyq+U/A2ibsT0jYvZqpg6m2zyDyw0kGZhrxCpcwVuqXISf+nVhorMDL/X/hkIiyhE3HWbwHoZioRdAEi+MELyFzNv6ch1/OjWrxAGUB0Y0SgeyQNWPMe06+3fhMnDH9v050ljwbVnGBOjQ5/Ke1CvjTs5UwvecQ4oGLwrA8yyz4h4a7AOZ2Oo9n0W61bf/L5AQHrRqvHEd+kntgK5rvJtLonAxLj/OZUywLIG+fDlsxEqQXeoL2nj6fQclLvlCWf/xwKkWXflIOJSE/q6U5F4cZ5JJMtw7oBV4nTG6Mu5hmC9qMgNLl7g4PoCpzNX46kITebXkTyYW6TsUEmkr8BvnRrf6A7OdL/VvRvcbT5b4WXQ5gz+4gYGGtOfH80tz9uWXiDpZFsvSEX5dB0s8gz91ThkWaEG/YPiRFAPx0Na90vqTtjoRtrnDNQfkrLBR/HscVDYDyVs3BmdLKHPvK8mJ0qZjZEDWmDx2N+zkDyky7n/XKiUMjF95s8Q5GYGVX3C3InKyS4XK3+2kveIoRPn4npFdL+M=
     - secure: TjTcCqfnCACT6UyWUH977tEz+zy6lT4hVU8cX1OulCndDtyh3nijQ5X/K4GloKYFVu3tOY6hfXcpePqCTXWxsGkDwtRopq0lAlMYFF3q8RFd+zSuE7P49cP8SokCyXBz8PPkfPjNMQHM5oSxpiV8fCGPvktEz4CsXf7v1HJ6C3mHH+Bl1qxwKhky87FQ9IZsZntaC91xCI4C1x5R+yJPXFr1SFOVLQGvTmvvk0q2IC+tLAKEynOGc+8z9GWgeWj1n2bL0mo+Vws3HQEn8IUTx726Rnk50lABXgS5XyiyptbOTab0CBgP+NKeSojDbHU7e6JdQcbrqEKf3kjmcZyzY4sNJfLRonoFvt5e4lYZrqCNyEHhWFAPMvoaW3eOngS8s7VQsPa/DuKFS1rF1WeA6dqnTHVEfI7lwZzrCQSfddCCgMAV5drNoftyNYOq9JyF6hLjxy99QAD1Nj5q5DWpiYZSmv73Ulek9MsYd7lsMbzVOMcXppss08qDipDh5gj13O9IUAOLB3qyA9wqfapd0JrkIyzj94iD+PGUuvQfPOwByQKoIPJG3WavsYIDfXrMALsyF1T/tO7VeduciL9iVKUE/JKupoM2ACxsSKFuj5VSqpBwW9Ucv1kdNRmpUoCTW57/V6ZnaDm9ILtzorzZx+rGT5e031QN5ll6uABKRfs=
+services:
+  - docker
 before_install:
   - openssl aes-256-cbc -K $encrypted_394ee048f8a1_key -iv $encrypted_394ee048f8a1_iv -in .travis/github_deploy_key.enc -out ~/.ssh/github_deploy_key -d
   - chmod 600 ~/.ssh/github_deploy_key
   - printf "Host github.com\n  IdentityFile ~/.ssh/github_deploy_key\n  LogLevel ERROR" >> ~/.ssh/config
-  - mkdir -p ~/.local/bin
-  - export PATH=$HOME/.local/bin:$PATH
-  - if [[ ! -x ~/.local/bin/stack ]]; then travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'; chmod a+x ~/.local/bin/stack; fi
-  - stack --version
   - git submodule init
   - git submodule update
   - git submodule foreach 'git checkout master; git pull'
-  - rvm install 2.4.0
-  - ruby --version
-  - gem install sass
   - git config --global user.name "$GH_NAME"
   - git config --global user.email "$GH_EMAIL"
 after_success:
@@ -39,9 +30,7 @@ after_success:
   - git commit -m "Built by Travis (build $TRAVIS_BUILD_NUMBER)"
   - git push --quiet github master:master
 install:
-  - stack --no-terminal setup
-  - stack exec -- ghc --version
-  - stack --no-terminal build
-  - stack exec -- blog build
+  - docker pull ${DEPLOYER_NAME}
+  - docker run -v $(pwd)/_site:/yoshitsugu.github.io/_site --rm $DEPLOYER_NAME bash -c "cd /yoshitsugu.github.io && LC_ALL=C.UTF-8 stack exec -- blog build"
 notifications:
   email: false

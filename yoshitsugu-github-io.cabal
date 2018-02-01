@@ -1,25 +1,35 @@
-name:                yoshitsugu-github-io
-version:             0.1.0.1
-synopsis:            Hakyll project template from stack
-description:         Please see README.md
-homepage:            http://github.com/yoshitsugu/yoshitsugu-github-io
-license:             MIT
-license-file:        LICENSE
-author:              Kota Yoshitsugu
-maintainer:          zeroinon1206bass@gmail.com
-copyright:           2016, Kota Yoshitsugu
-category:            Blog
-build-type:          Simple
-cabal-version:       >=1.10
+-- This file has been generated from package.yaml by hpack version 0.20.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 1ac1bfcdf42cab6800f3aed2d299c76df0347fd0541ad218e5ef0c6d417999d7
 
-executable blog
-  main-is:             site.hs
-  default-language:    Haskell2010
-  ghc-options:         -Wall -threaded
-  build-depends:       base == 4.*
-                     , hakyll == 4.*
-                     , highlighting-kate
+name:           yoshitsugu-github-io
+version:        0.1.0.2
+synopsis:       Hakyll project template from stack
+description:    Please see README.md
+category:       Blog
+homepage:       http://github.com/yoshitsugu/yoshitsugu-github-io
+author:         Kota Yoshitsugu
+maintainer:     zeroinon1206bass@gmail.com
+copyright:      2016,
+                Kota Yoshitsugu
+license:        MIT
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
 
 source-repository head
-  type:     git
+  type: git
   location: git://github.com/yoshitsugu/yoshitsugu.github.io.git
+
+executable blog
+  main-is: site.hs
+  ghc-options: -Wall -threaded
+  build-depends:
+      base ==4.*
+    , hakyll ==4.*
+    , highlighting-kate
+  other-modules:
+      Paths_yoshitsugu_github_io
+  default-language: Haskell2010
