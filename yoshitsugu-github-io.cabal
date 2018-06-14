@@ -1,8 +1,8 @@
--- This file has been generated from package.yaml by hpack version 0.20.0.
+-- This file has been generated from package.yaml by hpack version 0.28.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1ac1bfcdf42cab6800f3aed2d299c76df0347fd0541ad218e5ef0c6d417999d7
+-- hash: 0a9bac03d6902b74ae6551dc780ffc36a9645e15c4838906970cba726134402d
 
 name:           yoshitsugu-github-io
 version:        0.1.0.2
@@ -30,6 +30,7 @@ executable blog
       base ==4.*
     , hakyll ==4.*
     , highlighting-kate
+    , pandoc ==2.*
   other-modules:
       Paths_yoshitsugu_github_io
   default-language: Haskell2010

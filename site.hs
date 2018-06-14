@@ -2,6 +2,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Monoid            ((<>))
 import           Hakyll
+import           Text.Pandoc.Options
+import Text.Pandoc.Highlighting
 import qualified Text.Highlighting.Kate as K
 
 --------------------------------------------------------------------------------
@@ -43,7 +45,7 @@ main = hakyll $ do
 
     match (fromList ["about.md"]) $ do
         route   $ setExtension "html"
-        compile $ pandocCompiler
+        compile $ customPandocCompiler
             >>= loadAndApplyTemplate "templates/default.html" defaultCtx
             >>= relativizeUrls
 
@@ -66,7 +68,7 @@ main = hakyll $ do
 
     match "posts/*" $ do
         route $ setExtension "html"
-        compile $ pandocCompiler
+        compile $ customPandocCompiler
             >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/post.html"    (postCtxWithTags tags)
             >>= loadAndApplyTemplate "templates/default.html" (postCtxWithTags tags)
@@ -119,6 +121,14 @@ main = hakyll $ do
 
 
 --------------------------------------------------------------------------------
+customPandocCompiler :: Compiler (Item String)
+customPandocCompiler =
+  let writerOptions = defaultHakyllWriterOptions {
+        writerHighlightStyle = Just zenburn
+        }
+  in pandocCompilerWith defaultHakyllReaderOptions writerOptions
+
+
 defaultCtx :: Context String
 defaultCtx =
     urlField "ogpurl" `mappend`

@@ -18,6 +18,7 @@ dependencies:
 - base ==4.*
 - hakyll ==4.*
 - highlighting-kate
+- pandoc ==2.*
 executables:
   blog:
     main: site.hs

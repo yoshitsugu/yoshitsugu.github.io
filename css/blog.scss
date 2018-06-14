@@ -178,24 +178,35 @@ body {
           }
         }
       }
-      code {
-        padding: .2em .5em;
-        background-color: #fafbfc;
+      div.sourceCode {
         border: 1px solid #e1e4e8;
         border-radius: .2em;
-        font-size: .9rem;
-        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-        word-break: break-all;
-        &.sourceCode {
-          border: none;
-          padding: 0;
+        background-color: #fafbfc;
+        padding: .2em .5em;
+        line-height: 1.1em;
+        pre {
+          code {
+            padding: 0;
+            font-size: .9rem;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            word-break: break-all;
+            overflow: scroll;
+            &.sourceCode {
+              border: none;
+              padding: 0;
+            }
+            a {
+              font-weight: normal;
+            }
+          }
         }
       }
     }
-    pre.sourceCode {
-      padding: .5em 1em;
-      background-color: #fafbfc;
+    code {
       border: 1px solid #e1e4e8;
+      border-radius: .2em;
+      padding: .2em;
+      background-color: #fafbfc;
       font-size: .9rem;
       font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
     }
