@@ -224,6 +224,7 @@ pub extern "C" fn haribote_os() -> ! {
 
 make runすると以下のようにOS風の？見た目ができた。
 
-<img src="/images/20190605/default_palette.png" class="blog-img img-responsive" alt="OS風画面" title="OS風画面" />
+<img src="/images/20190605/display_taskbar.png" class="blog-img img-responsive" alt="OS風画面" title="OS風画面" />
 
-4日目は以上となる。
+4日目は以上となる。  
+ここまでの内容のコードは[yoshitsugu/hariboteos_in_rustのday4](https://github.com/yoshitsugu/hariboteos_in_rust/tree/day4)としてタグを打ってある。
