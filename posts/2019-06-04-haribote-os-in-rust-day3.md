@@ -6,7 +6,8 @@ tags: OS, Rust
 [「30日でできる！OS自作入門 」](https://book.mynavi.jp/supportsite/detail/4839919844.html) を読みはじめた。
 <!--more-->
 せっかくなのでCの部分はできるだけRustで書いてみようと思う。Cの導入部分からなので、3日目から開始となる。  
-この記事の成果物となるコードは [yoshitsugu/haribote_os_in_rust](https://github.com/yoshitsugu/hariboteos_in_rust/tree/day3) においてある。
+この記事の成果物となるコードは [yoshitsugu/haribote_os_in_rust](https://github.com/yoshitsugu/hariboteos_in_rust/tree/day3) においてある。  
+検証環境としてはx86_64のLinuxマシンとなる。
 
 ## 下準備
 まずはRustのプロジェクトを準備
