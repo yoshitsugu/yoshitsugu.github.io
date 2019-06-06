@@ -1,6 +1,6 @@
 ---
 title: 「30日でできる！OS自作入門」をRustで。4日目
-tags: OS, Rust
+tags: OS自作入門, OS, Rust
 ---
 
 [3日目](/posts/2019-06-04-haribote-os-in-rust-day3.html) の続きとなる。

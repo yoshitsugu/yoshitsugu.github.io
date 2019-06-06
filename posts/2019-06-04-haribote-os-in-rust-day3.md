@@ -1,6 +1,6 @@
 ---
 title: 「30日でできる！OS自作入門」をRustで。3日目
-tags: OS, Rust
+tags: OS自作入門, OS, Rust
 ---
 
 [「30日でできる！OS自作入門 」](https://book.mynavi.jp/supportsite/detail/4839919844.html) を読みはじめた。
