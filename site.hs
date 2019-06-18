@@ -1,12 +1,11 @@
---------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Monoid            ((<>))
 import           Hakyll
 import           Text.Pandoc.Options
 import Text.Pandoc.Highlighting
-import qualified Text.Highlighting.Kate as K
+import qualified Skylighting.Format.HTML as SF
+import qualified Skylighting.Styles as SS
 
---------------------------------------------------------------------------------
 hostName :: String
 hostName = "https://yoshitsugu.net"
 
@@ -41,7 +40,7 @@ main = hakyll $ do
 
     create ["css/highlight.css"] $ do
       route   idRoute
-      compile $ makeItem (compressCss $ K.styleToCss K.haddock)
+      compile $ makeItem (compressCss $ SF.styleToCss SS.haddock)
 
     match (fromList ["about.md"]) $ do
         route   $ setExtension "html"
