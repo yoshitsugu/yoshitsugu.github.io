@@ -10,7 +10,7 @@ tags: OS自作入門, OS, Rust
 
 [前回](/posts/2019-06-13-haribote-os-in-rust-day6.html)の記事で、`lazy_static`が使えないことに触れた。いろいろと調べた結果、kernel.ldにバグがあったことがわかった。
 
-```linkerscript.bash
+```default
 /* 省略 */
 	/*.dataセクションのメモリ開始位置*/
 	.data 0x00000400:

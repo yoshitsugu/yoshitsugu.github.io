@@ -128,8 +128,9 @@ target = "i686-haribote.json"
 
 `Cargo.toml` も調整が必要。panic時にstackがunwindされるのを防ぐため、 `panic = "abort"` を指定。また、Rustコードはstaticlibとしてビルドするようにする。
 
-<div class="sourceCode">
-<pre class="sourceCode"><code class="sourceCode">[profile.dev]
+```default
+// Cargo.toml
+[profile.dev]
 opt-level = 2
 lto = true
 panic = "abort"
@@ -142,8 +143,7 @@ panic = "abort"
 [lib]
 name = "haribote_os"
 crate-type = ["staticlib"]
-</code></pre>
-</div>
+```
 
 ビルド時には `cargo build` の代わりに、 `cargo xbuild` を使用する。これは、 Rust Coreライブラリという最低限のデータ構造などのセットを提供してくれるものを使用するときに便利だ。
 
