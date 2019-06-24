@@ -396,6 +396,10 @@ pub extern "C" fn haribote_os() {
 なお、背景用にメモリを確保したため、使用可能なメモリ容量が`29228KB` になっている
 
 <img src="/images/20190624/valid_overlay.png" class="blog-img img-responsive" alt="正しい重ね合わせ結果" title="正しい重ね合わせ結果" />  
-  
+
+相変らずGIFでのキャプチャがうまくいっていないが、うまくとれたものをついでに貼っておく
+
+<img src="/images/20190624/valid_overlay_movie.gif" class="blog-img img-responsive" alt="動画版"  />  
+
 
 10日目は以上となる。ここまでの内容のコードは[yoshitsugu/hariboteos_in_rustのday10](https://github.com/yoshitsugu/hariboteos_in_rust/tree/day10)としてタグを打ってある。
