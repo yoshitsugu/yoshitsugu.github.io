@@ -110,7 +110,7 @@ pub extern "C" fn haribote_os() {
 
 10msごとにカウントアップ、つまり1秒に100カウントアップするカウンターが表示されるようになった。
 
-<img src="/images/20190627/counter.gif" class="blog-img img-responsive" alt="タイマに連動したカウンター" title="タイマに連動したカウンター" />  
+<img src="/images/20190628/counter.gif" class="blog-img img-responsive" alt="タイマに連動したカウンター" title="タイマに連動したカウンター" />  
 
 
 ## タイムアウトの実装
