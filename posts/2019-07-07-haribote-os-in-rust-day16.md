@@ -8,7 +8,7 @@ tags: OS自作入門, OS, Rust
 
 ## 3つ以上のタスクを扱えるようにする
 
-[前回](/posts/2019-07-04-haribote-os-in-rust-day15.html)、2のタスクの切り替えはできるようになった。  
+[前回](/posts/2019-07-04-haribote-os-in-rust-day15.html)、2つのタスクの切り替えはできるようになった。  
 今回はこれを拡張して3つ以上のタスクを扱えるようにする。  
 基本的な方針はSheetManagerなどと同様だ。
 
