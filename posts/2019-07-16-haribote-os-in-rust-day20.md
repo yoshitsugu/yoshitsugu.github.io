@@ -297,9 +297,8 @@ msg:
 
 ### 実行結果
 
+実行してみると、以下の通り`hello`でも`hello2`でも`hello`という出力が得られた。  
+
 <img src="/images/20190716/hello2.png" class="blog-img img-responsive" alt="hello2" title="hello2"/>  
-
-
-実行してみると、以下の通り`hello`でも`hello2`でも`hello`という出力が得られた。
 
 20日目は以上となる。ここまでの内容のコードは[yoshitsugu/hariboteos_in_rustのday20](https://github.com/yoshitsugu/hariboteos_in_rust/tree/day20)としてタグを打ってある。
