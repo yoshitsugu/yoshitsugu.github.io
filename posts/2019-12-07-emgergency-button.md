@@ -1,5 +1,5 @@
 ---
-title: AWS IoT ButtonとRaspberry Piで子どもの緊急連絡ができるようにする
+title: AWS IoT ButtonとRaspberry Piで子どもでも緊急事態を連絡できるようにする
 tags: AWS IoT Button, Raspberry Pi, Rust, IoT
 ---
 
