@@ -27,7 +27,7 @@ main = hakyll $ do
     match "css/*.scss" $ do
         route $ setExtension "css"
         compile $ getResourceString
-          >>= withItemBody (unixFilter "sass" ["-s", "--scss"])
+          >>= withItemBody (unixFilter "sass" ["--stdin"])
           >>= return . fmap compressCss
 
     match "css/*.css" $ do
