@@ -60,8 +60,7 @@ jobs:
           path: blog
       - name: Move assets to blog branch
         run: |
-          mkdir -p blog/docs
-          mv _site/* blog/docs/
+          mv _site/* blog/
       - name: Set git config
         run: |
           cd blog
