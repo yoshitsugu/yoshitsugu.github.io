@@ -60,7 +60,7 @@ jobs:
           path: blog
       - name: Move assets to blog branch
         run: |
-          mv _site/* blog/
+          cp -r _site/* blog/
       - name: Set git config
         run: |
           cd blog
@@ -71,6 +71,6 @@ jobs:
         run: |
           cd blog
           git add .
-          git commit -am "Commit by GitHub Actions (triggered by ${GITHUB_SHA})"
+          git diff --quiet && git diff --staged --quiet || git commit -am "Commit by GitHub Actions (triggered by ${GITHUB_SHA})"
           git pull --prune
           git push origin blog
