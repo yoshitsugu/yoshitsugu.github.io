@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>「30日でできる！OS自作入門」をRustで。11日目 - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="「30日でできる！OS自作入門」をRustで。11日目 - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2019-06-26-haribote-os-in-rust-day11.html" />
+        <meta property="og:description" content="「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は11日目の内容。 " />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。11日目 - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は11日目の内容。 " />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>「30日でできる！OS自作入門」をRustで。11日目</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on June 26, 2019</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a href="../tags/OS.html">OS</a>, <a href="../tags/Rust.html">Rust</a></span>
+    
+</div>
+
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は11日目の内容。 <!--more--></p>
+<h2 id="マウスカーソルを画面端まで移動可能にする">マウスカーソルを画面端まで移動可能にする</h2>
+<p>現状、マウスカーソルを画面端のほうに移動すると以下のようにカーソルの右端が画面に接したところでとまってしまう。</p>
+<p><img src="../images/20190626/mouse_before.png" class="blog-img img-responsive" alt="マウスカーソルが右端までいけない" title="マウスカーソルが右端までいけない" /></p>
+<p>これをカーソルが隠れるくらいまで移動可能にする。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="co">// sheet.rs</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">impl</span> SheetManager <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-3" title="3">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb1-4" title="4">    <span class="kw">pub</span> <span class="kw">fn</span> refresh_part(&amp;<span class="kw">self</span>, x0: <span class="dt">i32</span>, y0: <span class="dt">i32</span>, x1: <span class="dt">i32</span>, y1: <span class="dt">i32</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-5" title="5">        <span class="kw">if</span> <span class="kw">self</span>.z_max.is_none() <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-6" title="6">            <span class="kw">return</span>;</a>
+<a class="sourceLine" id="cb1-7" title="7">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-8" title="8">        <span class="co">// 画面からはみだした場合の処理を追加</span></a>
+<a class="sourceLine" id="cb1-9" title="9">        <span class="kw">let</span> x0 = max(<span class="dv">0</span>, x0);</a>
+<a class="sourceLine" id="cb1-10" title="10">        <span class="kw">let</span> y0 = max(<span class="dv">0</span>, y0);</a>
+<a class="sourceLine" id="cb1-11" title="11">        <span class="kw">let</span> x1 = min(x1, *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">i32</span>); </a>
+<a class="sourceLine" id="cb1-12" title="12">        <span class="kw">let</span> y1 = min(y1, *SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">i32</span>);</a>
+<a class="sourceLine" id="cb1-13" title="13">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb1-14" title="14">    <span class="kw">pub</span> <span class="kw">fn</span> slide_by_diff(&amp;<span class="kw">mut</span> <span class="kw">self</span>, sheet_index: <span class="dt">usize</span>, dx: <span class="dt">i32</span>, dy: <span class="dt">i32</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-15" title="15">        <span class="kw">let</span> scrnx = *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">i32</span>;</a>
+<a class="sourceLine" id="cb1-16" title="16">        <span class="kw">let</span> scrny = *SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">i32</span>;</a>
+<a class="sourceLine" id="cb1-17" title="17">        <span class="kw">let</span> sheet = <span class="kw">self</span>.sheets_data<span class="op">[</span>sheet_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb1-18" title="18">        <span class="kw">let</span> <span class="kw">mut</span> new_x = sheet.x + dx;</a>
+<a class="sourceLine" id="cb1-19" title="19">        <span class="kw">let</span> <span class="kw">mut</span> new_y = sheet.y + dy;</a>
+<a class="sourceLine" id="cb1-20" title="20">        <span class="kw">let</span> xmax = scrnx - <span class="dv">1</span>; <span class="co">// &lt;- scrnx - MOUSE_CURSOR_WIDTHから変更</span></a>
+<a class="sourceLine" id="cb1-21" title="21">        <span class="kw">let</span> ymax = scrny - <span class="dv">1</span>; <span class="co">// &lt;- scrnx - MOUSE_CURSOR_HEIGHTから変更</span></a>
+<a class="sourceLine" id="cb1-22" title="22">        <span class="kw">if</span> new_x &lt; <span class="dv">0</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-23" title="23">            new_x = <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb1-24" title="24">        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> new_x &gt; xmax <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-25" title="25">            new_x = xmax;</a>
+<a class="sourceLine" id="cb1-26" title="26">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-27" title="27">        <span class="kw">if</span> new_y &lt; <span class="dv">0</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-28" title="28">            new_y = <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb1-29" title="29">        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> new_y &gt; ymax <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-30" title="30">            new_y = ymax;</a>
+<a class="sourceLine" id="cb1-31" title="31">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-32" title="32">        <span class="kw">self</span>.slide(sheet_index, new_x, new_y);</a>
+<a class="sourceLine" id="cb1-33" title="33">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-34" title="34">    <span class="co">// 省略</span></a></code></pre></div>
+<p>上記が主要な修正であるが、マイナスの値をうけつけるにあたって、必要な箇所を <code>u32</code> から <code>i32</code> にかえるなどの変更も行った。</p>
+<h3 id="結果">結果</h3>
+<p>以下のようにマウスカーソルが画面端に隠れるまで移動可能になった</p>
+<p><img src="../images/20190626/mouse_after.png" class="blog-img img-responsive" alt="マウスカーソルが右端まで移動可能" title="マウスカーソルが右端まで移動可能" /></p>
+<h2 id="ウィンドウの表示">ウィンドウの表示</h2>
+<p>次にウィンドウを表示する。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="co">//lib.rs</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="at">#[</span>no_mangle<span class="at">]</span></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="at">#[</span>start<span class="at">]</span></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-5" title="5">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb2-6" title="6">    <span class="kw">let</span> shi_bg = sheet_manager.alloc().unwrap();</a>
+<a class="sourceLine" id="cb2-7" title="7">    <span class="kw">let</span> shi_mouse = sheet_manager.alloc().unwrap();</a>
+<a class="sourceLine" id="cb2-8" title="8">    <span class="kw">let</span> shi_win = sheet_manager.alloc().unwrap(); <span class="co">// &lt;- 追加</span></a>
+<a class="sourceLine" id="cb2-9" title="9">    <span class="kw">let</span> scrnx = *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">i32</span>;</a>
+<a class="sourceLine" id="cb2-10" title="10">    <span class="kw">let</span> scrny = *SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">i32</span>;</a>
+<a class="sourceLine" id="cb2-11" title="11">    <span class="kw">let</span> buf_bg_addr = memman.alloc_4k((scrnx * scrny) <span class="kw">as</span> <span class="dt">u32</span>).unwrap() <span class="kw">as</span> <span class="dt">usize</span>;</a>
+<a class="sourceLine" id="cb2-12" title="12">    <span class="kw">let</span> buf_win_addr = memman.alloc_4k((<span class="dv">160</span> * <span class="dv">68</span>) <span class="kw">as</span> <span class="dt">u32</span>).unwrap() <span class="kw">as</span> <span class="dt">usize</span>; <span class="co">// &lt;- 追加</span></a>
+<a class="sourceLine" id="cb2-13" title="13">    <span class="kw">let</span> buf_mouse_addr =</a>
+<a class="sourceLine" id="cb2-14" title="14">        &amp;buf_mouse <span class="kw">as</span> *<span class="kw">const</span> <span class="op">[</span><span class="dt">u8</span>; MOUSE_CURSOR_HEIGHT * MOUSE_CURSOR_WIDTH<span class="op">]</span> <span class="kw">as</span> <span class="dt">usize</span>;</a>
+<a class="sourceLine" id="cb2-15" title="15">    sheet_manager.set_buf(shi_bg, buf_bg_addr, scrnx, scrny, <span class="cn">None</span>);</a>
+<a class="sourceLine" id="cb2-16" title="16">    sheet_manager.set_buf(shi_win, buf_win_addr, <span class="dv">160</span>, <span class="dv">68</span>, <span class="cn">None</span>); <span class="co">// &lt;- 追加</span></a>
+<a class="sourceLine" id="cb2-17" title="17">    sheet_manager.set_buf(</a>
+<a class="sourceLine" id="cb2-18" title="18">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb2-19" title="19">    make_window(buf_win_addr, <span class="dv">160</span>, <span class="dv">68</span>, <span class="st">&quot;window&quot;</span>);  <span class="co">// &lt;- 追加</span></a>
+<a class="sourceLine" id="cb2-20" title="20">    <span class="kw">let</span> <span class="kw">mut</span> writer = <span class="pp">ScreenWriter::</span>new(<span class="cn">Some</span>(buf_win_addr), <span class="pp">vga::Color::</span>Black, <span class="dv">24</span>, <span class="dv">28</span>, <span class="dv">160</span>, <span class="dv">68</span>); <span class="co">// &lt;- 追加</span></a>
+<a class="sourceLine" id="cb2-21" title="21">    <span class="pp">write!</span>(writer, <span class="st">&quot;Welcome to</span><span class="sc">\n</span><span class="st"> Haribote OS!&quot;</span>).unwrap(); <span class="co">// &lt;- 追加</span></a>
+<a class="sourceLine" id="cb2-22" title="22">    <span class="co">// 省略</span></a></code></pre></div>
+<p><code>make_window</code> については <code>vga.rs</code> に以下のように実装した。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="co">// vga.rs</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">pub</span> <span class="kw">fn</span> make_window(buf: <span class="dt">usize</span>, xsize: <span class="dt">i32</span>, ysize: <span class="dt">i32</span>, title: &amp;<span class="dt">str</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-3" title="3">    <span class="kw">let</span> xsize = xsize <span class="kw">as</span> <span class="dt">isize</span>;</a>
+<a class="sourceLine" id="cb3-4" title="4">    <span class="kw">let</span> ysize = ysize <span class="kw">as</span> <span class="dt">isize</span>;</a>
+<a class="sourceLine" id="cb3-5" title="5">    <span class="kw">let</span> closebtn: <span class="op">[</span>&amp;<span class="op">[</span><span class="dt">u8</span>; <span class="dv">16</span><span class="op">]</span>; <span class="dv">14</span><span class="op">]</span> = <span class="op">[</span></a>
+<a class="sourceLine" id="cb3-6" title="6">        <span class="st">b&quot;OOOOOOOOOOOOOOO@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-7" title="7">        <span class="st">b&quot;OQQQQQQQQQQQQQ$@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-8" title="8">        <span class="st">b&quot;OQQQQQQQQQQQQQ$@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-9" title="9">        <span class="st">b&quot;OQQQ@@QQQQ@@QQ$@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-10" title="10">        <span class="st">b&quot;OQQQQ@@QQ@@QQQ$@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-11" title="11">        <span class="st">b&quot;OQQQQQ@@@@QQQQ$@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-12" title="12">        <span class="st">b&quot;OQQQQQQ@@QQQQQ$@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-13" title="13">        <span class="st">b&quot;OQQQQQ@@@@QQQQ$@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-14" title="14">        <span class="st">b&quot;OQQQQ@@QQ@@QQQ$@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-15" title="15">        <span class="st">b&quot;OQQQ@@QQQQ@@QQ$@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-16" title="16">        <span class="st">b&quot;OQQQQQQQQQQQQQ$@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-17" title="17">        <span class="st">b&quot;OQQQQQQQQQQQQQ$@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-18" title="18">        <span class="st">b&quot;O$$$$$$$$$$$$$$@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-19" title="19">        <span class="st">b&quot;@@@@@@@@@@@@@@@@&quot;</span>,</a>
+<a class="sourceLine" id="cb3-20" title="20">    <span class="op">]</span>;</a>
+<a class="sourceLine" id="cb3-21" title="21">    boxfill(buf, xsize, <span class="pp">Color::</span>LightGray, <span class="dv">0</span>, <span class="dv">0</span>, xsize - <span class="dv">1</span>, <span class="dv">0</span>);</a>
+<a class="sourceLine" id="cb3-22" title="22">    boxfill(buf, xsize, <span class="pp">Color::</span>White, <span class="dv">1</span>, <span class="dv">1</span>, xsize - <span class="dv">2</span>, <span class="dv">1</span>);</a>
+<a class="sourceLine" id="cb3-23" title="23">    boxfill(buf, xsize, <span class="pp">Color::</span>LightGray, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, ysize - <span class="dv">1</span>);</a>
+<a class="sourceLine" id="cb3-24" title="24">    boxfill(buf, xsize, <span class="pp">Color::</span>White, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, ysize - <span class="dv">2</span>);</a>
+<a class="sourceLine" id="cb3-25" title="25">    boxfill(</a>
+<a class="sourceLine" id="cb3-26" title="26">        buf,</a>
+<a class="sourceLine" id="cb3-27" title="27">        xsize,</a>
+<a class="sourceLine" id="cb3-28" title="28">        <span class="pp">Color::</span>DarkGray,</a>
+<a class="sourceLine" id="cb3-29" title="29">        xsize - <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb3-30" title="30">        <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb3-31" title="31">        xsize - <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb3-32" title="32">        ysize - <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb3-33" title="33">    );</a>
+<a class="sourceLine" id="cb3-34" title="34">    boxfill(buf, xsize, <span class="pp">Color::</span>Black, xsize - <span class="dv">1</span>, <span class="dv">0</span>, xsize - <span class="dv">1</span>, ysize - <span class="dv">1</span>);</a>
+<a class="sourceLine" id="cb3-35" title="35">    boxfill(buf, xsize, <span class="pp">Color::</span>LightGray, <span class="dv">2</span>, <span class="dv">2</span>, xsize - <span class="dv">3</span>, ysize - <span class="dv">3</span>);</a>
+<a class="sourceLine" id="cb3-36" title="36">    boxfill(buf, xsize, <span class="pp">Color::</span>DarkBlue, <span class="dv">3</span>, <span class="dv">3</span>, xsize - <span class="dv">4</span>, <span class="dv">20</span>);</a>
+<a class="sourceLine" id="cb3-37" title="37">    boxfill(</a>
+<a class="sourceLine" id="cb3-38" title="38">        buf,</a>
+<a class="sourceLine" id="cb3-39" title="39">        xsize,</a>
+<a class="sourceLine" id="cb3-40" title="40">        <span class="pp">Color::</span>DarkGray,</a>
+<a class="sourceLine" id="cb3-41" title="41">        <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb3-42" title="42">        ysize - <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb3-43" title="43">        xsize - <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb3-44" title="44">        ysize - <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb3-45" title="45">    );</a>
+<a class="sourceLine" id="cb3-46" title="46">    boxfill(buf, xsize, <span class="pp">Color::</span>Black, <span class="dv">0</span>, ysize - <span class="dv">1</span>, xsize - <span class="dv">1</span>, ysize - <span class="dv">1</span>);</a>
+<a class="sourceLine" id="cb3-47" title="47">    <span class="kw">let</span> <span class="kw">mut</span> writer = <span class="pp">ScreenWriter::</span>new(</a>
+<a class="sourceLine" id="cb3-48" title="48">        <span class="cn">Some</span>(buf),</a>
+<a class="sourceLine" id="cb3-49" title="49">        <span class="pp">Color::</span>White,</a>
+<a class="sourceLine" id="cb3-50" title="50">        <span class="dv">24</span>,</a>
+<a class="sourceLine" id="cb3-51" title="51">        <span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb3-52" title="52">        xsize <span class="kw">as</span> <span class="dt">usize</span>,</a>
+<a class="sourceLine" id="cb3-53" title="53">        ysize <span class="kw">as</span> <span class="dt">usize</span>,</a>
+<a class="sourceLine" id="cb3-54" title="54">    );</a>
+<a class="sourceLine" id="cb3-55" title="55">    <span class="pp">write!</span>(writer, <span class="st">&quot;{}&quot;</span>, title).unwrap();</a>
+<a class="sourceLine" id="cb3-56" title="56">    <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span>..<span class="dv">14</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-57" title="57">        <span class="kw">let</span> y = y <span class="kw">as</span> <span class="dt">usize</span>;</a>
+<a class="sourceLine" id="cb3-58" title="58">        <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span>..<span class="dv">16</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-59" title="59">            <span class="kw">let</span> x = x <span class="kw">as</span> <span class="dt">usize</span>;</a>
+<a class="sourceLine" id="cb3-60" title="60">            <span class="kw">let</span> c = closebtn<span class="op">[</span>y<span class="op">][</span>x<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb3-61" title="61">            <span class="kw">let</span> color: Color;</a>
+<a class="sourceLine" id="cb3-62" title="62">            <span class="kw">if</span> c == <span class="ch">b'@'</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-63" title="63">                color = <span class="pp">Color::</span>Black</a>
+<a class="sourceLine" id="cb3-64" title="64">            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> c == <span class="ch">b'$'</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-65" title="65">                color = <span class="pp">Color::</span>DarkGray;</a>
+<a class="sourceLine" id="cb3-66" title="66">            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> c == <span class="ch">b'Q'</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-67" title="67">                color = <span class="pp">Color::</span>LightGray;</a>
+<a class="sourceLine" id="cb3-68" title="68">            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-69" title="69">                color = <span class="pp">Color::</span>White</a>
+<a class="sourceLine" id="cb3-70" title="70">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-71" title="71">            <span class="kw">let</span> ptr = <span class="kw">unsafe</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-72" title="72">                &amp;<span class="kw">mut</span> *((buf + (<span class="dv">5</span> + y) * xsize <span class="kw">as</span> <span class="dt">usize</span> + (xsize <span class="kw">as</span> <span class="dt">usize</span> - <span class="dv">21</span> + x)) <span class="kw">as</span> *<span class="kw">mut</span> Color)</a>
+<a class="sourceLine" id="cb3-73" title="73">            <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb3-74" title="74">            *ptr = color;</a>
+<a class="sourceLine" id="cb3-75" title="75">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-76" title="76">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-77" title="77"><span class="op">}</span></a></code></pre></div>
+<p>この他、<code>boxfill</code> や <code>print_char</code> が画面幅固定での描画になってしまっていたのを修正した。</p>
+<h3 id="結果-1">結果</h3>
+<p>以下のようにウィンドウが描画できた。</p>
+<p><img src="../images/20190626/window.png" class="blog-img img-responsive" alt="ウィンドウの描画" title="ウィンドウの描画" /></p>
+<h2 id="カウンターの表示">カウンターの表示</h2>
+<p>ウィンドウ内にカウンターを表示する。</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="co">//lib.rs</span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="at">#[</span>no_mangle<span class="at">]</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="at">#[</span>start<span class="at">]</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-5" title="5">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb4-6" title="6">    <span class="kw">let</span> shi_bg = sheet_manager.alloc().unwrap();</a>
+<a class="sourceLine" id="cb4-7" title="7">    <span class="kw">let</span> shi_mouse = sheet_manager.alloc().unwrap();</a>
+<a class="sourceLine" id="cb4-8" title="8">    <span class="kw">let</span> shi_win = sheet_manager.alloc().unwrap(); </a>
+<a class="sourceLine" id="cb4-9" title="9">    <span class="kw">let</span> scrnx = *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">i32</span>;</a>
+<a class="sourceLine" id="cb4-10" title="10">    <span class="kw">let</span> scrny = *SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">i32</span>;</a>
+<a class="sourceLine" id="cb4-11" title="11">    <span class="kw">let</span> buf_bg_addr = memman.alloc_4k((scrnx * scrny) <span class="kw">as</span> <span class="dt">u32</span>).unwrap() <span class="kw">as</span> <span class="dt">usize</span>;</a>
+<a class="sourceLine" id="cb4-12" title="12">    <span class="kw">let</span> buf_win_addr = memman.alloc_4k((<span class="dv">160</span> * <span class="dv">52</span>) <span class="kw">as</span> <span class="dt">u32</span>).unwrap() <span class="kw">as</span> <span class="dt">usize</span>; <span class="co">// &lt;- サイズ修正</span></a>
+<a class="sourceLine" id="cb4-13" title="13">    <span class="kw">let</span> buf_mouse_addr =</a>
+<a class="sourceLine" id="cb4-14" title="14">        &amp;buf_mouse <span class="kw">as</span> *<span class="kw">const</span> <span class="op">[</span><span class="dt">u8</span>; MOUSE_CURSOR_HEIGHT * MOUSE_CURSOR_WIDTH<span class="op">]</span> <span class="kw">as</span> <span class="dt">usize</span>;</a>
+<a class="sourceLine" id="cb4-15" title="15">    sheet_manager.set_buf(shi_bg, buf_bg_addr, scrnx, scrny, <span class="cn">None</span>);</a>
+<a class="sourceLine" id="cb4-16" title="16">    sheet_manager.set_buf(shi_win, buf_win_addr, <span class="dv">160</span>, <span class="dv">52</span>, <span class="cn">None</span>); <span class="co">// &lt;- サイズ修正</span></a>
+<a class="sourceLine" id="cb4-17" title="17">    sheet_manager.set_buf(</a>
+<a class="sourceLine" id="cb4-18" title="18">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb4-19" title="19">    make_window(buf_win_addr, <span class="dv">160</span>, <span class="dv">52</span>, <span class="st">&quot;counter&quot;</span>);  <span class="co">// &lt;- 追加</span></a>
+<a class="sourceLine" id="cb4-20" title="20">    <span class="co">// window内のテキスト表示を削除</span></a>
+<a class="sourceLine" id="cb4-21" title="21">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb4-22" title="22">    <span class="kw">let</span> <span class="kw">mut</span> count = <span class="dv">0u32</span>; <span class="co">// カウンターを追加</span></a>
+<a class="sourceLine" id="cb4-23" title="23">    <span class="kw">loop</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-24" title="24">        count += <span class="dv">1</span>;</a>
+<a class="sourceLine" id="cb4-25" title="25">        boxfill(buf_win_addr, <span class="dv">160</span>, <span class="pp">Color::</span>LightGray, <span class="dv">40</span>, <span class="dv">28</span>, <span class="dv">119</span>, <span class="dv">43</span>);</a>
+<a class="sourceLine" id="cb4-26" title="26">        <span class="kw">let</span> <span class="kw">mut</span> writer = <span class="pp">ScreenWriter::</span>new(<span class="cn">Some</span>(buf_win_addr), <span class="pp">vga::Color::</span>Black, <span class="dv">40</span>, <span class="dv">28</span>, <span class="dv">160</span>, <span class="dv">52</span>);</a>
+<a class="sourceLine" id="cb4-27" title="27">        <span class="pp">write!</span>(writer, <span class="st">&quot;{:&gt;010}&quot;</span>, count).unwrap();</a>
+<a class="sourceLine" id="cb4-28" title="28">        sheet_manager.refresh(shi_win, <span class="dv">40</span>, <span class="dv">28</span>, <span class="dv">120</span>, <span class="dv">44</span>);</a>
+<a class="sourceLine" id="cb4-29" title="29">        <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb4-30" title="30">        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-31" title="31">            sti(); <span class="co">// &lt;- stihltから変更してhltしないようにする。</span></a>
+<a class="sourceLine" id="cb4-32" title="32">        <span class="op">}</span></a></code></pre></div>
+<p>ただ、このままだと高速にレンダリングの重ね描きが発生し、画面がチラついてしまう。 そのため、本ではこの後、レンダリングを最低限にするようにしている。</p>
+<h2 id="チラつきの抑制">チラつきの抑制</h2>
+<p><code>SheetManager</code>に一番上の<code>Sheet</code>番号をもつような<code>map</code>を導入して、その<code>Sheet</code>のみ描画するように変更する。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="co">//sheet.rs</span></a>
+<a class="sourceLine" id="cb5-2" title="2"></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="kw">pub</span> <span class="kw">struct</span> SheetManager <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-4" title="4">    <span class="kw">pub</span> z_max: <span class="dt">Option</span>&lt;<span class="dt">usize</span>&gt;,             <span class="co">// 一番上のSheetのz</span></a>
+<a class="sourceLine" id="cb5-5" title="5">    <span class="kw">pub</span> map_addr: <span class="dt">i32</span>,                    <span class="co">// 追加: 重ね合わせ計算用のマップをもつ</span></a>
+<a class="sourceLine" id="cb5-6" title="6">    <span class="kw">pub</span> sheets: <span class="op">[</span><span class="dt">usize</span>; MAX_SHEETS<span class="op">]</span>,      <span class="co">// sheets_data上のindexを保持する</span></a>
+<a class="sourceLine" id="cb5-7" title="7">    <span class="kw">pub</span> sheets_data: <span class="op">[</span>Sheet; MAX_SHEETS<span class="op">]</span>, <span class="co">// sheetデータの実体</span></a>
+<a class="sourceLine" id="cb5-8" title="8"><span class="op">}</span></a>
+<a class="sourceLine" id="cb5-9" title="9"></a>
+<a class="sourceLine" id="cb5-10" title="10"><span class="kw">impl</span> SheetManager <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-11" title="11">    <span class="kw">pub</span> <span class="kw">fn</span> new(map_addr: <span class="dt">i32</span>) -&gt; SheetManager <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-12" title="12">        SheetManager <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-13" title="13">            z_max: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb5-14" title="14">            map_addr, <span class="co">// &lt;- 追加</span></a>
+<a class="sourceLine" id="cb5-15" title="15">            sheets: <span class="op">[</span><span class="dv">0</span>; MAX_SHEETS<span class="op">]</span>,</a>
+<a class="sourceLine" id="cb5-16" title="16">            sheets_data: <span class="op">[</span><span class="pp">Sheet::</span>new(); MAX_SHEETS<span class="op">]</span>,</a>
+<a class="sourceLine" id="cb5-17" title="17">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-18" title="18">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-19" title="19">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb5-20" title="20">     <span class="kw">pub</span> <span class="kw">fn</span> refresh_map(&amp;<span class="kw">self</span>, x0: <span class="dt">i32</span>, y0: <span class="dt">i32</span>, x1: <span class="dt">i32</span>, y1: <span class="dt">i32</span>, z0: <span class="dt">i32</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-21" title="21">        <span class="kw">if</span> <span class="kw">self</span>.z_max.is_none() <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-22" title="22">            <span class="kw">return</span>;</a>
+<a class="sourceLine" id="cb5-23" title="23">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-24" title="24">        <span class="kw">let</span> x0 = max(<span class="dv">0</span>, x0);</a>
+<a class="sourceLine" id="cb5-25" title="25">        <span class="kw">let</span> y0 = max(<span class="dv">0</span>, y0);</a>
+<a class="sourceLine" id="cb5-26" title="26">        <span class="kw">let</span> x1 = min(x1, *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">i32</span>);</a>
+<a class="sourceLine" id="cb5-27" title="27">        <span class="kw">let</span> y1 = min(y1, *SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">i32</span>);</a>
+<a class="sourceLine" id="cb5-28" title="28">        <span class="kw">for</span> h <span class="kw">in</span> (z0 <span class="kw">as</span> <span class="dt">usize</span>)..=<span class="kw">self</span>.z_max.unwrap() <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-29" title="29">            <span class="kw">let</span> si = <span class="kw">self</span>.sheets<span class="op">[</span>h <span class="kw">as</span> <span class="dt">usize</span><span class="op">]</span>;</a>
+<a class="sourceLine" id="cb5-30" title="30">            <span class="kw">let</span> sheet = &amp;<span class="kw">self</span>.sheets_data<span class="op">[</span>si<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb5-31" title="31">            <span class="kw">let</span> bx0 = <span class="kw">if</span> x0 &gt; sheet.x <span class="op">{</span> x0 - sheet.x <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">}</span> <span class="kw">as</span> <span class="dt">usize</span>;</a>
+<a class="sourceLine" id="cb5-32" title="32">            <span class="kw">let</span> by0 = <span class="kw">if</span> y0 &gt; sheet.y <span class="op">{</span> y0 - sheet.y <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">}</span> <span class="kw">as</span> <span class="dt">usize</span>;</a>
+<a class="sourceLine" id="cb5-33" title="33">            <span class="kw">let</span> bx1 = <span class="kw">if</span> x1 &gt; sheet.x <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-34" title="34">                min(x1 - sheet.x, sheet.width)</a>
+<a class="sourceLine" id="cb5-35" title="35">            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-36" title="36">                <span class="dv">0</span></a>
+<a class="sourceLine" id="cb5-37" title="37">            <span class="op">}</span> <span class="kw">as</span> <span class="dt">usize</span>;</a>
+<a class="sourceLine" id="cb5-38" title="38">            <span class="kw">let</span> by1 = <span class="kw">if</span> y1 &gt; sheet.y <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-39" title="39">                min(y1 - sheet.y, sheet.height)</a>
+<a class="sourceLine" id="cb5-40" title="40">            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-41" title="41">                <span class="dv">0</span></a>
+<a class="sourceLine" id="cb5-42" title="42">            <span class="op">}</span> <span class="kw">as</span> <span class="dt">usize</span>;</a>
+<a class="sourceLine" id="cb5-43" title="43">            <span class="kw">for</span> by <span class="kw">in</span> by0..by1 <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-44" title="44">                <span class="kw">let</span> vy = sheet.y <span class="kw">as</span> <span class="dt">usize</span> + by;</a>
+<a class="sourceLine" id="cb5-45" title="45">                <span class="kw">for</span> bx <span class="kw">in</span> bx0..bx1 <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-46" title="46">                    <span class="kw">let</span> vx = sheet.x <span class="kw">as</span> <span class="dt">usize</span> + bx;</a>
+<a class="sourceLine" id="cb5-47" title="47">                    <span class="kw">let</span> width = sheet.width <span class="kw">as</span> <span class="dt">usize</span>;</a>
+<a class="sourceLine" id="cb5-48" title="48">                    <span class="kw">let</span> c = <span class="kw">unsafe</span> <span class="op">{</span> *((sheet.buf_addr + by * width + bx) <span class="kw">as</span> *<span class="kw">const</span> Color) <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb5-49" title="49">                    <span class="kw">if</span> <span class="cn">Some</span>(c) != sheet.transparent <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-50" title="50">                        <span class="kw">let</span> ptr = <span class="kw">unsafe</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-51" title="51">                            &amp;<span class="kw">mut</span> *((<span class="kw">self</span>.map_addr <span class="kw">as</span> *<span class="kw">mut</span> <span class="dt">u8</span>)</a>
+<a class="sourceLine" id="cb5-52" title="52">                                .offset(vy <span class="kw">as</span> <span class="dt">isize</span> * *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">isize</span> + vx <span class="kw">as</span> <span class="dt">isize</span>))</a>
+<a class="sourceLine" id="cb5-53" title="53">                        <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb5-54" title="54">                        *ptr = si <span class="kw">as</span> <span class="dt">u8</span>;</a>
+<a class="sourceLine" id="cb5-55" title="55">                    <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-56" title="56">                <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-57" title="57">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-58" title="58">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-59" title="59">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-60" title="60">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb5-61" title="61">    <span class="kw">pub</span> <span class="kw">fn</span> refresh_part(&amp;<span class="kw">self</span>, x0: <span class="dt">i32</span>, y0: <span class="dt">i32</span>, x1: <span class="dt">i32</span>, y1: <span class="dt">i32</span>, z0: <span class="dt">i32</span>, z1: <span class="dt">i32</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-62" title="62">        <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb5-63" title="63">            <span class="kw">for</span> by <span class="kw">in</span> by0..by1 <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-64" title="64">                <span class="kw">let</span> vy = sheet.y <span class="kw">as</span> <span class="dt">usize</span> + by;</a>
+<a class="sourceLine" id="cb5-65" title="65">                <span class="kw">for</span> bx <span class="kw">in</span> bx0..bx1 <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-66" title="66">                    <span class="kw">let</span> vx = sheet.x <span class="kw">as</span> <span class="dt">usize</span> + bx;</a>
+<a class="sourceLine" id="cb5-67" title="67">                    <span class="kw">let</span> width = sheet.width <span class="kw">as</span> <span class="dt">usize</span>;</a>
+<a class="sourceLine" id="cb5-68" title="68">                    <span class="kw">let</span> map_si = <span class="kw">unsafe</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-69" title="69">                        *((<span class="kw">self</span>.map_addr <span class="kw">as</span> <span class="dt">isize</span></a>
+<a class="sourceLine" id="cb5-70" title="70">                            + vy <span class="kw">as</span> <span class="dt">isize</span> * *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">isize</span></a>
+<a class="sourceLine" id="cb5-71" title="71">                            + vx <span class="kw">as</span> <span class="dt">isize</span>) <span class="kw">as</span> *<span class="kw">const</span> <span class="dt">u8</span>)</a>
+<a class="sourceLine" id="cb5-72" title="72">                    <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb5-73" title="73">                    <span class="co">// 一番上のSheetだったらレンダリングするようにする</span></a>
+<a class="sourceLine" id="cb5-74" title="74">                    <span class="kw">if</span> si <span class="kw">as</span> <span class="dt">u8</span> == map_si <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-75" title="75">                        <span class="kw">let</span> c = <span class="kw">unsafe</span> <span class="op">{</span> *((sheet.buf_addr + by * width + bx) <span class="kw">as</span> *<span class="kw">const</span> Color) <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb5-76" title="76">                        <span class="kw">let</span> ptr = <span class="kw">unsafe</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-77" title="77">                            &amp;<span class="kw">mut</span> *((*VRAM_ADDR <span class="kw">as</span> *<span class="kw">mut</span> <span class="dt">u8</span>)</a>
+<a class="sourceLine" id="cb5-78" title="78">                                .offset(vy <span class="kw">as</span> <span class="dt">isize</span> * *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">isize</span> + vx <span class="kw">as</span> <span class="dt">isize</span>))</a>
+<a class="sourceLine" id="cb5-79" title="79">                        <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb5-80" title="80">                        *ptr = c <span class="kw">as</span> <span class="dt">u8</span>;</a>
+<a class="sourceLine" id="cb5-81" title="81">                    <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-82" title="82">                <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-83" title="83">            <span class="op">}</span></a></code></pre></div>
+<h3 id="実行結果">実行結果</h3>
+<p>実行してみると以下の通り、マウスを重ねてもチラつかずにカウンターが表示される。(GIFのフレームレートの影響で若干歪んでみえるが、実際はもっときれいに見えている。)</p>
+<p><img src="../images/20190626/counter.gif" class="blog-img img-responsive" alt="カウンタ" title="カウンタ" /></p>
+<p>だいぶ <code>i32</code>, <code>u32</code>, <code>isize</code>, <code>usize</code> が乱立してきて型変換が面倒なのでそろそろ整理したほうがいいかもしれない。。</p>
+<p>11日目は以上となる。ここまでの内容のコードは<a href="https://github.com/yoshitsugu/hariboteos_in_rust/tree/day11">yoshitsugu/hariboteos_in_rustのday11</a>としてタグを打ってある。</p>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2019-06-26-haribote-os-in-rust-day11.html" class="hatena-bookmark-button" data-hatena-bookmark-title="「30日でできる！OS自作入門」をRustで。11日目 - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>

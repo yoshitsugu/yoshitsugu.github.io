@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>「30日でできる！OS自作入門」をRustで。13日目 - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="「30日でできる！OS自作入門」をRustで。13日目 - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2019-06-29-haribote-os-in-rust-day13.html" />
+        <meta property="og:description" content="「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は13日目の内容。 " />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。13日目 - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は13日目の内容。 " />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>「30日でできる！OS自作入門」をRustで。13日目</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on June 29, 2019</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a href="../tags/OS.html">OS</a>, <a href="../tags/Rust.html">Rust</a></span>
+    
+</div>
+
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は13日目の内容。 <!--more--></p>
+<h2 id="write_with_bg-マクロの導入"><code>write_with_bg!</code> マクロの導入</h2>
+<p>本では矩形を描画し、その上に文字を表示する部分をまとめて関数にしていた。<br />
+たしかに、Rustのコードでも、矩形と文字描画の部分で、サイズ指定などが重複しており煩わしかったので、マクロでまとめてみる。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="co">// vga.rs</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="at">#[</span>macro_export<span class="at">]</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="pp">macro_rules!</span> write_with_bg <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-4" title="4">    ($sheet_manager: expr, $sheet_addr: expr, $dst: expr, $width: expr, $height: expr, $x: expr, $y: expr, $fg: expr, $bg: expr, $length: expr, $($arg: tt)* ) =&gt; <span class="op">{{</span></a>
+<a class="sourceLine" id="cb1-5" title="5">        boxfill($dst, $width, $bg, $x, $y, $x + <span class="dv">8</span> * $length - <span class="dv">1</span>, $y + <span class="dv">15</span>);</a>
+<a class="sourceLine" id="cb1-6" title="6">        <span class="kw">let</span> <span class="kw">mut</span> writer = <span class="pp">ScreenWriter::</span>new(</a>
+<a class="sourceLine" id="cb1-7" title="7">                    <span class="cn">Some</span>($dst),</a>
+<a class="sourceLine" id="cb1-8" title="8">                    $fg,</a>
+<a class="sourceLine" id="cb1-9" title="9">                    $x,</a>
+<a class="sourceLine" id="cb1-10" title="10">                    $y,</a>
+<a class="sourceLine" id="cb1-11" title="11">                    $width <span class="kw">as</span> <span class="dt">usize</span>,</a>
+<a class="sourceLine" id="cb1-12" title="12">                    $height <span class="kw">as</span> <span class="dt">usize</span>);</a>
+<a class="sourceLine" id="cb1-13" title="13">        <span class="kw">use</span> <span class="pp">core::fmt::</span>Write;</a>
+<a class="sourceLine" id="cb1-14" title="14">        <span class="pp">write!</span>(writer, $($arg)*).unwrap();</a>
+<a class="sourceLine" id="cb1-15" title="15">        $sheet_manager.refresh($sheet_addr, $x, $y, $x + $length * <span class="dv">8</span>, $y + <span class="dv">16</span>);</a>
+<a class="sourceLine" id="cb1-16" title="16">    <span class="op">}}</span></a>
+<a class="sourceLine" id="cb1-17" title="17"><span class="op">}</span></a></code></pre></div>
+<p>引数が長大になってしまったので、あまり見た目はよくないが、少なくともrefreshと矩形領域のサイズのミスは防ぐことができるようになったのでよしとする。</p>
+<p>差分は<a href="https://github.com/yoshitsugu/hariboteos_in_rust/commit/11bd1b2ccda8b7028aab6fc03e23f582870ea131?diff=split">GitHubのdiff</a>を見てもらうのがわかりやすいかと思う。</p>
+<h2 id="タイマ用のfifoをまとめる">タイマ用のFIFOをまとめる</h2>
+<p>現状、タイマごとに別のFIFOを使っていたが、まとめるようにする。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="co">//lib.rs</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="at">#[</span>no_mangle<span class="at">]</span></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="at">#[</span>start<span class="at">]</span></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-5" title="5">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb2-6" title="6">    <span class="kw">let</span> timer_buf = <span class="pp">Fifo::</span>new(<span class="dv">8</span>); <span class="co">// &lt;- 一つに統合</span></a>
+<a class="sourceLine" id="cb2-7" title="7"></a>
+<a class="sourceLine" id="cb2-8" title="8">    <span class="co">// FIFOを統一して、キューにつめるデータで区別できるようにする</span></a>
+<a class="sourceLine" id="cb2-9" title="9">    <span class="kw">let</span> timer_index1 = TIMER_MANAGER.lock().alloc().unwrap();</a>
+<a class="sourceLine" id="cb2-10" title="10">    TIMER_MANAGER</a>
+<a class="sourceLine" id="cb2-11" title="11">        .lock()</a>
+<a class="sourceLine" id="cb2-12" title="12">        .init_timer(timer_index1, &amp;timer_buf, <span class="dv">10</span>);</a>
+<a class="sourceLine" id="cb2-13" title="13">    TIMER_MANAGER.lock().set_time(timer_index1, <span class="dv">1000</span>);</a>
+<a class="sourceLine" id="cb2-14" title="14">    <span class="kw">let</span> timer_index2 = TIMER_MANAGER.lock().alloc().unwrap();</a>
+<a class="sourceLine" id="cb2-15" title="15">    TIMER_MANAGER.lock().init_timer(timer_index2, &amp;timer_buf, <span class="dv">3</span>);</a>
+<a class="sourceLine" id="cb2-16" title="16">    TIMER_MANAGER.lock().set_time(timer_index2, <span class="dv">300</span>);</a>
+<a class="sourceLine" id="cb2-17" title="17">    <span class="kw">let</span> timer_index3 = TIMER_MANAGER.lock().alloc().unwrap();</a>
+<a class="sourceLine" id="cb2-18" title="18">    TIMER_MANAGER</a>
+<a class="sourceLine" id="cb2-19" title="19">        .lock()</a>
+<a class="sourceLine" id="cb2-20" title="20">        .init_timer(timer_index3, &amp;timer_buf, <span class="dv">1</span>);</a>
+<a class="sourceLine" id="cb2-21" title="21">    TIMER_MANAGER.lock().set_time(timer_index3, <span class="dv">50</span>);</a>
+<a class="sourceLine" id="cb2-22" title="22"></a>
+<a class="sourceLine" id="cb2-23" title="23">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb2-24" title="24">    <span class="kw">loop</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-25" title="25">        <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb2-26" title="26">        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> timer_buf.status() != <span class="dv">0</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-27" title="27">            <span class="co">// timer_bufで判定したあとに、データで判定</span></a>
+<a class="sourceLine" id="cb2-28" title="28">            <span class="kw">let</span> i = timer_buf.get().unwrap();</a>
+<a class="sourceLine" id="cb2-29" title="29">            sti();</a>
+<a class="sourceLine" id="cb2-30" title="30">            <span class="kw">if</span> i == <span class="dv">10</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-31" title="31">                <span class="pp">write_with_bg!</span>(</a>
+<a class="sourceLine" id="cb2-32" title="32">                    sheet_manager,</a>
+<a class="sourceLine" id="cb2-33" title="33">                    shi_bg,</a>
+<a class="sourceLine" id="cb2-34" title="34">                    buf_bg_addr,</a>
+<a class="sourceLine" id="cb2-35" title="35">                    *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">isize</span>,</a>
+<a class="sourceLine" id="cb2-36" title="36">                    *SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">isize</span>,</a>
+<a class="sourceLine" id="cb2-37" title="37">                    <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb2-38" title="38">                    <span class="dv">64</span>,</a>
+<a class="sourceLine" id="cb2-39" title="39">                    <span class="pp">Color::</span>White,</a>
+<a class="sourceLine" id="cb2-40" title="40">                    <span class="pp">Color::</span>DarkCyan,</a>
+<a class="sourceLine" id="cb2-41" title="41">                    <span class="dv">7</span>,</a>
+<a class="sourceLine" id="cb2-42" title="42">                    <span class="st">&quot;10[sec]&quot;</span></a>
+<a class="sourceLine" id="cb2-43" title="43">                );</a>
+<a class="sourceLine" id="cb2-44" title="44">            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> i == <span class="dv">3</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-45" title="45">                <span class="co">// ...</span></a>
+<a class="sourceLine" id="cb2-46" title="46">            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-47" title="47">                <span class="kw">if</span> i != <span class="dv">0</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-48" title="48">                    <span class="co">// ...</span></a>
+<a class="sourceLine" id="cb2-49" title="49">                <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-50" title="50">                    <span class="co">// ...</span></a>
+<a class="sourceLine" id="cb2-51" title="51">                <span class="op">}</span></a>
+<a class="sourceLine" id="cb2-52" title="52">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb2-53" title="53">    <span class="co">// 省略</span></a></code></pre></div>
+<h2 id="ベンチマークの導入">ベンチマークの導入</h2>
+<p>性能を計測するために、ベンチマークを導入する。<br />
+ここでは、エントリポイントとなる関数のloopにカウントアップする変数を仕込み、起動後3秒-10秒で何回ループが発生したかを計測することで、ベンチマークとする。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="co">// lib.rs</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="at">#[</span>no_mangle<span class="at">]</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="at">#[</span>start<span class="at">]</span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-5" title="5">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb3-6" title="6">    <span class="kw">let</span> <span class="kw">mut</span> count = <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb3-7" title="7">    <span class="kw">let</span> <span class="kw">mut</span> count_done = <span class="cn">false</span>;</a>
+<a class="sourceLine" id="cb3-8" title="8">    <span class="kw">loop</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-9" title="9">        count += <span class="dv">1</span>;</a>
+<a class="sourceLine" id="cb3-10" title="10">        <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb3-11" title="11">            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> i == <span class="dv">10</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-12" title="12">                <span class="pp">write_with_bg!</span>(sheet_manager, shi_bg, buf_bg_addr, *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">isize</span>, *SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">isize</span>,</a>
+<a class="sourceLine" id="cb3-13" title="13">                                <span class="dv">0</span>, <span class="dv">64</span>, <span class="pp">Color::</span>White, <span class="pp">Color::</span>DarkCyan, <span class="dv">7</span>, <span class="st">&quot;10[sec]&quot;</span>);</a>
+<a class="sourceLine" id="cb3-14" title="14">                <span class="kw">if</span> !count_done <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-15" title="15">                    <span class="co">// ウィンドウ内にループ数を表示</span></a>
+<a class="sourceLine" id="cb3-16" title="16">                    <span class="pp">write_with_bg!</span>(sheet_manager, shi_win, buf_win_addr, <span class="dv">160</span>, <span class="dv">52</span>, </a>
+<a class="sourceLine" id="cb3-17" title="17">                                   <span class="dv">40</span>, <span class="dv">28</span>, <span class="pp">Color::</span>Black,  <span class="pp">Color::</span>LightGray, <span class="dv">10</span>, <span class="st">&quot;{:&gt;010}&quot;</span>, count);</a>
+<a class="sourceLine" id="cb3-18" title="18">                    count_done = <span class="cn">true</span>;</a>
+<a class="sourceLine" id="cb3-19" title="19">                <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-20" title="20">            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> i == <span class="dv">3</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-21" title="21">                <span class="pp">write_with_bg!</span>(sheet_manager, shi_bg, buf_bg_addr, *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">isize</span>, *SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">isize</span>,</a>
+<a class="sourceLine" id="cb3-22" title="22">                              <span class="dv">0</span>, <span class="dv">80</span>, <span class="pp">Color::</span>White, <span class="pp">Color::</span>DarkCyan, <span class="dv">6</span>, <span class="st">&quot;3[sec]&quot;</span>);</a>
+<a class="sourceLine" id="cb3-23" title="23">                <span class="co">// 起動直後から測定すると誤差が大きいのでここから測定</span></a>
+<a class="sourceLine" id="cb3-24" title="24">                count = <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb3-25" title="25">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-26" title="26">            <span class="co">// 省略</span></a></code></pre></div>
+<h3 id="実行結果">実行結果</h3>
+<p>5回実行してみて、結果は以下の通りだった。</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode default"><code class="sourceCode default"><a class="sourceLine" id="cb4-1" title="1">1回目: 50507701</a>
+<a class="sourceLine" id="cb4-2" title="2">2回目: 47596192</a>
+<a class="sourceLine" id="cb4-3" title="3">3回目: 39071813</a>
+<a class="sourceLine" id="cb4-4" title="4">4回目: 43176467</a>
+<a class="sourceLine" id="cb4-5" title="5">5回目: 47981996</a></code></pre></div>
+<p>結構バラつきがあるが、QEMU上での確認なのでホストマシンの状況にも影響をうけそうだ。</p>
+<h2 id="fifoキューを統一">FIFOキューを統一</h2>
+<p>性能向上のため、割り込みデータを保持するのに使っているFIFOキューをキーボード用、マウス用、タイマ用でわけず、すべて同じFIFOキューを使うようにする。キューにつめこむデータの値の範囲で区別できるようにする。 以下、細かい差分が多いので、おおまかなところの差分だけ載せる。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="co">// fifo.rs</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="kw">pub</span> <span class="kw">struct</span> Fifo <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-3" title="3">    <span class="kw">pub</span> buf: RefCell&lt;<span class="op">[</span><span class="dt">u32</span>; <span class="dv">128</span><span class="op">]</span>&gt;, <span class="co">// 値をカバーできるようにu8 -&gt; u32にする</span></a>
+<a class="sourceLine" id="cb5-4" title="4">    <span class="kw">pub</span> p: Cell&lt;<span class="dt">u32</span>&gt;,</a>
+<a class="sourceLine" id="cb5-5" title="5">    <span class="kw">pub</span> q: Cell&lt;<span class="dt">u32</span>&gt;,</a>
+<a class="sourceLine" id="cb5-6" title="6">    <span class="kw">pub</span> free: Cell&lt;<span class="dt">u32</span>&gt;,</a>
+<a class="sourceLine" id="cb5-7" title="7">    <span class="kw">pub</span> flags: Cell&lt;<span class="dt">u32</span>&gt;,</a>
+<a class="sourceLine" id="cb5-8" title="8">    <span class="kw">pub</span> size: <span class="dt">u32</span>,</a>
+<a class="sourceLine" id="cb5-9" title="9"><span class="op">}</span></a>
+<a class="sourceLine" id="cb5-10" title="10"></a>
+<a class="sourceLine" id="cb5-11" title="11"><span class="pp">lazy_static!</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-12" title="12">    <span class="co">// 割り込み全般で使うように汎用的なFIFOキューを定義しておく。</span></a>
+<a class="sourceLine" id="cb5-13" title="13">    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw">ref</span> FIFO_BUF: Mutex&lt;Fifo&gt; = <span class="pp">Mutex::</span>new(<span class="pp">Fifo::</span>new(<span class="dv">128</span>));</a>
+<a class="sourceLine" id="cb5-14" title="14"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="co">// interrupt.rs</span></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="kw">const</span> KEYBOARD_OFFSET: <span class="dt">u32</span> = <span class="dv">256</span>;</a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="kw">const</span> MOUSE_OFFSET: <span class="dt">u32</span> = <span class="dv">512</span>;</a>
+<a class="sourceLine" id="cb6-4" title="4"></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> inthandler21() <span class="op">{</span></a>
+<a class="sourceLine" id="cb6-6" title="6">    out8(PIC0_OCW2, <span class="dv">0x61</span>); <span class="co">// IRQ-01 受付終了</span></a>
+<a class="sourceLine" id="cb6-7" title="7">    <span class="kw">let</span> key = in8(PORT_KEYDAT);</a>
+<a class="sourceLine" id="cb6-8" title="8">    FIFO_BUF.lock().put(key <span class="kw">as</span> <span class="dt">u32</span> + KEYBOARD_OFFSET).unwrap();</a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="op">}</span></a>
+<a class="sourceLine" id="cb6-10" title="10"></a>
+<a class="sourceLine" id="cb6-11" title="11"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> inthandler2c() <span class="op">{</span></a>
+<a class="sourceLine" id="cb6-12" title="12">    out8(PIC1_OCW2, <span class="dv">0x64</span>); <span class="co">// IRQ-12受付完了をPIC1に通知</span></a>
+<a class="sourceLine" id="cb6-13" title="13">    out8(PIC0_OCW2, <span class="dv">0x62</span>); <span class="co">// IRQ-02受付完了をPIC0に通知</span></a>
+<a class="sourceLine" id="cb6-14" title="14">    <span class="kw">let</span> data = in8(PORT_KEYDAT);</a>
+<a class="sourceLine" id="cb6-15" title="15">    FIFO_BUF.lock().put(data <span class="kw">as</span> <span class="dt">u32</span> + MOUSE_OFFSET).unwrap();</a>
+<a class="sourceLine" id="cb6-16" title="16"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="co">// lib.rs</span></a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="at">#[</span>no_mangle<span class="at">]</span></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="at">#[</span>start<span class="at">]</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-5" title="5">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb7-6" title="6">        <span class="kw">if</span> FIFO_BUF.lock().status() != <span class="dv">0</span> <span class="op">{</span> <span class="co">// FIFO_BUFで判定</span></a>
+<a class="sourceLine" id="cb7-7" title="7">            <span class="kw">let</span> i = FIFO_BUF.lock().get().unwrap();</a>
+<a class="sourceLine" id="cb7-8" title="8">            sti();</a>
+<a class="sourceLine" id="cb7-9" title="9">            <span class="kw">if</span> <span class="dv">256</span> &lt;= i &amp;&amp; i &lt;= <span class="dv">511</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-10" title="10">                <span class="co">// キーボード用の処理</span></a>
+<a class="sourceLine" id="cb7-11" title="11">            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="dv">512</span> &lt;= i &amp;&amp; i &lt;= <span class="dv">767</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-12" title="12">                <span class="co">// マウス用の処理</span></a>
+<a class="sourceLine" id="cb7-13" title="13">            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="co">// タイマ用の処理 省略</span></a></code></pre></div>
+<h3 id="実行結果-1">実行結果</h3>
+<p>FIFOキューを統一した結果の性能向上を測るため、再度ベンチマークで計測してみた</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode default"><code class="sourceCode default"><a class="sourceLine" id="cb8-1" title="1">1回目: 70267378</a>
+<a class="sourceLine" id="cb8-2" title="2">2回目: 73037165</a>
+<a class="sourceLine" id="cb8-3" title="3">3回目: 69773835</a>
+<a class="sourceLine" id="cb8-4" title="4">4回目: 69880820</a>
+<a class="sourceLine" id="cb8-5" title="5">5回目: 70381397</a></code></pre></div>
+<p>1.5倍ほど向上してそうだ。</p>
+<h2 id="タイマの順番を線形リスト形式で保持するようにする">タイマの順番を線形リスト形式で保持するようにする</h2>
+<p>現状、タイマの順番は配列形式でもっているが、これは先頭がタイムアウトになると後ろを詰めなおす処理がいるので非効率だ。(配列の長さをnとするとO(n)かかる。)<br />
+線形リストのように、次の要素のインデックスを要素自身にもたせることで効率化を図る。</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb9-1" title="1"><span class="co">//timer.rs</span></a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="at">,</span> <span class="bu">Clone</span><span class="at">,</span> <span class="bu">Copy</span><span class="at">)]</span></a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="kw">pub</span> <span class="kw">struct</span> Timer <span class="op">{</span></a>
+<a class="sourceLine" id="cb9-4" title="4">    <span class="kw">pub</span> timeout: <span class="dt">u32</span>,</a>
+<a class="sourceLine" id="cb9-5" title="5">    <span class="kw">pub</span> flag: TimerFlag,</a>
+<a class="sourceLine" id="cb9-6" title="6">    <span class="kw">pub</span> data: <span class="dt">u8</span>,</a>
+<a class="sourceLine" id="cb9-7" title="7">    <span class="kw">pub</span> next: <span class="dt">usize</span>, <span class="co">// 追加 次の要素のインデックスをもつ</span></a>
+<a class="sourceLine" id="cb9-8" title="8"><span class="op">}</span></a>
+<a class="sourceLine" id="cb9-9" title="9"></a>
+<a class="sourceLine" id="cb9-10" title="10"><span class="kw">impl</span> Timer <span class="op">{</span></a>
+<a class="sourceLine" id="cb9-11" title="11">    <span class="kw">pub</span> <span class="kw">fn</span> new() -&gt; Timer <span class="op">{</span></a>
+<a class="sourceLine" id="cb9-12" title="12">        Timer <span class="op">{</span></a>
+<a class="sourceLine" id="cb9-13" title="13">            timeout: <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb9-14" title="14">            flag: <span class="pp">TimerFlag::</span>AVAILABLE,</a>
+<a class="sourceLine" id="cb9-15" title="15">            data: <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb9-16" title="16">            next: <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb9-17" title="17">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb9-18" title="18">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb9-19" title="19"><span class="op">}</span></a>
+<a class="sourceLine" id="cb9-20" title="20"></a>
+<a class="sourceLine" id="cb9-21" title="21"><span class="kw">pub</span> <span class="kw">struct</span> TimerManager <span class="op">{</span></a>
+<a class="sourceLine" id="cb9-22" title="22">    <span class="kw">pub</span> count: <span class="dt">u32</span>,</a>
+<a class="sourceLine" id="cb9-23" title="23">    <span class="kw">pub</span> next_tick: <span class="dt">u32</span>, <span class="co">// &lt;- 元々nextだったが、紛らわしいので名前変更</span></a>
+<a class="sourceLine" id="cb9-24" title="24">    <span class="kw">pub</span> counting: <span class="dt">u32</span>,</a>
+<a class="sourceLine" id="cb9-25" title="25">    <span class="kw">pub</span> t0: <span class="dt">usize</span>,</a>
+<a class="sourceLine" id="cb9-26" title="26">    <span class="kw">pub</span> timers_data: <span class="op">[</span>Timer; MAX_TIMER<span class="op">]</span>,</a>
+<a class="sourceLine" id="cb9-27" title="27"><span class="op">}</span></a></code></pre></div>
+<p>各関数も変更する。</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb10-1" title="1"><span class="co">//timer.rs</span></a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> inthandler20() <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-3" title="3">    out8(PIC0_OCW2, <span class="dv">0x60</span>); <span class="co">// IRQ-00受付完了をPICに通知</span></a>
+<a class="sourceLine" id="cb10-4" title="4">    <span class="kw">let</span> <span class="kw">mut</span> tm = TIMER_MANAGER.lock();</a>
+<a class="sourceLine" id="cb10-5" title="5">    tm.count += <span class="dv">1</span>;</a>
+<a class="sourceLine" id="cb10-6" title="6">    <span class="kw">if</span> tm.next_tick &gt; tm.count <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-7" title="7">        <span class="kw">return</span>;</a>
+<a class="sourceLine" id="cb10-8" title="8">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-9" title="9">    <span class="kw">let</span> <span class="kw">mut</span> timer_index = tm.t0;</a>
+<a class="sourceLine" id="cb10-10" title="10">    <span class="kw">let</span> <span class="kw">mut</span> timeout_count = <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb10-11" title="11">    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span>..tm.counting <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-12" title="12">        timeout_count = i;</a>
+<a class="sourceLine" id="cb10-13" title="13">        <span class="kw">if</span> tm.timers_data<span class="op">[</span>timer_index<span class="op">]</span>.timeout &gt; tm.count <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-14" title="14">            <span class="kw">break</span>;</a>
+<a class="sourceLine" id="cb10-15" title="15">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-16" title="16">        <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-17" title="17">            <span class="kw">let</span> <span class="kw">mut</span> t_mut = &amp;<span class="kw">mut</span> tm.timers_data<span class="op">[</span>timer_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb10-18" title="18">            t_mut.flag = <span class="pp">TimerFlag::</span>USED;</a>
+<a class="sourceLine" id="cb10-19" title="19">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-20" title="20">        <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-21" title="21">            <span class="kw">let</span> timer = &amp;tm.timers_data<span class="op">[</span>timer_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb10-22" title="22">            FIFO_BUF.lock().put(timer.data <span class="kw">as</span> <span class="dt">u32</span>).unwrap();</a>
+<a class="sourceLine" id="cb10-23" title="23">            timer_index = timer.next;</a>
+<a class="sourceLine" id="cb10-24" title="24">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-25" title="25">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-26" title="26">    tm.counting -= timeout_count;</a>
+<a class="sourceLine" id="cb10-27" title="27">    tm.t0 = timer_index;</a>
+<a class="sourceLine" id="cb10-28" title="28"></a>
+<a class="sourceLine" id="cb10-29" title="29">    <span class="kw">if</span> tm.counting &gt; <span class="dv">0</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-30" title="30">        tm.next_tick = tm.timers_data<span class="op">[</span>tm.t0<span class="op">]</span>.timeout;</a>
+<a class="sourceLine" id="cb10-31" title="31">    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-32" title="32">        tm.next_tick = <span class="dv">0xffffffff</span>;</a>
+<a class="sourceLine" id="cb10-33" title="33">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-34" title="34"><span class="op">}</span></a>
+<a class="sourceLine" id="cb10-35" title="35"></a>
+<a class="sourceLine" id="cb10-36" title="36"><span class="kw">impl</span> TimerManager <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-37" title="37">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb10-38" title="38">        <span class="kw">pub</span> <span class="kw">fn</span> set_time(&amp;<span class="kw">mut</span> <span class="kw">self</span>, timer_index: <span class="dt">usize</span>, timeout: <span class="dt">u32</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-39" title="39">        <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-40" title="40">            <span class="kw">let</span> <span class="kw">mut</span> timer = &amp;<span class="kw">mut</span> <span class="kw">self</span>.timers_data<span class="op">[</span>timer_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb10-41" title="41">            timer.timeout = timeout + <span class="kw">self</span>.count;</a>
+<a class="sourceLine" id="cb10-42" title="42">            timer.flag = <span class="pp">TimerFlag::</span>COUNTING;</a>
+<a class="sourceLine" id="cb10-43" title="43">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-44" title="44">        <span class="kw">let</span> eflags = load_eflags();</a>
+<a class="sourceLine" id="cb10-45" title="45">        cli();</a>
+<a class="sourceLine" id="cb10-46" title="46">        <span class="kw">self</span>.counting += <span class="dv">1</span>;</a>
+<a class="sourceLine" id="cb10-47" title="47">        <span class="kw">if</span> <span class="kw">self</span>.counting == <span class="dv">1</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-48" title="48">            <span class="kw">let</span> <span class="kw">mut</span> timer = &amp;<span class="kw">mut</span> <span class="kw">self</span>.timers_data<span class="op">[</span>timer_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb10-49" title="49">            <span class="kw">self</span>.t0 = timer_index;</a>
+<a class="sourceLine" id="cb10-50" title="50">            timer.next = <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb10-51" title="51">            <span class="kw">self</span>.next_tick = timer.timeout;</a>
+<a class="sourceLine" id="cb10-52" title="52">            store_eflags(eflags);</a>
+<a class="sourceLine" id="cb10-53" title="53">            <span class="kw">return</span>;</a>
+<a class="sourceLine" id="cb10-54" title="54">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-55" title="55">        <span class="kw">let</span> <span class="kw">mut</span> t_index = <span class="kw">self</span>.t0;</a>
+<a class="sourceLine" id="cb10-56" title="56">        <span class="kw">if</span> &amp;<span class="kw">self</span>.timers_data<span class="op">[</span>timer_index<span class="op">]</span>.timeout &lt;= &amp;<span class="kw">self</span>.timers_data<span class="op">[</span>t_index<span class="op">]</span>.timeout <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-57" title="57">            <span class="co">// 先頭に入れる</span></a>
+<a class="sourceLine" id="cb10-58" title="58">            <span class="kw">let</span> <span class="kw">mut</span> timer = &amp;<span class="kw">mut</span> <span class="kw">self</span>.timers_data<span class="op">[</span>timer_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb10-59" title="59">            <span class="kw">self</span>.t0 = timer_index;</a>
+<a class="sourceLine" id="cb10-60" title="60">            timer.next = t_index;</a>
+<a class="sourceLine" id="cb10-61" title="61">            <span class="kw">self</span>.next_tick = timer.timeout;</a>
+<a class="sourceLine" id="cb10-62" title="62">            store_eflags(eflags);</a>
+<a class="sourceLine" id="cb10-63" title="63">            <span class="kw">return</span>;</a>
+<a class="sourceLine" id="cb10-64" title="64">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-65" title="65">        <span class="kw">let</span> <span class="kw">mut</span> old_t_index = t_index;</a>
+<a class="sourceLine" id="cb10-66" title="66">        <span class="co">// 間に入るところを探す</span></a>
+<a class="sourceLine" id="cb10-67" title="67">        <span class="kw">loop</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-68" title="68">            old_t_index = t_index;</a>
+<a class="sourceLine" id="cb10-69" title="69">            t_index = <span class="kw">self</span>.timers_data<span class="op">[</span>t_index<span class="op">]</span>.next;</a>
+<a class="sourceLine" id="cb10-70" title="70">            <span class="kw">if</span> t_index == <span class="dv">0</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-71" title="71">                <span class="kw">break</span>;</a>
+<a class="sourceLine" id="cb10-72" title="72">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-73" title="73">            <span class="kw">if</span> <span class="kw">self</span>.timers_data<span class="op">[</span>timer_index<span class="op">]</span>.timeout &lt;= <span class="kw">self</span>.timers_data<span class="op">[</span>t_index<span class="op">]</span>.timeout <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-74" title="74">                <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-75" title="75">                    <span class="kw">let</span> <span class="kw">mut</span> s = &amp;<span class="kw">mut</span> <span class="kw">self</span>.timers_data<span class="op">[</span>old_t_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb10-76" title="76">                    s.next = timer_index;</a>
+<a class="sourceLine" id="cb10-77" title="77">                <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-78" title="78">                <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-79" title="79">                    <span class="kw">let</span> <span class="kw">mut</span> timer = &amp;<span class="kw">mut</span> <span class="kw">self</span>.timers_data<span class="op">[</span>timer_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb10-80" title="80">                    timer.next = t_index;</a>
+<a class="sourceLine" id="cb10-81" title="81">                <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-82" title="82">                store_eflags(eflags);</a>
+<a class="sourceLine" id="cb10-83" title="83">                <span class="kw">return</span>;</a>
+<a class="sourceLine" id="cb10-84" title="84">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-85" title="85">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-86" title="86">        <span class="co">// 入るところが見つからなかったので、最後に入れる</span></a>
+<a class="sourceLine" id="cb10-87" title="87">        <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-88" title="88">            <span class="kw">let</span> <span class="kw">mut</span> s = &amp;<span class="kw">mut</span> <span class="kw">self</span>.timers_data<span class="op">[</span>old_t_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb10-89" title="89">            s.next = timer_index;</a>
+<a class="sourceLine" id="cb10-90" title="90">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-91" title="91">        <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-92" title="92">            <span class="kw">let</span> <span class="kw">mut</span> timer = &amp;<span class="kw">mut</span> <span class="kw">self</span>.timers_data<span class="op">[</span>timer_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb10-93" title="93">            timer.next = <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb10-94" title="94">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-95" title="95"></a>
+<a class="sourceLine" id="cb10-96" title="96">        store_eflags(eflags);</a>
+<a class="sourceLine" id="cb10-97" title="97">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb10-98" title="98">    <span class="co">// 省略</span></a></code></pre></div>
+<p>所有権の問題回避でカッコが多いが、やっていることはそこまで難しくない。</p>
+<h3 id="実行結果-2">実行結果</h3>
+<p>本の通り、これだけではあまり速くならなかった。</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode default"><code class="sourceCode default"><a class="sourceLine" id="cb11-1" title="1">1回目: 71964683</a>
+<a class="sourceLine" id="cb11-2" title="2">2回目: 68172741</a>
+<a class="sourceLine" id="cb11-3" title="3">3回目: 68513039</a>
+<a class="sourceLine" id="cb11-4" title="4">4回目: 71347232</a>
+<a class="sourceLine" id="cb11-5" title="5">5回目: 77214783</a></code></pre></div>
+<h2 id="長さではなく番兵で判定するようにする">長さではなく番兵で判定するようにする</h2>
+<p>上記に加えて、有効なタイマの長さベースで管理するのではなく、最初からタイマの順番用配列に番兵となるようなデータを入れておくことで判定ロジックを簡単にする</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb12-1" title="1"><span class="co">// timer.rs</span></a>
+<a class="sourceLine" id="cb12-2" title="2"></a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="kw">impl</span> TimerManager <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-4" title="4">    <span class="kw">pub</span> <span class="kw">fn</span> new() -&gt; TimerManager <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-5" title="5">        <span class="kw">let</span> <span class="kw">mut</span> tm = TimerManager <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-6" title="6">            count: <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb12-7" title="7">            next_tick: <span class="dv">0xffffffff</span>,</a>
+<a class="sourceLine" id="cb12-8" title="8">            t0: <span class="cn">Some</span>(MAX_TIMER - <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb12-9" title="9">            timers_data: <span class="op">[</span><span class="pp">Timer::</span>new(); MAX_TIMER<span class="op">]</span>,</a>
+<a class="sourceLine" id="cb12-10" title="10">        <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb12-11" title="11">        <span class="co">// 番兵</span></a>
+<a class="sourceLine" id="cb12-12" title="12">        tm.timers_data<span class="op">[</span>MAX_TIMER - <span class="dv">1</span><span class="op">]</span> = Timer <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-13" title="13">            timeout: <span class="dv">0xffffffff</span>,</a>
+<a class="sourceLine" id="cb12-14" title="14">            flag: <span class="pp">TimerFlag::</span>COUNTING,</a>
+<a class="sourceLine" id="cb12-15" title="15">            data: <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb12-16" title="16">            next: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb12-17" title="17">        <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb12-18" title="18">        tm</a>
+<a class="sourceLine" id="cb12-19" title="19">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-20" title="20"></a>
+<a class="sourceLine" id="cb12-21" title="21">    <span class="kw">pub</span> <span class="kw">fn</span> set_time(&amp;<span class="kw">mut</span> <span class="kw">self</span>, timer_index: <span class="dt">usize</span>, timeout: <span class="dt">u32</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-22" title="22">        <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-23" title="23">            <span class="kw">let</span> <span class="kw">mut</span> timer = &amp;<span class="kw">mut</span> <span class="kw">self</span>.timers_data<span class="op">[</span>timer_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb12-24" title="24">            timer.timeout = timeout + <span class="kw">self</span>.count;</a>
+<a class="sourceLine" id="cb12-25" title="25">            timer.flag = <span class="pp">TimerFlag::</span>COUNTING;</a>
+<a class="sourceLine" id="cb12-26" title="26">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-27" title="27">        <span class="kw">if</span> <span class="kw">self</span>.t0.is_none() <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-28" title="28">            <span class="kw">return</span>;</a>
+<a class="sourceLine" id="cb12-29" title="29">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-30" title="30">        <span class="kw">let</span> eflags = load_eflags();</a>
+<a class="sourceLine" id="cb12-31" title="31">        cli();</a>
+<a class="sourceLine" id="cb12-32" title="32">        <span class="kw">let</span> <span class="kw">mut</span> t_index = <span class="kw">self</span>.t0.unwrap();</a>
+<a class="sourceLine" id="cb12-33" title="33">        <span class="kw">if</span> &amp;<span class="kw">self</span>.timers_data<span class="op">[</span>timer_index<span class="op">]</span>.timeout &lt;= &amp;<span class="kw">self</span>.timers_data<span class="op">[</span>t_index<span class="op">]</span>.timeout <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-34" title="34">            <span class="co">// 先頭に入れる</span></a>
+<a class="sourceLine" id="cb12-35" title="35">            <span class="kw">let</span> <span class="kw">mut</span> timer = &amp;<span class="kw">mut</span> <span class="kw">self</span>.timers_data<span class="op">[</span>timer_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb12-36" title="36">            <span class="kw">self</span>.t0 = <span class="cn">Some</span>(timer_index);</a>
+<a class="sourceLine" id="cb12-37" title="37">            timer.next = <span class="cn">Some</span>(t_index);</a>
+<a class="sourceLine" id="cb12-38" title="38">            <span class="kw">self</span>.next_tick = timer.timeout;</a>
+<a class="sourceLine" id="cb12-39" title="39">            store_eflags(eflags);</a>
+<a class="sourceLine" id="cb12-40" title="40">            <span class="kw">return</span>;</a>
+<a class="sourceLine" id="cb12-41" title="41">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-42" title="42">        <span class="kw">let</span> <span class="kw">mut</span> old_t_index: <span class="dt">usize</span>;</a>
+<a class="sourceLine" id="cb12-43" title="43">        <span class="co">// 挿入できるインデックスをさがす</span></a>
+<a class="sourceLine" id="cb12-44" title="44">        <span class="kw">loop</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-45" title="45">            old_t_index = t_index;</a>
+<a class="sourceLine" id="cb12-46" title="46">            <span class="kw">if</span> <span class="kw">self</span>.timers_data<span class="op">[</span>t_index<span class="op">]</span>.next.is_none() <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-47" title="47">                store_eflags(eflags);</a>
+<a class="sourceLine" id="cb12-48" title="48">                <span class="kw">break</span>;</a>
+<a class="sourceLine" id="cb12-49" title="49">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-50" title="50">            t_index = <span class="kw">self</span>.timers_data<span class="op">[</span>t_index<span class="op">]</span>.next.unwrap();</a>
+<a class="sourceLine" id="cb12-51" title="51">            <span class="kw">if</span> <span class="kw">self</span>.timers_data<span class="op">[</span>timer_index<span class="op">]</span>.timeout &lt;= <span class="kw">self</span>.timers_data<span class="op">[</span>t_index<span class="op">]</span>.timeout <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-52" title="52">                <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-53" title="53">                    <span class="kw">let</span> <span class="kw">mut</span> s = &amp;<span class="kw">mut</span> <span class="kw">self</span>.timers_data<span class="op">[</span>old_t_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb12-54" title="54">                    s.next = <span class="cn">Some</span>(timer_index);</a>
+<a class="sourceLine" id="cb12-55" title="55">                <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-56" title="56">                <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-57" title="57">                    <span class="kw">let</span> <span class="kw">mut</span> timer = &amp;<span class="kw">mut</span> <span class="kw">self</span>.timers_data<span class="op">[</span>timer_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb12-58" title="58">                    timer.next = <span class="cn">Some</span>(t_index);</a>
+<a class="sourceLine" id="cb12-59" title="59">                <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-60" title="60">                store_eflags(eflags);</a>
+<a class="sourceLine" id="cb12-61" title="61">                <span class="kw">return</span>;</a>
+<a class="sourceLine" id="cb12-62" title="62">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-63" title="63">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-64" title="64">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-65" title="65">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb12-66" title="66"><span class="op">}</span></a>
+<a class="sourceLine" id="cb12-67" title="67"></a>
+<a class="sourceLine" id="cb12-68" title="68"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> inthandler20() <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-69" title="69">    out8(PIC0_OCW2, <span class="dv">0x60</span>); <span class="co">// IRQ-00受付完了をPICに通知</span></a>
+<a class="sourceLine" id="cb12-70" title="70">    <span class="kw">let</span> <span class="kw">mut</span> tm = TIMER_MANAGER.lock();</a>
+<a class="sourceLine" id="cb12-71" title="71">    tm.count += <span class="dv">1</span>;</a>
+<a class="sourceLine" id="cb12-72" title="72">    <span class="kw">if</span> tm.next_tick &gt; tm.count <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-73" title="73">        <span class="kw">return</span>;</a>
+<a class="sourceLine" id="cb12-74" title="74">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-75" title="75">    <span class="kw">let</span> <span class="kw">mut</span> timer_index = tm.t0;</a>
+<a class="sourceLine" id="cb12-76" title="76">    <span class="kw">loop</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-77" title="77">        <span class="kw">if</span> timer_index.is_none() <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-78" title="78">            <span class="kw">return</span>;</a>
+<a class="sourceLine" id="cb12-79" title="79">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-80" title="80">        <span class="kw">let</span> t_index = timer_index.unwrap();</a>
+<a class="sourceLine" id="cb12-81" title="81">        <span class="kw">if</span> tm.timers_data<span class="op">[</span>t_index<span class="op">]</span>.timeout &gt; tm.count <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-82" title="82">            <span class="kw">break</span>;</a>
+<a class="sourceLine" id="cb12-83" title="83">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-84" title="84">        <span class="kw">let</span> <span class="kw">mut</span> timer = &amp;<span class="kw">mut</span> tm.timers_data<span class="op">[</span>t_index<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb12-85" title="85">        timer.flag = <span class="pp">TimerFlag::</span>USED;</a>
+<a class="sourceLine" id="cb12-86" title="86">        FIFO_BUF.lock().put(timer.data <span class="kw">as</span> <span class="dt">u32</span>).unwrap();</a>
+<a class="sourceLine" id="cb12-87" title="87">        timer_index = timer.next;</a>
+<a class="sourceLine" id="cb12-88" title="88">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-89" title="89">    tm.t0 = timer_index;</a>
+<a class="sourceLine" id="cb12-90" title="90">    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(t_index) = timer_index <span class="op">{</span></a>
+<a class="sourceLine" id="cb12-91" title="91">        tm.next_tick = tm.timers_data<span class="op">[</span>t_index<span class="op">]</span>.timeout;</a>
+<a class="sourceLine" id="cb12-92" title="92">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb12-93" title="93"><span class="op">}</span></a></code></pre></div>
+<h3 id="実行結果-3">実行結果</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode default"><code class="sourceCode default"><a class="sourceLine" id="cb13-1" title="1">1回目: 67180042</a>
+<a class="sourceLine" id="cb13-2" title="2">2回目: 75023138</a>
+<a class="sourceLine" id="cb13-3" title="3">3回目: 71575761</a>
+<a class="sourceLine" id="cb13-4" title="4">4回目: 76029007</a>
+<a class="sourceLine" id="cb13-5" title="5">5回目: 76825781</a></code></pre></div>
+<p>少し速くなったようだ。</p>
+<p>13日目は以上となる。ここまでの内容のコードは<a href="https://github.com/yoshitsugu/hariboteos_in_rust/tree/day13">yoshitsugu/hariboteos_in_rustのday13</a>としてタグを打ってある。</p>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2019-06-29-haribote-os-in-rust-day13.html" class="hatena-bookmark-button" data-hatena-bookmark-title="「30日でできる！OS自作入門」をRustで。13日目 - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>

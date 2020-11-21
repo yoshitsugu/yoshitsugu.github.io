@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>「30日でできる！OS自作入門」をRustで。30日目 - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="「30日でできる！OS自作入門」をRustで。30日目 - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2019-08-23-haribote-os-in-rust-day30.html" />
+        <meta property="og:description" content="「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回で最後となる。 " />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。30日目 - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回で最後となる。 " />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>「30日でできる！OS自作入門」をRustで。30日目</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on August 23, 2019</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a href="../tags/OS.html">OS</a>, <a href="../tags/Rust.html">Rust</a></span>
+    
+</div>
+
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回で最後となる。 <!--more--></p>
+<p>アプリケーションを作っていく。特にソースを載せてもあまり意味がなさそうなので、ソースは載せず、概要と実行結果だけにとどめる。</p>
+<h2 id="数値演算をする">数値演算をする</h2>
+<p>簡単な数値演算プログラムを作る。<br />
+ソースは<a href="https://github.com/yoshitsugu/hariboteos_in_rust/blob/master/apps/calc/src/lib.rs">こちら</a>を参照のこと。<br />
+本の内容と同様、パーズ結果の中間表現のようなものは挟まず、パーズした木の端にあたるところからそのまま評価していく形の実装となる。</p>
+<h3 id="実行結果">実行結果</h3>
+<p><img src="../images/20190823/calc.png" class="blog-img img-responsive" alt="数値演算" title="数値演算" /></p>
+<h2 id="テキストビューワを作る">テキストビューワを作る</h2>
+<p>スクロールつきでテキストを表示できるビューワを作る。<br />
+ここで、コンソール以外のウィンドウでは日本語対応していないことに気づいたので、日本語対応部分をコンソール内から外に切り出した。(本のコードでは元々そうなっていた。)</p>
+<h3 id="実行結果-1">実行結果</h3>
+<p><img src="../images/20190823/tview.gif" class="blog-img img-responsive" alt="テキストビューワ" title="テキストビューワ" /></p>
+<h2 id="画像ビューワを作る">画像ビューワを作る</h2>
+<p>本では音楽再生のアプリも作っているが、QEMUだと音がならないため、とばして画像ビューワを作る。<br />
+ソースは<a href>こちら</a>を参照のこと。</p>
+<h3 id="実行結果-2">実行結果</h3>
+<p><img src="../images/20190823/gview.gif" class="blog-img img-responsive" alt="画像ビューワ" title="画像ビューワ" /></p>
+<p>30日目は以上となる。ここまでの内容のコードは<a href="https://github.com/yoshitsugu/hariboteos_in_rust/tree/day30">yoshitsugu/hariboteos_in_rustのday30</a>としてタグを打ってある。</p>
+<h2 id="感想など">感想など</h2>
+<p>ここまでで本の内容で実装したいものは実装できたので一旦終了とする。 折角なので、感想も書いておく。</p>
+<p>自分はあまりOSなどいわゆる低レイヤーと呼ばれるような部分について詳しくなく、もう少し詳しくなりたい、という思いからこの本を読みはじめた。そういう意味では、かなり勉強になったと思う。今の最新のOSはそもそもブートがUEFIになっていたり、メモリ管理にはセグメンテーションではなくページングが必須になっていたり<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>とかなり違うようだが、エッセンスを学ぶにはよかったように思う。</p>
+<p>また、勉強中のRustで書いたため、余計時間がかかった部分もあったが、デバッグ時のエラーメッセージや、所有権の仕組みによるメモリ汚染の防止など、Rustの洗練されている部分の恩恵もかなり受けられたのではないかと思う。<br />
+とはいえ、本のCのコードをそのまま翻訳したような<code>unsafe</code>なコードばかり書いてしまったのでそこはもう少しやり方を変えてもよかったかもしれない。</p>
+<p>最後に、3ヶ月近くかかってしまったが、楽しくすすめられたのでよかったと思う。</p>
+<p><img src="../images/20190823/haribote.png" class="blog-img img-responsive" /></p>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="https://docs.google.com/presentation/d/1mbLk70RKi-ExLzb78WosCu5DujpQN2K7B9iSbUGRXq4/mobilepresent">こちらのスライド</a> が現代のOSの差分を知るのにちょうどよかった。<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2019-08-23-haribote-os-in-rust-day30.html" class="hatena-bookmark-button" data-hatena-bookmark-title="「30日でできる！OS自作入門」をRustで。30日目 - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>

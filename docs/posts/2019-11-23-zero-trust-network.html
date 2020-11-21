@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>「ゼロトラストネットワーク」を読んだ - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="「ゼロトラストネットワーク」を読んだ - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2019-11-23-zero-trust-network.html" />
+        <meta property="og:description" content="「ゼロトラストネットワーク」 を読んだので感想などを書く。 " />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="「ゼロトラストネットワーク」を読んだ - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="「ゼロトラストネットワーク」 を読んだので感想などを書く。 " />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>「ゼロトラストネットワーク」を読んだ</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on November 23, 2019</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/Zero%20Trust%20Networks.html">Zero Trust Networks</a>, <a href="../tags/Book%20Review.html">Book Review</a></span>
+    
+</div>
+
+<p><a href="https://www.oreilly.co.jp/books/9784873118888/">「ゼロトラストネットワーク」</a> を読んだので感想などを書く。 <!--more--></p>
+<h2 id="読んだ目的">読んだ目的</h2>
+<p>今の会社はフルリモート環境ということで、各自自宅やカフェなどで普段作業を行っている。 そういった状況において、セキュリティを担保するためのよりよい方法が学べるのではないかと思い、この本を読んだ。</p>
+<h2 id="感想">感想</h2>
+<p>この本の通りにゼロトラストネットワークを構築するのは大変そうだなと感じた。コントロールプレーンに認証、認可を集約させるような仕組みの構築や、信用スコアを用いた動的な認可の制御など、大掛かりになりそうなものが多い印象だった。<br />
+後半の一部にコントロールプレーンなしの簡易的なものの導入方法も触れられており、まずはここを目指せるとよいかと思う。<br />
+また、できるだけ信用を動的にするための仕組み、特に期限つきの認証・認可ができるような仕組みの導入はゼロトラストに近づくために重要そうだと感じた。</p>
+<h2 id="各章ごとの気になった点">各章ごとの気になった点</h2>
+<h3 id="章-ゼロトラストの基礎">1章 ゼロトラストの基礎</h3>
+<p>ここでは、なぜゼロトラストネットワークが必要なのかについて述べられていた。従来のネットワークの構成方法を「境界モデル」とよび、境界モデルの限界(内部に潜入さえしてしまえば、信用された状態になるなど)に触れられており、なるほど、と感じた。</p>
+<h3 id="章-信頼と信用の管理">2章 信頼と信用の管理</h3>
+<p>2章では、脅威モデル、公開鍵基盤などの説明をした上で、ゼロトラストの構成要素の説明がされていた。ゼロトラストではパブリックPKIよりプライベートPKIを推奨する、という一瞬驚く主張がされており、興味深かった。また、sudoのように必要なときだけ権限を取得する、最小権限の原則については、比較的手軽に実践できそうで、心がけたい点だ。<br />
+アメリカのクレジットカードスコアのように信用スコアに応じて権限がかわる、というモデルはここで導入されていて、とても面白い、かつリーズナブルな発想だな、と思った。</p>
+<h3 id="章-ネットワークエージェント">3章 ネットワークエージェント</h3>
+<p>エージェントとはユーザーとデバイスのデータの組み合わせことであり、ゼロトラストではこのエージェントの単位で認可を検証する。ある人がPCではGitリポジトリへのコミットを行うが、モバイル端末でアクセスするときはコミットはしない、などの特性によって認可制御ができるからである。この辺の話も原則的にはうなづけることが多く、どう実現するかは別として、その単位で認可の制御ができるのが理想だと感じた。<br />
+また、エージェントは認証には使用されず、認可には使用される、というのも興味深かった。<br />
+ゼロトラストネットワーク全体について言えることだが、まだ標準は決まっていないため、各自工夫が必要そうだ。</p>
+<h3 id="章-認可の判断">4章 認可の判断</h3>
+<p>4章ではゼロトラストネットワークでの認可アーキテクチャについて説明されていた。</p>
+<ul>
+<li>エンフォーサ: 認可の問い合わせを行うクライアントのようなもの。ワークロードのできるだけ近くに配置。</li>
+<li>ポリシーエンジン: 認可の可否を判断する。</li>
+<li>トラストエンジン: リスク分析を行い、ポリシーエンジンに信用スコアを提供する</li>
+<li>データストア: ポリシーエンジンやトラストエンジンから使用されるデータを格納する場所</li>
+</ul>
+<h3 id="章-デバイスの信頼と信用">5章 デバイスの信頼と信用</h3>
+<p>デバイスについての認証方法や認可についての留意点が書かれていた。<br />
+TPMについては不勉強で、この本ではじめて認知した。現時点ではTPMアクセスは煩雑で、効率がよくないため、X.509によるアイデンティティと認証も使い分けることが推奨されていた。<br />
+長期間使用されているデバイスはその分攻撃にも晒されやすいため、定期的なローテーションも推奨されていた。docker化などで実機への依存が少なくなっている今の時代では手軽にできそうだと感じた。<br />
+デバイスの認証を済ませた後でユーザーの認証を行うことでデバイスの地理情報などをユーザーの認証に使用できるのはうまい方法だと思う。</p>
+<h3 id="章-ユーザーの信頼と信用">6章 ユーザーの信頼と信用</h3>
+<p>デバイスの認証が済んだら、今度は「デバイスを使っているのはどのユーザーなのか？」を認証しなければならない。<br />
+ユーザーの認証として、ここでは以下の3種類があげられていた。</p>
+<ul>
+<li>ユーザーが知っているもの: パスワードなど</li>
+<li>ユーザーが持っているもの: 期限つきトークンなど</li>
+<li>ユーザー自身のもの: 指紋など</li>
+</ul>
+<p>状況によってこれらを組み合わせて使用する。コラムにかかれていたが、ユーザーは物理的な暴力などで、こういった情報の提供を強要されるかもしれない。したがって、本当に重要なものを守るには複数人の認証(シャミアの秘密分散法)を必要とする、などの措置が必要となる。</p>
+<h3 id="章-アプリケーションの信頼と信用">7章 アプリケーションの信頼と信用</h3>
+<p>デバイスやユーザーが信用できるものでも、デバイスの上で動くコードに悪意のあるものが混じっている場合がある。7章ではそういった場合に備えたアプリケーションの信頼と信用について書かれている。<br />
+ソースコード自身、デプロイフロー、リポジトリなど、プロダクション環境でコードが動くまでに悪意が紛れこむポイントはいくつかある。最近はGitHubでも署名つきのコミットが表示されるようになっていたり、開発環境もよくなってきていると思う。<br />
+また、ファジングなど、動的な監視によって常に異常を発見できるようにしなければならない、と書かれていた。</p>
+<h3 id="章トラフィックの信頼と信用">8章トラフィックの信頼と信用</h3>
+<p>ここでは、ネットワークフローの認証と認可について書かれている。<br />
+ゼロトラストネットワークではVPNをトンネルモードで使用し、「信頼されているネットワーク」内の防御を手薄くしてしまうことを厳しく批判している。<br />
+対応端末など、現実的な問題を鑑み、トラフィックの認証では、クライアント-サーバ間はmTLS(相互TLS、ブラウザでアクセスする場合限定になってしまう)、サーバ-サーバ間はIPsecが推奨されている。mTLSは存在はなんとなく知っていたものの、あまり使用する場面がわかっていなかったため、また調べて導入できる場面があるか検討してみようと思う。<br />
+ゼロトラストネットワークではトラフィックのフィルタリングに送信者と受信者以外の第3者が使用されるべき、という「中間フィルタリング」というものが推奨されている。デバイス自体とフィルタリングを別立てにすることで、デバイスに侵入されたときもフィルタリングで被害を防ぎやすい。</p>
+<h3 id="章-ゼロトラストネットワークの実現">9章 ゼロトラストネットワークの実現</h3>
+<p>実際にゼロトラストネットワークを実現するにあたり、何が必要なのか、どうやるのかの概要が述べられている。<br />
+個人的にはこれでもまだハードルが高いなと感じており、標準化が進み、サポートするツールが充実してこないとなかなか移行に踏み切れるチームは少ないのではと思う。</p>
+<h3 id="章-攻撃者の視点">10章 攻撃者の視点</h3>
+<p>攻撃者からみたゼロトラストネットワークが書かれている。<br />
+ゼロトラストがカバーしない範囲について述べられていて、よかったと思う。特にゼロトラストネットワークでは機密性は保証されるがプライバシーは保証されない、つまりコミュニケーションの内容はわからないけどコミュニケーションが発生したことは観測可能である、とのことだ。<br />
+また、ゼロトラストネットワークではコントロールプレーンがかなり重要な役割を果たす。そのため、コントロールプレーン、特にポリシーエンジンのポリシーが改竄されるようなことはあってはならず、厳しい認証、認可を設定すべきである、と書かれている。</p>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2019-11-23-zero-trust-network.html" class="hatena-bookmark-button" data-hatena-bookmark-title="「ゼロトラストネットワーク」を読んだ - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>

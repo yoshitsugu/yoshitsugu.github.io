@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>ブログをつくってみた - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="ブログをつくってみた - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2016-03-05-greeting.html" />
+        <meta property="og:description" content="そろそろブログくらいさくっとつくれるようになるか、と思い立ち、Hakyllでブログをつくってみた。 ブログのセットアップしながらHaskellもさわれてよい感じである。" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="ブログをつくってみた - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="そろそろブログくらいさくっとつくれるようになるか、と思い立ち、Hakyllでブログをつくってみた。 ブログのセットアップしながらHaskellもさわれてよい感じである。" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>ブログをつくってみた</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on March  5, 2016</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/Haskell.html">Haskell</a>, <a href="../tags/Travis.html">Travis</a>, <a href="../tags/Hakyll.html">Hakyll</a></span>
+    
+</div>
+
+<p>そろそろブログくらいさくっとつくれるようになるか、と思い立ち、Hakyllでブログをつくってみた。 ブログのセットアップしながらHaskellもさわれてよい感じである。<!--more--><br />
+あまりアウトプットは得意ではないが、これからがんばってやっていきたい。 主に技術的なことをぼちぼちと書いていくことができればと考えている。 考えていたが、技術的なこと縛りにするとネタがなくなりそうなので、なんでも書くことにする。 なんでも書くことにするとなんにも書かなくなりそうな気もする。 世の中のブログを書く人はどういうモチベーションで書いているのだろうか。</p>
+<h2 id="やったこと">やったこと</h2>
+<h3 id="template作成">1. template作成</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1">$ <span class="ex">stack</span> new blog hakyll-template</a></code></pre></div>
+<h3 id="scssをつかえるように">2. scssをつかえるように</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" title="1"><span class="co">-- site.hs</span></a>
+<a class="sourceLine" id="cb2-2" title="2">match <span class="st">&quot;css/*.scss&quot;</span> <span class="op">$</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb2-3" title="3">  route <span class="op">$</span> setExtension <span class="st">&quot;css&quot;</span></a>
+<a class="sourceLine" id="cb2-4" title="4">  compile <span class="op">$</span> getResourceString</a>
+<a class="sourceLine" id="cb2-5" title="5">    <span class="op">&gt;&gt;=</span> withItemBody (unixFilter <span class="st">&quot;sass&quot;</span> [<span class="st">&quot;-s&quot;</span>, <span class="st">&quot;--scss&quot;</span>])</a>
+<a class="sourceLine" id="cb2-6" title="6">    <span class="op">&gt;&gt;=</span> <span class="fu">return</span> <span class="op">.</span> <span class="fu">fmap</span> compressCss</a></code></pre></div>
+<h3 id="各ページ修正">3. 各ページ修正</h3>
+<p>デフォルトからいくつか修正した。</p>
+<ul>
+<li><a href="../">HOME</a>の“More”のやつはteaserというらしい。<br />
+<a href="https://jaspervdj.be/hakyll/tutorials/using-teasers-in-hakyll.html" target="_blank">https://jaspervdj.be/hakyll/tutorials/using-teasers-in-hakyll.html</a></li>
+<li>見た目は<a href="http://purecss.io" target="_blank">Pure.css</a>を元にカスタマイズした。</li>
+<li>シンタックスハイライトは<a href="https://hackage.haskell.org/package/highlighting-kate" target="_blank">highlighting-kate</a>を使った。</li>
+</ul>
+<h3 id="github-pageとして公開できるようにgit-submodule-.travis.ymlの設定">4. github pageとして公開できるようにgit submodule, .travis.ymlの設定</h3>
+<p>これが結構大変だった。git submoduleをつかったことがなく、よくわからないので調べながらすすめた。</p>
+<h3 id="独自ドメインで運用">5. 独自ドメインで運用</h3>
+<p>github上でCNAMEの設定と、CloudFlareでDNSの設定をした。 CNAME Flattingを使っているが、CNAME Flattingについてよくわかってないので、あとで確認する。</p>
+<h2 id="疑問点">疑問点</h2>
+<p>markdownで記事をかいているのだが、リンクを別タブでひらかせる方法がわからない。外部リンクは<code>target="_blank"</code>にしないとなんとなく気持ち悪いのだけど、どうしたらいいんだろうか。とりあえずaタグ直書きしている。不便。</p>
+<h2 id="参考にしたブログなど">参考にしたブログなど</h2>
+<ul>
+<li><a href="https://imokuri123.com/blog/2015/12/how-to-create-blog-with-hakyll-part1.html" target="_blank">Hakyllでブログを作る(実践編)</a>
+<ul>
+<li>すごく丁寧に書いてあってよかった。<br />
+まだ試せていない機能もたくさんあるので、徐々にカスタマイズしていきたい。</li>
+</ul></li>
+<li><a href="http://www.slideshare.net/TomohikoHimura/hakyll-18303056" target="_blank">Hakyllで遊んでみた。</a>
+<ul>
+<li>SCSSを使うための設定はここを参考にした。</li>
+</ul></li>
+<li><a href="http://335g.github.io/posts/2015-08-09-hakyll_travis.html" target="_blank">Hakyll, stack, Travis CI, Github でブログを管理する</a>
+<ul>
+<li>こちらも詳細に書いてあって、勉強になった。</li>
+</ul></li>
+<li><a href="https://help.github.com/articles/setting-up-your-pages-site-repository/" target="_blank">Setting up your pages site repository</a>
+<ul>
+<li>github pagesを独自ドメインで運用するための設定。</li>
+</ul></li>
+<li><a href="http://d.hatena.ne.jp/hnw/20150301" target="_blank">CloudFlareのCNAME FlatteningをGitHub Pagesで使ってみた</a>
+<ul>
+<li>CloudFlareの設定。</li>
+</ul></li>
+</ul>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2016-03-05-greeting.html" class="hatena-bookmark-button" data-hatena-bookmark-title="ブログをつくってみた - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>
