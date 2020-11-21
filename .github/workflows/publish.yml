@@ -5,36 +5,36 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-20.04
-  steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-haskell@v1.1.4
-      id: setup-haskell-cabal
-      name: Setup Haskell
-      with:
-        ghc-version: 8.6.5
-        cabal-version: 2.4.0.1
-        enable-stack: true
-        stack-version: 'latest'
-    - name: Install dependencies
-      run: stack --system-ghc build --only-dependencies
-    - name: Build blog
-      run: stack --system-ghc exec -- blog build
-    - name: mv files
-      run: |
-        mkdir -p docs
-        mv _site/* docs/
-    - name: git setting
-    - run: |
-        git config --local user.email yoshitsugu@users.noreply.github.com
-        git config --local user.name yoshitsugu
-        git config pull.rebase false
-    - name: commit files
-    - run: |
-        git add .
-        git commit -am "Commit by GitHub Actions"
-    - name: push
-      run: |
-        git pull --prune
-        git push origin main
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-haskell@v1.1.4
+        id: setup-haskell-cabal
+        name: Setup Haskell
+        with:
+          ghc-version: 8.6.5
+          cabal-version: 2.4.0.1
+          enable-stack: true
+          stack-version: 'latest'
+      - name: Install dependencies
+        run: stack --system-ghc build --only-dependencies
+      - name: Build blog
+        run: stack --system-ghc exec -- blog build
+      - name: mv files
+        run: |
+          mkdir -p docs
+          mv _site/* docs/
+      - name: git setting
+      - run: |
+          git config --local user.email yoshitsugu@users.noreply.github.com
+          git config --local user.name yoshitsugu
+          git config pull.rebase false
+      - name: commit files
+      - run: |
+          git add .
+          git commit -am "Commit by GitHub Actions"
+      - name: push
+        run: |
+          git pull --prune
+          git push origin main
