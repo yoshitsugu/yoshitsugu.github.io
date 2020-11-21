@@ -40,7 +40,7 @@ jobs:
           cabal-version: 2.4.0.1
           enable-stack: true
           stack-version: 'latest'
-     - name: Install dependencies
+      - name: Install dependencies
         run: stack --system-ghc build --only-dependencies
       - name: Build blog
         run: stack --system-ghc exec -- blog build
