@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>RustでGoogle IME skkserv を作った - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="RustでGoogle IME skkserv を作った - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2016-11-01-google-ime-skkserv-in-rust.html" />
+        <meta property="og:description" content="Rustの勉強がてら、Google IME skkservを作った。" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="RustでGoogle IME skkserv を作った - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="Rustの勉強がてら、Google IME skkservを作った。" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>RustでGoogle IME skkserv を作った</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on November  1, 2016</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/Rust.html">Rust</a>, <a href="../tags/SKK.html">SKK</a></span>
+    
+</div>
+
+<p>Rustの勉強がてら、Google IME skkservを作った。<!--more--></p>
+<h2 id="githubリポジトリ">GitHubリポジトリ</h2>
+<p><a href="https://github.com/yoshitsugu/google-ime-skkserv-rs">https://github.com/yoshitsugu/google-ime-skkserv-rs</a></p>
+<h2 id="これは何か">これは何か</h2>
+<p>SKKという日本語入力のIMEがある。SKKサーバーというサーバーをたてることで、文字変換の際に単に辞書を参考するだけでなく、サーバーから受け取る形にすることができる。<br />
+一方Google IMEには「Google CGI API for Japanese Input」というAPIがある。これは変換したい文字を投げてやると変換後の文字列が返ってくるものである。<br />
+そこでGoogle CGI API for Japanese Inputに中継してくれるSKKサーバーをたてればSKKユーザーでもGoogle IMEでの変換を活用することができる。このツール自体は既にあり(ページ最下部「参考にしたページ」参照)、今回は必要に迫られた、というよりはRust勉強のために作った、という側面が強い。</p>
+<h2 id="使い方">使い方</h2>
+<ol type="1">
+<li>Rustの環境を準備しておく。自分は<a href="https://github.com/rust-lang-nursery/rustup.rs">rustup</a>を使っている。</li>
+<li>上のリポジトリをclone</li>
+<li><code>cargo install</code></li>
+<li><code>gskkserv</code> で 55100ポートにskkservが待ち受けている状態になる。
+<ul>
+<li><code>-h</code> オプションでlistenするhost, <code>-p</code> オプションでlistenするportをそれぞれ指定できるようにしている。</li>
+</ul></li>
+</ol>
+<h2 id="使っている様子">使っている様子</h2>
+<h3 id="before">Before</h3>
+<p><img src="../images/20161101/before.gif" class="blog-img img-responsive"><br />
+標準のSKK辞書では変換できない。</p>
+<h3 id="after">After</h3>
+<p><img src="../images/20161101/after.gif" class="blog-img img-responsive"><br />
+一発で変換できる。</p>
+<h2 id="難しかった点">難しかった点</h2>
+<ul>
+<li>skkservに渡される文字列がEUC_JPで、Google IMEのAPIを使うにはUTF-8に変換しなければならず、Rustでやると結構面倒だった。</li>
+<li>まだあまりownershipまわりの扱い方がしっくりきていないのでもうちょっと経験が必要そう。</li>
+</ul>
+<h2 id="今後">今後</h2>
+<p>さすがにネットワークI/Oがあると一瞬待つので、変換結果をキャッシュできるようにしたい。<br />
+また、今回Rustチュートリアルなどをさらっと見ながらつくっただけなので、コードの書き方についてももう少し洗練させていきたい。</p>
+<h2 id="参考にしたページ">参考にしたページ</h2>
+<ul>
+<li><a href="http://blog.sushi.money/entry/20110421/1303274561">Google IME SKK サーバー 作った - hitode909のダイアリー</a></li>
+<li><a href="https://github.com/akiym/go-skkserv">Lightweight skkserv implementation for golang</a></li>
+</ul>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2016-11-01-google-ime-skkserv-in-rust.html" class="hatena-bookmark-button" data-hatena-bookmark-title="RustでGoogle IME skkserv を作った - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>

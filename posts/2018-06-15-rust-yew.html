@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>Webクライアントサイドとサーバーサイド両方Rustで書く - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="Webクライアントサイドとサーバーサイド両方Rustで書く - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2018-06-15-rust-yew.html" />
+        <meta property="og:description" content="yew と gotham を使って、クライアントサイド、サーバーサイド両方Rustで書かれたWikiを作ってみる。" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="Webクライアントサイドとサーバーサイド両方Rustで書く - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="yew と gotham を使って、クライアントサイド、サーバーサイド両方Rustで書かれたWikiを作ってみる。" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>Webクライアントサイドとサーバーサイド両方Rustで書く</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on June 15, 2018</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/Rust.html">Rust</a>, <a href="../tags/wasm.html">wasm</a></span>
+    
+</div>
+
+<p><a href="https://github.com/DenisKolodin/yew">yew</a> と <a href="https://github.com/gotham-rs/gotham">gotham</a> を使って、クライアントサイド、サーバーサイド両方Rustで書かれたWikiを作ってみる。<!--more--></p>
+<h2 id="yewについて">yewについて</h2>
+<p>Rustはwasmやasm.jsに変換できるので、ブラウザ上で動作するいろいろなライブラリも作られはじめている。このyewもその一つだ。<br />
+<em>“Yew is a modern Rust framework inspired by Elm and ReactJS.”</em> ということで、確かに、ElmやReactのような書き方ができる。</p>
+<ul>
+<li>パーツをComponentにまとめることができる。</li>
+<li>状態を管理する部分と、イベントをうけて状態を変更する部分を分離して記述できる。</li>
+<li>JSXライクなviewの書き方ができる。</li>
+</ul>
+<h2 id="gothamについて">gothamについて</h2>
+<p><a href="http://keens.github.io/blog/2018/01/04/2018nenchuumokushiteikitaigijutsu/#gotham-https-gotham-rs">こちら</a> で紹介されているのを目にして知った。いくつかRust製のWebアプリケーションフレームワークはあるが、これは非同期かつマルチスレッドで、Stable主義とのこと。</p>
+<h2 id="作るもの">作るもの</h2>
+<p>題材として、簡単なwikiを作ることにした。シンプルかつフォームの入力やページ遷移がそれなりにありそう、というところが理由だ。<br />
+要件的には以下のようなものを考える。</p>
+<ul>
+<li>記事はMarkDownで記述したものを自動的にHTMLで表示する。</li>
+<li>特に閲覧や編集権限は考えない。</li>
+<li>デザインも特に凝らない。
+<ul>
+<li><a href="https://minicss.org/">mini.css</a>という手軽そうなCSSフレームワークがあったのでそれを使用する。</li>
+</ul></li>
+<li>記事へのリンクは <code>A/B</code> のようにテキストで書くとカテゴリAの配下のBという記事、という階層表示ができるようにしたい(esaライクなもの)。</li>
+</ul>
+<h2 id="実装概要">実装概要</h2>
+<p>ここからは軽くコードの説明をする。<br />
+コードは <a href="https://github.com/yoshitsugu/rusty_wiki">yoshitsugu/rusty_wiki</a> として公開しているので興味があればそちらも参照のこと。</p>
+<h3 id="バックエンドを作る">バックエンドを作る</h3>
+<p>まずはwikiのページのCRUD操作用のAPIを作る。</p>
+<h4 id="db準備">DB準備</h4>
+<p>データ保持には <a href="https://github.com/diesel-rs/diesel">diesel</a> を使用する。こちらは自分が普段使っているRuby on Railsのコミッターが作っていたりして、使い勝手に親近感がわくORMだ。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="co">// テーブルに保持されている内容に対応するstruct</span></a>
+<a class="sourceLine" id="cb1-2" title="2"></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="at">#[</span>derive<span class="at">(</span>Queryable<span class="at">,</span> Serialize<span class="at">,</span> Deserialize<span class="at">,</span> <span class="bu">Debug</span><span class="at">)]</span></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw">pub</span> <span class="kw">struct</span> Post <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-5" title="5">    <span class="kw">pub</span> id: <span class="dt">i32</span>, <span class="co">// ユニークキー</span></a>
+<a class="sourceLine" id="cb1-6" title="6">    <span class="kw">pub</span> title: <span class="dt">String</span>, <span class="co">// wiki記事のタイトル</span></a>
+<a class="sourceLine" id="cb1-7" title="7">    <span class="kw">pub</span> body: <span class="dt">String</span>, <span class="co">// wiki記事の中身(MarkDown形式)</span></a>
+<a class="sourceLine" id="cb1-8" title="8">    <span class="kw">pub</span> body_html: <span class="dt">String</span>, <span class="co">// wiki記事の中身(bodyから変換したHTML形式)</span></a>
+<a class="sourceLine" id="cb1-9" title="9">    <span class="kw">pub</span> published: <span class="dt">bool</span>, <span class="co">// 公開フラグ。結局今のところ使ってない</span></a>
+<a class="sourceLine" id="cb1-10" title="10"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-11" title="11"></a>
+<a class="sourceLine" id="cb1-12" title="12"><span class="at">#[</span>derive<span class="at">(</span>Insertable<span class="at">,</span> AsChangeset<span class="at">,</span> Serialize<span class="at">,</span> Deserialize<span class="at">,</span> <span class="bu">Debug</span><span class="at">)]</span></a>
+<a class="sourceLine" id="cb1-13" title="13"><span class="at">#[</span>table_name <span class="at">=</span> <span class="st">&quot;posts&quot;</span><span class="at">]</span></a>
+<a class="sourceLine" id="cb1-14" title="14"><span class="kw">pub</span> <span class="kw">struct</span> NewPost <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-15" title="15">    <span class="kw">pub</span> title: <span class="dt">String</span>,</a>
+<a class="sourceLine" id="cb1-16" title="16">    <span class="kw">pub</span> body: <span class="dt">String</span>,</a>
+<a class="sourceLine" id="cb1-17" title="17">    <span class="kw">pub</span> body_html: <span class="dt">String</span>,</a>
+<a class="sourceLine" id="cb1-18" title="18">    <span class="kw">pub</span> published: <span class="dt">bool</span>,</a>
+<a class="sourceLine" id="cb1-19" title="19"><span class="op">}</span></a></code></pre></div>
+<h4 id="サーバーサイドのコード">サーバーサイドのコード</h4>
+<p>こちらをgothamのhandlerから扱うようにする。長いので全部は載せないが、例えば、idからpostをとってくる GET <code>/posts/:id</code> のAPI用のhandlerは以下のようになる。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">pub</span> <span class="kw">fn</span> show(state: State) -&gt; (State, Response) <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-2" title="2">    <span class="kw">let</span> res = <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-3" title="3">        <span class="kw">let</span> path_params = <span class="pp">PostPathExtractor::</span>borrow_from(&amp;state);</a>
+<a class="sourceLine" id="cb2-4" title="4">        <span class="kw">let</span> connection = establish_connection();</a>
+<a class="sourceLine" id="cb2-5" title="5">        <span class="kw">let</span> result = posts</a>
+<a class="sourceLine" id="cb2-6" title="6">            .filter(published.eq(<span class="cn">true</span>))</a>
+<a class="sourceLine" id="cb2-7" title="7">            .find(path_params.id)</a>
+<a class="sourceLine" id="cb2-8" title="8">            .<span class="pp">first::</span>&lt;Post&gt;(&amp;connection);</a>
+<a class="sourceLine" id="cb2-9" title="9">        <span class="kw">match</span> result <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-10" title="10">            <span class="cn">Ok</span>(post) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-11" title="11">                <span class="kw">let</span> serialized = <span class="pp">serde_json::</span>to_string(&amp;post).unwrap();</a>
+<a class="sourceLine" id="cb2-12" title="12">                create_response(</a>
+<a class="sourceLine" id="cb2-13" title="13">                    &amp;state,</a>
+<a class="sourceLine" id="cb2-14" title="14">                    <span class="pp">StatusCode::</span><span class="cn">Ok</span>,</a>
+<a class="sourceLine" id="cb2-15" title="15">                    <span class="cn">Some</span>((</a>
+<a class="sourceLine" id="cb2-16" title="16">                        <span class="dt">String</span>::from(serialized).into_bytes(),</a>
+<a class="sourceLine" id="cb2-17" title="17">                        <span class="pp">mime::</span>APPLICATION_JSON,</a>
+<a class="sourceLine" id="cb2-18" title="18">                    )),</a>
+<a class="sourceLine" id="cb2-19" title="19">                )</a>
+<a class="sourceLine" id="cb2-20" title="20">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb2-21" title="21">            <span class="cn">Err</span>(err) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-22" title="22">                <span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span>, err);</a>
+<a class="sourceLine" id="cb2-23" title="23">                create_response(</a>
+<a class="sourceLine" id="cb2-24" title="24">                    &amp;state,</a>
+<a class="sourceLine" id="cb2-25" title="25">                    <span class="pp">StatusCode::</span>NotFound,</a>
+<a class="sourceLine" id="cb2-26" title="26">                    <span class="cn">Some</span>((</a>
+<a class="sourceLine" id="cb2-27" title="27">                        <span class="dt">String</span>::from(<span class="st">&quot;{error: not_found}&quot;</span>).into_bytes(),</a>
+<a class="sourceLine" id="cb2-28" title="28">                        <span class="pp">mime::</span>APPLICATION_JSON,</a>
+<a class="sourceLine" id="cb2-29" title="29">                    )),</a>
+<a class="sourceLine" id="cb2-30" title="30">                )</a>
+<a class="sourceLine" id="cb2-31" title="31">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb2-32" title="32">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb2-33" title="33">    <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb2-34" title="34"></a>
+<a class="sourceLine" id="cb2-35" title="35">    (state, res)</a>
+<a class="sourceLine" id="cb2-36" title="36"><span class="op">}</span></a></code></pre></div>
+<p>gothamではルーティングの設定は以下のように書ける</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">fn</span> router() -&gt; Router <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-2" title="2">    build_simple_router(|route| <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-3" title="3">        route.get(<span class="st">&quot;/posts/:id&quot;</span>).<span class="pp">with_path_extractor::</span>&lt;<span class="pp">posts_handler::</span>PostPathExtractor&gt;().to(<span class="pp">posts_handler::</span>show);</a>
+<a class="sourceLine" id="cb3-4" title="4">    <span class="op">}</span>)</a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="op">}</span></a></code></pre></div>
+<p>なお、MarkDownからHTMLを生成するところは <a href="https://github.com/oli-obk/rust-pandoc">rust-pandoc</a> という <a href="http://pandoc.org/">Pandoc</a> のWrapperを使うことにした。Pandoc自体はこのブログの生成にも使っている。</p>
+<h3 id="クライアント側を作る">クライアント側を作る</h3>
+<h4 id="おおまかな流れ">おおまかな流れ</h4>
+<p><a href="https://github.com/DenisKolodin/yew/blob/master/examples/counter/src/lib.rs">こちら</a> のcounterのサンプルなどを見てもらうとわかるが、基本的にyewでは以下の構成要素から成る。</p>
+<ol type="1">
+<li>状態を管理するstruct(このサンプルでは <code>Model</code> というstruct)</li>
+<li>状態を変更するイベント(このサンプルでは <code>Msg</code> というenum)</li>
+<li>イベントの実装(<code>impl Component for Model</code> しているところ)</li>
+<li>レンダリングするview(<code>impl Renderable for Model</code> しているところ)</li>
+</ol>
+<p>Componentの下にさらにComponentを作りたい場合は上の1-4をさらに1セット作っていく感じになる。</p>
+<h4 id="wiki記事の表示">wiki記事の表示</h4>
+<p>まずはwiki記事をAPIから取得して表示してみる。部分的だが以下のようなコードになる</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">pub</span> <span class="kw">struct</span> Context <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-2" title="2">    <span class="kw">pub</span> web: FetchService,</a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="op">}</span></a>
+<a class="sourceLine" id="cb4-4" title="4"></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="kw">impl</span> <span class="bu">AsMut</span>&lt;FetchService&gt; <span class="kw">for</span> Context <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-6" title="6">    <span class="kw">fn</span> as_mut(&amp;<span class="kw">mut</span> <span class="kw">self</span>) -&gt; &amp;<span class="kw">mut</span> FetchService <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-7" title="7">        &amp;<span class="kw">mut</span> <span class="kw">self</span>.web</a>
+<a class="sourceLine" id="cb4-8" title="8">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="op">}</span></a>
+<a class="sourceLine" id="cb4-10" title="10"></a>
+<a class="sourceLine" id="cb4-11" title="11"><span class="kw">pub</span> <span class="kw">struct</span> Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-12" title="12">    ft: <span class="dt">Option</span>&lt;FetchTask&gt;,</a>
+<a class="sourceLine" id="cb4-13" title="13">    post: <span class="dt">Option</span>&lt;Post&gt;,</a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="op">}</span></a>
+<a class="sourceLine" id="cb4-15" title="15"></a>
+<a class="sourceLine" id="cb4-16" title="16"></a>
+<a class="sourceLine" id="cb4-17" title="17"><span class="kw">pub</span> <span class="kw">enum</span> Msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-18" title="18">    FetchReady(<span class="dt">Result</span>&lt;Post, Error&gt;),</a>
+<a class="sourceLine" id="cb4-19" title="19">    FetchData(<span class="dt">i32</span>),</a>
+<a class="sourceLine" id="cb4-20" title="20">    Ignore,</a>
+<a class="sourceLine" id="cb4-21" title="21"><span class="op">}</span></a>
+<a class="sourceLine" id="cb4-22" title="22"></a>
+<a class="sourceLine" id="cb4-23" title="23"></a>
+<a class="sourceLine" id="cb4-24" title="24"><span class="kw">impl</span>&lt;CTX&gt; Component&lt;CTX&gt; <span class="kw">for</span> Model</a>
+<a class="sourceLine" id="cb4-25" title="25"><span class="kw">where</span></a>
+<a class="sourceLine" id="cb4-26" title="26">    CTX: <span class="bu">AsMut</span>&lt;FetchService&gt; + <span class="ot">'static</span>,</a>
+<a class="sourceLine" id="cb4-27" title="27"><span class="op">{</span></a>
+<a class="sourceLine" id="cb4-28" title="28">    <span class="kw">type</span> Msg = Msg;</a>
+<a class="sourceLine" id="cb4-29" title="29">    <span class="kw">type</span> Properties = ();</a>
+<a class="sourceLine" id="cb4-30" title="30"></a>
+<a class="sourceLine" id="cb4-31" title="31">    <span class="kw">fn</span> create(_: <span class="kw">Self</span>::Properties, _: &amp;<span class="kw">mut</span> Env&lt;CTX, <span class="kw">Self</span>&gt;) -&gt; <span class="kw">Self</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-32" title="32">        Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-33" title="33">            fetching: <span class="cn">false</span>,</a>
+<a class="sourceLine" id="cb4-34" title="34">            post: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb4-35" title="35">            ft: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb4-36" title="36">            editing: <span class="cn">false</span>,</a>
+<a class="sourceLine" id="cb4-37" title="37">            menu_updated: <span class="cn">false</span>,</a>
+<a class="sourceLine" id="cb4-38" title="38">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-39" title="39">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-40" title="40"></a>
+<a class="sourceLine" id="cb4-41" title="41">    <span class="kw">fn</span> update(&amp;<span class="kw">mut</span> <span class="kw">self</span>, msg: <span class="kw">Self</span>::Msg, env: &amp;<span class="kw">mut</span> Env&lt;CTX, <span class="kw">Self</span>&gt;) -&gt; ShouldRender <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-42" title="42">        <span class="kw">match</span> msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-43" title="43">            <span class="pp">Msg::</span>FetchData(num) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-44" title="44">                <span class="kw">self</span>.fetching = <span class="cn">true</span>;</a>
+<a class="sourceLine" id="cb4-45" title="45">                <span class="kw">self</span>.editing = <span class="cn">false</span>;</a>
+<a class="sourceLine" id="cb4-46" title="46">                <span class="kw">let</span> callback = env.send_back(|response: Response&lt;Json&lt;<span class="dt">Result</span>&lt;Post, Error&gt;&gt;&gt;| <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-47" title="47">                    <span class="kw">let</span> (meta, Json(data)) = response.into_parts();</a>
+<a class="sourceLine" id="cb4-48" title="48">                    <span class="kw">if</span> meta.status.is_success() <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-49" title="49">                        <span class="pp">Msg::</span>FetchReady(data)</a>
+<a class="sourceLine" id="cb4-50" title="50">                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-51" title="51">                        <span class="pp">Msg::</span>Ignore <span class="co">// </span><span class="al">FIXME</span><span class="co">: Handle this error accordingly.</span></a>
+<a class="sourceLine" id="cb4-52" title="52">                    <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-53" title="53">                <span class="op">}</span>);</a>
+<a class="sourceLine" id="cb4-54" title="54">                <span class="kw">let</span> request = <span class="pp">Request::</span>get(<span class="pp">format!</span>(<span class="st">&quot;http://{}/posts/{}&quot;</span>, API_HOSTNAME, num))</a>
+<a class="sourceLine" id="cb4-55" title="55">                    .body(Nothing)</a>
+<a class="sourceLine" id="cb4-56" title="56">                    .unwrap();</a>
+<a class="sourceLine" id="cb4-57" title="57">                <span class="kw">let</span> fetch_service: &amp;<span class="kw">mut</span> FetchService = env.as_mut();</a>
+<a class="sourceLine" id="cb4-58" title="58">                <span class="kw">let</span> task = fetch_service.fetch(request, callback);</a>
+<a class="sourceLine" id="cb4-59" title="59">                <span class="kw">self</span>.ft = <span class="cn">Some</span>(task);</a>
+<a class="sourceLine" id="cb4-60" title="60">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-61" title="61">            <span class="pp">Msg::</span>FetchReady(response) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-62" title="62">                <span class="kw">self</span>.fetching = <span class="cn">false</span>;</a>
+<a class="sourceLine" id="cb4-63" title="63">                <span class="kw">self</span>.editing = <span class="cn">false</span>;</a>
+<a class="sourceLine" id="cb4-64" title="64">                <span class="kw">self</span>.menu_updated = <span class="cn">true</span>;</a>
+<a class="sourceLine" id="cb4-65" title="65">                <span class="kw">self</span>.post = response.ok();</a>
+<a class="sourceLine" id="cb4-66" title="66">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-67" title="67">            <span class="pp">Msg::</span>Ignore =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-68" title="68">                <span class="kw">let</span> console_service: &amp;<span class="kw">mut</span> ConsoleService = env.as_mut();</a>
+<a class="sourceLine" id="cb4-69" title="69">                <span class="kw">self</span>.post = <span class="cn">None</span>;</a>
+<a class="sourceLine" id="cb4-70" title="70">                console_service.log(<span class="st">&quot;Ignore&quot;</span>);</a>
+<a class="sourceLine" id="cb4-71" title="71">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-72" title="72">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-73" title="73">        <span class="cn">true</span></a>
+<a class="sourceLine" id="cb4-74" title="74">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-75" title="75"><span class="op">}</span></a></code></pre></div>
+<p><code>update</code>の<code>Msg::FetchData</code>の部分のように、callback処理が書ける。<br />
+フォームのsubmitの場合も、同じように <code>Request::post</code> を使用すればよい。</p>
+<h4 id="子コンポーネントから親コンポーネントの値を変更する">子コンポーネントから親コンポーネントの値を変更する</h4>
+<p>子コンポーネントから親コンポーネントの値を変更するためには、親から子を呼び出す時にコールバックを渡してやればよい。<br />
+たとえば、親から</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="pp">html!</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-2" title="2">  &lt;PostForm: post=value.to_new_post(),</a>
+<a class="sourceLine" id="cb5-3" title="3">  oncancel=|_| <span class="pp">Msg::</span>SetEditing(<span class="cn">false</span>),</a>
+<a class="sourceLine" id="cb5-4" title="4">  onsubmit=|new_post| <span class="pp">Msg::</span>PutData(new_post),</a>
+<a class="sourceLine" id="cb5-5" title="5">  /&gt;</a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="op">}</span></a></code></pre></div>
+<p>のように呼び出すと、子側で</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="co">// updateの中</span></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="pp">Msg::</span>OnCancel =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb6-3" title="3">    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(<span class="kw">ref</span> <span class="kw">mut</span> cb) = <span class="kw">self</span>.oncancel <span class="op">{</span></a>
+<a class="sourceLine" id="cb6-4" title="4">        cb.emit(());</a>
+<a class="sourceLine" id="cb6-5" title="5">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="op">}</span></a>
+<a class="sourceLine" id="cb6-7" title="7">            </a>
+<a class="sourceLine" id="cb6-8" title="8"></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">// viewの中</span></a>
+<a class="sourceLine" id="cb6-10" title="10">&lt;button onclick=|_| <span class="pp">Msg::</span>OnCancel,&gt;<span class="op">{</span> <span class="st">&quot;cancel&quot;</span> <span class="op">}</span>&lt;/button&gt;</a></code></pre></div>
+<p>のようにしてあげれば、<code>cb</code> に <code>Msg::SetEditing(false)</code> がわたってきて、無事に親の <code>Msg::SetEditing(false)</code> が発火する。</p>
+<h2 id="動作確認">動作確認</h2>
+<p>実際に手元で動かしている様子を載せる。</p>
+<ul>
+<li>新規作成</li>
+</ul>
+<p><img src="../images/20180615/create.gif" class="blog-img img-responsive" alt="新規作成" title="新規作成" /></p>
+<ul>
+<li>編集</li>
+</ul>
+<p><img src="../images/20180615/update.gif" class="blog-img img-responsive" alt="編集" title="編集" /></p>
+<ul>
+<li>削除</li>
+</ul>
+<p><img src="../images/20180615/delete.gif" class="blog-img img-responsive" alt="削除" title="削除" /></p>
+<h2 id="まとめ感想">まとめ、感想</h2>
+<ul>
+<li>Rustでクライアントサイド、サーバーサイド両方を書いた。</li>
+<li>yewは思ったよりはまともに動いて、普通に開発できた。
+<ul>
+<li>Rustのコンパイラで検出できるところはデバッグも簡単だった。しかし、コンパイル時に検出できないがブラウザで動かすとエラーになる場合があり、その時は意味不明なエラーしかでてこず、デバッグが大変だった。</li>
+<li>今回のような、いわゆるSPAを作っているとRouterがほしくなるが、まだyew公式のRouterはないようだ。<a href="https://github.com/DenisKolodin/yew/pull/187l">このPR</a>がとりこまれれば、使えるようになるかもしれない。</li>
+</ul></li>
+<li>gothamはあまり非同期、マルチスレッドという特徴を活かせる題材ではなかったため、メリットがまだよくわかっていない。ただ、普通にWebアプリケーションフレームワークとして活用するのも問題ないように思えた。</li>
+<li>コードは <a href="https://github.com/yoshitsugu/rusty_wiki">yoshitsugu/rusty_wiki</a> としてGitHubに公開している。</li>
+</ul>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2018-06-15-rust-yew.html" class="hatena-bookmark-button" data-hatena-bookmark-title="Webクライアントサイドとサーバーサイド両方Rustで書く - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>

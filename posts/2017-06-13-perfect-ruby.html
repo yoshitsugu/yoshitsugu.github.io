@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>パーフェクトRuby第2版を読んだ - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="パーフェクトRuby第2版を読んだ - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2017-06-13-perfect-ruby.html" />
+        <meta property="og:description" content="パーフェクトRuby第2版を読んだので、軽く感想を書いておく" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="パーフェクトRuby第2版を読んだ - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="パーフェクトRuby第2版を読んだので、軽く感想を書いておく" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>パーフェクトRuby第2版を読んだ</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on June 13, 2017</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/Ruby.html">Ruby</a>, <a href="../tags/Book%20Review.html">Book Review</a></span>
+    
+</div>
+
+<p><a href="http://gihyo.jp/book/2017/978-4-7741-8977-2">パーフェクトRuby第2版</a>を読んだので、軽く感想を書いておく<!--more--></p>
+<h2 id="総評">総評</h2>
+<p>さすがに結構知っていることが多かったものの、細かいところは勉強になった。</p>
+<h2 id="章ごとの感想">章ごとの感想</h2>
+<h3 id="part1-ruby-overview-part2-ruby言語仕様">Part1 Ruby overview, Part2 Ruby言語仕様</h3>
+<p>だいたい知っている内容だった。 細かいところだが、caseのwhenにProcを使えるのは知らなかった。<br />
+FizzBuzzも</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">def</span> fizz_buzz(n)</a>
+<a class="sourceLine" id="cb1-2" title="2">  <span class="kw">case</span> n</a>
+<a class="sourceLine" id="cb1-3" title="3">  <span class="kw">when</span> -&gt; (n) { n % <span class="dv">15</span> == <span class="dv">0</span> }</a>
+<a class="sourceLine" id="cb1-4" title="4">    <span class="st">'FizzBuzz'</span></a>
+<a class="sourceLine" id="cb1-5" title="5">  <span class="kw">when</span> -&gt; (n) { n % <span class="dv">3</span> == <span class="dv">0</span> }</a>
+<a class="sourceLine" id="cb1-6" title="6">    <span class="st">'Fizz'</span></a>
+<a class="sourceLine" id="cb1-7" title="7">  <span class="kw">when</span> -&gt; (n) { n % <span class="dv">5</span> == <span class="dv">0</span> }</a>
+<a class="sourceLine" id="cb1-8" title="8">    <span class="st">'Buzz'</span></a>
+<a class="sourceLine" id="cb1-9" title="9">  <span class="kw">else</span></a>
+<a class="sourceLine" id="cb1-10" title="10">    n</a>
+<a class="sourceLine" id="cb1-11" title="11">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb1-12" title="12"><span class="kw">end</span></a></code></pre></div>
+<p>のように書ける。こんな風に書くことはないだろうが。</p>
+<p>Thread, Fiberあたりの並行処理の話は今まであまり必要になったことがないので、勉強になった。<br />
+次の版では話題のGuildの話もはいってくるのだろうか。</p>
+<h3 id="part3-メタプログラミング">Part3 メタプログラミング</h3>
+<p>恥ずかしながら(なのかどうかはよくわからないが)<a href="https://www.oreilly.co.jp/books/9784873117430/">メタプログラミングRuby</a>は読んだことがなく、メタプログラミングは普段あまりやらないので、結構知らないこと、もしくは今まであまり理解できていなかったことが書いてあった。ClassやModuleの構造を理解する上では非常に勉強になった。<br />
+そういえば、以下Animalモジュールのような動的なメソッド生成を行っているmoduleを見たことがある。DogではAnimalをextendして、<code>define_animal_methods</code> を呼べばメソッドが展開されるという寸法である。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">module</span> <span class="dt">Animal</span></a>
+<a class="sourceLine" id="cb2-2" title="2">  <span class="kw">def</span> define_animal_methods</a>
+<a class="sourceLine" id="cb2-3" title="3">    define_method <span class="st">:name</span> <span class="kw">do</span> |&amp;block|</a>
+<a class="sourceLine" id="cb2-4" title="4">      puts <span class="st">'animal_name'</span></a>
+<a class="sourceLine" id="cb2-5" title="5">      block.call <span class="kw">if</span> block</a>
+<a class="sourceLine" id="cb2-6" title="6">    <span class="kw">end</span></a>
+<a class="sourceLine" id="cb2-7" title="7"></a>
+<a class="sourceLine" id="cb2-8" title="8">    <span class="co"># define_methodが続く...</span></a>
+<a class="sourceLine" id="cb2-9" title="9">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="kw">end</span></a>
+<a class="sourceLine" id="cb2-11" title="11"></a>
+<a class="sourceLine" id="cb2-12" title="12"><span class="kw">class</span> <span class="dt">Dog</span></a>
+<a class="sourceLine" id="cb2-13" title="13">  extend <span class="dt">Animal</span></a>
+<a class="sourceLine" id="cb2-14" title="14">  define_animal_methods</a>
+<a class="sourceLine" id="cb2-15" title="15"><span class="kw">end</span></a>
+<a class="sourceLine" id="cb2-16" title="16"></a>
+<a class="sourceLine" id="cb2-17" title="17"><span class="dt">Dog</span>.new.name</a>
+<a class="sourceLine" id="cb2-18" title="18"><span class="co">#=&gt; animal_name</span></a></code></pre></div>
+<p>ここで、展開先のClassにおいて、Animalの <code>name</code> をoverrideするようなイメージで、 <code>block.call</code> しているところにblockを渡して新しい <code>name</code> メソッドにしたい。どうしたらいいだろうか。<br />
+自分は結果的には以下のように <code>instance_method</code> で一旦退避させた上で、 <code>define_method</code> で定義するような荒技を使った。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">class</span> <span class="dt">Cat</span></a>
+<a class="sourceLine" id="cb3-2" title="2">  extend <span class="dt">Animal</span></a>
+<a class="sourceLine" id="cb3-3" title="3">  define_animal_methods</a>
+<a class="sourceLine" id="cb3-4" title="4"></a>
+<a class="sourceLine" id="cb3-5" title="5">  _name = instance_method(<span class="st">:name</span>)</a>
+<a class="sourceLine" id="cb3-6" title="6"></a>
+<a class="sourceLine" id="cb3-7" title="7">  define_method <span class="st">:name</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb3-8" title="8">    _name.bind(<span class="dv">self</span>).() <span class="kw">do</span></a>
+<a class="sourceLine" id="cb3-9" title="9">      puts <span class="st">'cat_name'</span></a>
+<a class="sourceLine" id="cb3-10" title="10">    <span class="kw">end</span></a>
+<a class="sourceLine" id="cb3-11" title="11">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="kw">end</span></a>
+<a class="sourceLine" id="cb3-13" title="13"></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="dt">Cat</span>.new.name</a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="co"># =&gt; animal_name</span></a>
+<a class="sourceLine" id="cb3-16" title="16"><span class="co">#    cat_name</span></a></code></pre></div>
+<p>もっと簡単な方法があるような気もするが、どうだろうか。<br />
+また、関係ないが、 <code>method_missing</code> を使った<a href="http://qiita.com/pink_bangbi/items/274c8227a92826a269cb">こういうアプローチ</a>は面白いと思う。自分でも何か考えてみたい。</p>
+<h3 id="part4-標準添付ライブラリ">Part4 標準添付ライブラリ</h3>
+<p>こうしてみるとRubyはやはり標準の機能がかなり豊富だなと思う。<br />
+fileutilsなどのあまり使わないライブラリまわりは、覚えられないので必要になったら都度調べている。今回復習できたものの、また忘れたころに必要になるだろうなと思う。Setもごく稀に使うが、Arrayで事足りることが多いイメージがある。</p>
+<h3 id="part5-実践プログラミング">Part5 実践プログラミング</h3>
+<p>gemを一度は作ったことがあり、なんとなく流れは知っているので、流し読み程度。<br />
+Ruby版Power Assertについても触れられているが、どのくらいユーザー数いるんだろうか。</p>
+<p><br /></p>
+<h2 id="最近読んだ他の本">最近読んだ他の本</h2>
+<p>最後に、パーフェクトRuby以外の本で最近読んで気になったものをあげておく。</p>
+<ul>
+<li><a href="http://amzn.to/2swsaZF">実践AWS Lambda</a>
+<ul>
+<li>AWS Lambdaのチュートリアル的な本。</li>
+<li>SAMや周辺サービスにも言及している。</li>
+<li>総ページ数に対してほぼスクリーンショットのページが多くて少し残念だった。</li>
+</ul></li>
+<li><a href="http://amzn.to/2sWR81T">炎立つ</a>
+<ul>
+<li>技術書ではない。奥州藤原氏の話で、岩手に引っ越したので読んでいる。</li>
+<li>まだ3巻の途中。</li>
+<li>影響されてしまったのか、「感心しました」と言いたい場面で「感服仕った」が先に出てきて困った。</li>
+</ul></li>
+</ul>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2017-06-13-perfect-ruby.html" class="hatena-bookmark-button" data-hatena-bookmark-title="パーフェクトRuby第2版を読んだ - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>

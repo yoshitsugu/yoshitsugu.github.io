@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>「30日でできる！OS自作入門」をRustで。6日目 - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="「30日でできる！OS自作入門」をRustで。6日目 - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2019-06-13-haribote-os-in-rust-day6.html" />
+        <meta property="og:description" content="「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は6日目の内容。 " />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。6日目 - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は6日目の内容。 " />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>「30日でできる！OS自作入門」をRustで。6日目</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on June 13, 2019</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a href="../tags/OS.html">OS</a>, <a href="../tags/Rust.html">Rust</a></span>
+    
+</div>
+
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は6日目の内容。 <!--more--></p>
+<h2 id="gdt-idtの定義">GDT, IDTの定義</h2>
+<p>前回やらなかったGDT, IDTの定義をする。<br />
+新しく <code>descriptor_table.rs</code> というファイルを作り、そこに追記する。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">use</span> <span class="kw">crate</span>::asm;</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">use</span> <span class="kw">crate</span>::handler;</a>
+<a class="sourceLine" id="cb1-3" title="3"></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="at">,</span> <span class="bu">Clone</span><span class="at">,</span> <span class="bu">Copy</span><span class="at">)]</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="at">#[</span>repr<span class="at">(</span>C<span class="at">,</span> packed<span class="at">)]</span></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="kw">struct</span> SegmentDescriptor <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-7" title="7">    limit_low: <span class="dt">u16</span>,</a>
+<a class="sourceLine" id="cb1-8" title="8">    base_low: <span class="dt">u16</span>,</a>
+<a class="sourceLine" id="cb1-9" title="9">    base_mid: <span class="dt">u8</span>,</a>
+<a class="sourceLine" id="cb1-10" title="10">    access_right: <span class="dt">u8</span>,</a>
+<a class="sourceLine" id="cb1-11" title="11">    limit_high: <span class="dt">u8</span>,</a>
+<a class="sourceLine" id="cb1-12" title="12">    base_high: <span class="dt">u8</span>,</a>
+<a class="sourceLine" id="cb1-13" title="13"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-14" title="14"></a>
+<a class="sourceLine" id="cb1-15" title="15"><span class="kw">impl</span> SegmentDescriptor <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-16" title="16">    <span class="kw">fn</span> new(<span class="kw">mut</span> limit: <span class="dt">u32</span>, base: <span class="dt">i32</span>, <span class="kw">mut</span> ar: <span class="dt">i32</span>) -&gt; SegmentDescriptor <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-17" title="17">        <span class="kw">if</span> limit &gt; <span class="dv">0xfffff</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-18" title="18">            ar |= <span class="dv">0x8000</span>;</a>
+<a class="sourceLine" id="cb1-19" title="19">            limit /= <span class="dv">0x1000</span>;</a>
+<a class="sourceLine" id="cb1-20" title="20">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-21" title="21">        SegmentDescriptor <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-22" title="22">            limit_low: limit <span class="kw">as</span> <span class="dt">u16</span>,</a>
+<a class="sourceLine" id="cb1-23" title="23">            base_low: base <span class="kw">as</span> <span class="dt">u16</span>,</a>
+<a class="sourceLine" id="cb1-24" title="24">            base_mid: (base &gt;&gt; <span class="dv">16</span>) <span class="kw">as</span> <span class="dt">u8</span>,</a>
+<a class="sourceLine" id="cb1-25" title="25">            access_right: ar <span class="kw">as</span> <span class="dt">u8</span>,</a>
+<a class="sourceLine" id="cb1-26" title="26">            limit_high: ((limit &gt;&gt; <span class="dv">16</span>) <span class="kw">as</span> <span class="dt">u8</span> &amp; <span class="dv">0x0f</span>) | ((ar &gt;&gt; <span class="dv">8</span>) <span class="kw">as</span> <span class="dt">u8</span> &amp; <span class="dv">0xf0</span>),</a>
+<a class="sourceLine" id="cb1-27" title="27">            base_high: (base &gt;&gt; <span class="dv">24</span>) <span class="kw">as</span> <span class="dt">u8</span>,</a>
+<a class="sourceLine" id="cb1-28" title="28">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-29" title="29">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-30" title="30"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-31" title="31"></a>
+<a class="sourceLine" id="cb1-32" title="32"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="at">,</span> <span class="bu">Clone</span><span class="at">,</span> <span class="bu">Copy</span><span class="at">)]</span></a>
+<a class="sourceLine" id="cb1-33" title="33"><span class="at">#[</span>repr<span class="at">(</span>C<span class="at">,</span> packed<span class="at">)]</span></a>
+<a class="sourceLine" id="cb1-34" title="34"><span class="kw">struct</span> GateDescriptor <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-35" title="35">    <span class="kw">pub</span> offset_low: <span class="dt">u16</span>,</a>
+<a class="sourceLine" id="cb1-36" title="36">    <span class="kw">pub</span> selector: <span class="dt">u16</span>,</a>
+<a class="sourceLine" id="cb1-37" title="37">    <span class="kw">pub</span> dw_count: <span class="dt">u8</span>,</a>
+<a class="sourceLine" id="cb1-38" title="38">    <span class="kw">pub</span> access_right: <span class="dt">u8</span>,</a>
+<a class="sourceLine" id="cb1-39" title="39">    <span class="kw">pub</span> offset_high: <span class="dt">u16</span>,</a>
+<a class="sourceLine" id="cb1-40" title="40"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-41" title="41"></a>
+<a class="sourceLine" id="cb1-42" title="42"><span class="kw">impl</span> GateDescriptor <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-43" title="43">    <span class="kw">fn</span> new(offset: <span class="dt">u32</span>, selector: <span class="dt">i32</span>, ar: <span class="dt">i32</span>) -&gt; GateDescriptor <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-44" title="44">        GateDescriptor <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-45" title="45">            offset_low: offset <span class="kw">as</span> <span class="dt">u16</span>,</a>
+<a class="sourceLine" id="cb1-46" title="46">            selector: selector <span class="kw">as</span> <span class="dt">u16</span>,</a>
+<a class="sourceLine" id="cb1-47" title="47">            dw_count: (ar &gt;&gt; <span class="dv">8</span>) <span class="kw">as</span> <span class="dt">u8</span>,</a>
+<a class="sourceLine" id="cb1-48" title="48">            access_right: ar <span class="kw">as</span> <span class="dt">u8</span>,</a>
+<a class="sourceLine" id="cb1-49" title="49">            offset_high: (offset &gt;&gt; <span class="dv">16</span>) <span class="kw">as</span> <span class="dt">u16</span>,</a>
+<a class="sourceLine" id="cb1-50" title="50">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-51" title="51">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-52" title="52"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-53" title="53"></a>
+<a class="sourceLine" id="cb1-54" title="54"><span class="kw">const</span> ADR_GDT: <span class="dt">i32</span> = <span class="dv">0x00270000</span>;</a>
+<a class="sourceLine" id="cb1-55" title="55"><span class="kw">const</span> LIMIT_GDT: <span class="dt">i32</span> = <span class="dv">0x0000ffff</span>;</a>
+<a class="sourceLine" id="cb1-56" title="56"><span class="kw">const</span> ADR_IDT: <span class="dt">i32</span> = <span class="dv">0x0026f800</span>;</a>
+<a class="sourceLine" id="cb1-57" title="57"><span class="kw">const</span> LIMIT_IDT: <span class="dt">i32</span> = <span class="dv">0x000007ff</span>;</a>
+<a class="sourceLine" id="cb1-58" title="58"><span class="kw">const</span> ADR_BOTPAK: <span class="dt">i32</span> = <span class="dv">0x00280000</span>;</a>
+<a class="sourceLine" id="cb1-59" title="59"><span class="kw">const</span> LIMIT_BOTPAK: <span class="dt">u32</span> = <span class="dv">0x0007ffff</span>;</a>
+<a class="sourceLine" id="cb1-60" title="60"><span class="kw">const</span> AR_INTGATE32: <span class="dt">i32</span> = <span class="dv">0x008e</span>;</a>
+<a class="sourceLine" id="cb1-61" title="61"><span class="kw">const</span> AR_DATA32_RW: <span class="dt">i32</span> = <span class="dv">0x4092</span>;</a>
+<a class="sourceLine" id="cb1-62" title="62"><span class="kw">const</span> AR_CODE32_ER: <span class="dt">i32</span> = <span class="dv">0x409a</span>;</a>
+<a class="sourceLine" id="cb1-63" title="63"></a>
+<a class="sourceLine" id="cb1-64" title="64"><span class="kw">pub</span> <span class="kw">fn</span> init() <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-65" title="65">    <span class="kw">use</span> <span class="kw">crate</span>::<span class="pp">interrupt::</span><span class="op">{</span>inthandler21, inthandler2c<span class="op">}</span>;</a>
+<a class="sourceLine" id="cb1-66" title="66">    <span class="kw">use</span> <span class="pp">asm::</span><span class="op">{</span>load_gdtr, load_idtr<span class="op">}</span>;</a>
+<a class="sourceLine" id="cb1-67" title="67">    <span class="co">// GDTの初期化</span></a>
+<a class="sourceLine" id="cb1-68" title="68">    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span>..=(LIMIT_GDT / <span class="dv">8</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-69" title="69">        <span class="kw">let</span> gdt = <span class="kw">unsafe</span> <span class="op">{</span> &amp;<span class="kw">mut</span> *((ADR_GDT + i * <span class="dv">8</span>) <span class="kw">as</span> *<span class="kw">mut</span> SegmentDescriptor) <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb1-70" title="70">        *gdt = <span class="pp">SegmentDescriptor::</span>new(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>);</a>
+<a class="sourceLine" id="cb1-71" title="71">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-72" title="72">    <span class="kw">let</span> gdt = <span class="kw">unsafe</span> <span class="op">{</span> &amp;<span class="kw">mut</span> *((ADR_GDT + <span class="dv">1</span> * <span class="dv">8</span>) <span class="kw">as</span> *<span class="kw">mut</span> SegmentDescriptor) <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb1-73" title="73">    *gdt = <span class="pp">SegmentDescriptor::</span>new(<span class="dv">0xffffffff</span>, <span class="dv">0x00000000</span>, AR_DATA32_RW);</a>
+<a class="sourceLine" id="cb1-74" title="74">    <span class="kw">let</span> gdt = <span class="kw">unsafe</span> <span class="op">{</span> &amp;<span class="kw">mut</span> *((ADR_GDT + <span class="dv">2</span> * <span class="dv">8</span>) <span class="kw">as</span> *<span class="kw">mut</span> SegmentDescriptor) <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb1-75" title="75">    *gdt = <span class="pp">SegmentDescriptor::</span>new(LIMIT_BOTPAK, ADR_BOTPAK, AR_CODE32_ER);</a>
+<a class="sourceLine" id="cb1-76" title="76"></a>
+<a class="sourceLine" id="cb1-77" title="77">    load_gdtr(LIMIT_GDT, ADR_GDT);</a>
+<a class="sourceLine" id="cb1-78" title="78"></a>
+<a class="sourceLine" id="cb1-79" title="79">    <span class="co">// IDTの初期化</span></a>
+<a class="sourceLine" id="cb1-80" title="80">    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span>..=(LIMIT_IDT / <span class="dv">8</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-81" title="81">        <span class="kw">let</span> idt = <span class="kw">unsafe</span> <span class="op">{</span> &amp;<span class="kw">mut</span> *((ADR_IDT + i * <span class="dv">8</span>) <span class="kw">as</span> *<span class="kw">mut</span> GateDescriptor) <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb1-82" title="82">        *idt = <span class="pp">GateDescriptor::</span>new(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>);</a>
+<a class="sourceLine" id="cb1-83" title="83">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-84" title="84"></a>
+<a class="sourceLine" id="cb1-85" title="85">    <span class="co">// 割り込みの設定</span></a>
+<a class="sourceLine" id="cb1-86" title="86">    <span class="kw">let</span> idt = <span class="kw">unsafe</span> <span class="op">{</span> &amp;<span class="kw">mut</span> *((ADR_IDT + <span class="dv">0x21</span> * <span class="dv">8</span>) <span class="kw">as</span> *<span class="kw">mut</span> GateDescriptor) <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb1-87" title="87">    *idt = <span class="pp">GateDescriptor::</span>new(<span class="pp">handler!</span>(inthandler21) <span class="kw">as</span> <span class="dt">u32</span>, <span class="dv">2</span> * <span class="dv">8</span>, AR_INTGATE32);</a>
+<a class="sourceLine" id="cb1-88" title="88">    <span class="kw">let</span> idt = <span class="kw">unsafe</span> <span class="op">{</span> &amp;<span class="kw">mut</span> *((ADR_IDT + <span class="dv">0x2c</span> * <span class="dv">8</span>) <span class="kw">as</span> *<span class="kw">mut</span> GateDescriptor) <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb1-89" title="89">    *idt = <span class="pp">GateDescriptor::</span>new(<span class="pp">handler!</span>(inthandler2c) <span class="kw">as</span> <span class="dt">u32</span>, <span class="dv">2</span> * <span class="dv">8</span>, AR_INTGATE32);</a>
+<a class="sourceLine" id="cb1-90" title="90">    load_idtr(LIMIT_IDT, ADR_IDT);</a>
+<a class="sourceLine" id="cb1-91" title="91"><span class="op">}</span></a></code></pre></div>
+<p>Cで実装した場合とメモリ配置が同じになるように、structには <code>#[repr(C, packed)]</code> をつけている。見た目は本のCのコードとあまりかわらないと思う。</p>
+<h2 id="asm.rsの追記">asm.rsの追記</h2>
+<p><code>load_gdtr</code>, <code>load_idtr</code> などは <code>asm.rs</code> のほうに追加しておく。ついでにわりこみハンドラを生成するマクロ <code>handler!</code> もつくった。( マクロについては<a href="https://os.phil-opp.com/better-exception-messages/#a-handler-macro">ここ</a>が参考になった。)</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="co">// asm.rs</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="at">,</span> <span class="bu">Clone</span><span class="at">,</span> <span class="bu">Copy</span><span class="at">)]</span></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="at">#[</span>repr<span class="at">(</span>C<span class="at">,</span> packed<span class="at">)]</span></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="kw">struct</span> Dtr <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-5" title="5">    limit: <span class="dt">i16</span>,</a>
+<a class="sourceLine" id="cb2-6" title="6">    base: <span class="dt">i32</span>,</a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="op">}</span></a>
+<a class="sourceLine" id="cb2-8" title="8"></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="kw">pub</span> <span class="kw">fn</span> load_gdtr(limit: <span class="dt">i32</span>, adr: <span class="dt">i32</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-10" title="10">    <span class="kw">unsafe</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-11" title="11">        <span class="pp">asm!</span>(<span class="st">&quot;LGDT ($0)&quot;</span> :: <span class="st">&quot;r&quot;</span>(&amp;Dtr <span class="op">{</span> limit: limit <span class="kw">as</span> <span class="dt">i16</span>, base: adr <span class="op">}</span> ) : <span class="st">&quot;memory&quot;</span>);</a>
+<a class="sourceLine" id="cb2-12" title="12">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="op">}</span></a>
+<a class="sourceLine" id="cb2-14" title="14"></a>
+<a class="sourceLine" id="cb2-15" title="15"><span class="kw">pub</span> <span class="kw">fn</span> load_idtr(limit: <span class="dt">i32</span>, adr: <span class="dt">i32</span>) <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-16" title="16">    <span class="kw">unsafe</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-17" title="17">        <span class="pp">asm!</span>(<span class="st">&quot;LIDT ($0)&quot;</span> :: <span class="st">&quot;r&quot;</span>(&amp;Dtr <span class="op">{</span> limit: limit <span class="kw">as</span> <span class="dt">i16</span>, base: adr <span class="op">}</span>) : <span class="st">&quot;memory&quot;</span>);</a>
+<a class="sourceLine" id="cb2-18" title="18">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb2-19" title="19"><span class="op">}</span></a>
+<a class="sourceLine" id="cb2-20" title="20"></a>
+<a class="sourceLine" id="cb2-21" title="21"><span class="at">#[</span>macro_export<span class="at">]</span></a>
+<a class="sourceLine" id="cb2-22" title="22"><span class="pp">macro_rules!</span> handler <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-23" title="23">    ($name: ident) =&gt; <span class="op">{{</span></a>
+<a class="sourceLine" id="cb2-24" title="24">        <span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> wrapper() -&gt; ! <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-25" title="25">            <span class="kw">unsafe</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-26" title="26">                <span class="pp">asm!</span>(<span class="st">&quot;PUSH ES</span></a>
+<a class="sourceLine" id="cb2-27" title="27"><span class="st">                      PUSH DS</span></a>
+<a class="sourceLine" id="cb2-28" title="28"><span class="st">                      PUSHAD</span></a>
+<a class="sourceLine" id="cb2-29" title="29"><span class="st">                      MOV EAX,ESP</span></a>
+<a class="sourceLine" id="cb2-30" title="30"><span class="st">                      PUSH EAX</span></a>
+<a class="sourceLine" id="cb2-31" title="31"><span class="st">                      MOV AX,SS</span></a>
+<a class="sourceLine" id="cb2-32" title="32"><span class="st">                      MOV DS,AX</span></a>
+<a class="sourceLine" id="cb2-33" title="33"><span class="st">                      MOV ES,AX&quot;</span> : : : : <span class="st">&quot;intel&quot;</span>, <span class="st">&quot;volatile&quot;</span>);</a>
+<a class="sourceLine" id="cb2-34" title="34">                <span class="pp">asm!</span>(<span class="st">&quot;CALL $0&quot;</span> : : <span class="st">&quot;r&quot;</span>($name <span class="kw">as</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span>()) : : <span class="st">&quot;intel&quot;</span>);</a>
+<a class="sourceLine" id="cb2-35" title="35">                <span class="pp">asm!</span>(<span class="st">&quot;POP EAX</span></a>
+<a class="sourceLine" id="cb2-36" title="36"><span class="st">                    POPAD</span></a>
+<a class="sourceLine" id="cb2-37" title="37"><span class="st">                    POP DS</span></a>
+<a class="sourceLine" id="cb2-38" title="38"><span class="st">                    POP ES</span></a>
+<a class="sourceLine" id="cb2-39" title="39"><span class="st">                    IRETD&quot;</span> : : : : <span class="st">&quot;intel&quot;</span>, <span class="st">&quot;volatile&quot;</span>);</a>
+<a class="sourceLine" id="cb2-40" title="40">                ::<span class="pp">core::intrinsics::</span>unreachable();</a>
+<a class="sourceLine" id="cb2-41" title="41">            <span class="op">}</span></a>
+<a class="sourceLine" id="cb2-42" title="42">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb2-43" title="43">        wrapper</a>
+<a class="sourceLine" id="cb2-44" title="44">    <span class="op">}}</span></a>
+<a class="sourceLine" id="cb2-45" title="45"><span class="op">}</span></a></code></pre></div>
+<p>ここでもメモリ配置が本と同様になるように、 <code>#[repr(C, packed)]</code> をつけたstructを定義し、それを読み込むようにした。</p>
+<h2 id="picの定義割り込みの際の動作の定義">PICの定義、割り込みの際の動作の定義</h2>
+<p>PICまわりも本に準拠する形で作った。<code>interrupt.rs</code> という別ファイルにまとめている。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="co">// interrupt.rs</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">use</span> <span class="kw">crate</span>::<span class="pp">asm::</span>out8;</a>
+<a class="sourceLine" id="cb3-3" title="3"></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="kw">const</span> PIC0_ICW1: <span class="dt">u32</span> = <span class="dv">0x0020</span>;</a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="kw">const</span> PIC0_OCW2: <span class="dt">u32</span> = <span class="dv">0x0020</span>;</a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="kw">const</span> PIC0_IMR: <span class="dt">u32</span> = <span class="dv">0x0021</span>;</a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="kw">const</span> PIC0_ICW2: <span class="dt">u32</span> = <span class="dv">0x0021</span>;</a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="kw">const</span> PIC0_ICW3: <span class="dt">u32</span> = <span class="dv">0x0021</span>;</a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="kw">const</span> PIC0_ICW4: <span class="dt">u32</span> = <span class="dv">0x0021</span>;</a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="kw">const</span> PIC1_ICW1: <span class="dt">u32</span> = <span class="dv">0x00a0</span>;</a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="kw">const</span> PIC1_OCW2: <span class="dt">u32</span> = <span class="dv">0x00a0</span>;</a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="kw">const</span> PIC1_IMR: <span class="dt">u32</span> = <span class="dv">0x00a1</span>;</a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="kw">const</span> PIC1_ICW2: <span class="dt">u32</span> = <span class="dv">0x00a1</span>;</a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="kw">const</span> PIC1_ICW3: <span class="dt">u32</span> = <span class="dv">0x00a1</span>;</a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="kw">const</span> PIC1_ICW4: <span class="dt">u32</span> = <span class="dv">0x00a1</span>;</a>
+<a class="sourceLine" id="cb3-16" title="16"></a>
+<a class="sourceLine" id="cb3-17" title="17"><span class="kw">pub</span> <span class="kw">fn</span> init() <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-18" title="18">    out8(PIC0_IMR, <span class="dv">0xff</span>); <span class="co">// 全ての割り込みを受け付けない</span></a>
+<a class="sourceLine" id="cb3-19" title="19">    out8(PIC1_IMR, <span class="dv">0xff</span>); <span class="co">// 全ての割り込みを受け付けない</span></a>
+<a class="sourceLine" id="cb3-20" title="20"></a>
+<a class="sourceLine" id="cb3-21" title="21">    out8(PIC0_ICW1, <span class="dv">0x11</span>); <span class="co">// エッジトリガモード</span></a>
+<a class="sourceLine" id="cb3-22" title="22">    out8(PIC0_ICW2, <span class="dv">0x20</span>); <span class="co">// IRQ0-7は、INT20-27で受ける</span></a>
+<a class="sourceLine" id="cb3-23" title="23">    out8(PIC0_ICW3, <span class="dv">1</span> &lt;&lt; <span class="dv">2</span>); <span class="co">// PIC1はIRQ2にて接続</span></a>
+<a class="sourceLine" id="cb3-24" title="24">    out8(PIC0_ICW4, <span class="dv">0x01</span>); <span class="co">// ノンバッファモード</span></a>
+<a class="sourceLine" id="cb3-25" title="25"></a>
+<a class="sourceLine" id="cb3-26" title="26">    out8(PIC1_ICW1, <span class="dv">0x11</span>); <span class="co">// エッジトリガモード</span></a>
+<a class="sourceLine" id="cb3-27" title="27">    out8(PIC1_ICW2, <span class="dv">0x28</span>); <span class="co">// IRQ8-15は、INT28-2fで受ける</span></a>
+<a class="sourceLine" id="cb3-28" title="28">    out8(PIC1_ICW3, <span class="dv">2</span>); <span class="co">// PIC1はIRQ2にて接続</span></a>
+<a class="sourceLine" id="cb3-29" title="29">    out8(PIC1_ICW4, <span class="dv">0x01</span>); <span class="co">// ノンバッファモード</span></a>
+<a class="sourceLine" id="cb3-30" title="30"></a>
+<a class="sourceLine" id="cb3-31" title="31">    out8(PIC0_IMR, <span class="dv">0xfb</span>); <span class="co">// 11111011 PIC1以外は全て禁止</span></a>
+<a class="sourceLine" id="cb3-32" title="32">    out8(PIC1_IMR, <span class="dv">0xff</span>); <span class="co">// 11111111 全ての割り込みを受け付けない</span></a>
+<a class="sourceLine" id="cb3-33" title="33"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-34" title="34"></a>
+<a class="sourceLine" id="cb3-35" title="35"><span class="kw">pub</span> <span class="kw">fn</span> allow_input() <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-36" title="36">    out8(PIC0_IMR, <span class="dv">0xf9</span>); <span class="co">// PIC1とキーボードを許可(11111001)</span></a>
+<a class="sourceLine" id="cb3-37" title="37">    out8(PIC1_IMR, <span class="dv">0xef</span>); <span class="co">// マウスを許可(11101111)</span></a>
+<a class="sourceLine" id="cb3-38" title="38"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-39" title="39"></a>
+<a class="sourceLine" id="cb3-40" title="40"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> inthandler21() <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-41" title="41">    <span class="kw">use</span> <span class="kw">crate</span>::<span class="pp">vga::</span><span class="op">{</span>Color, Screen, ScreenWriter<span class="op">}</span>;</a>
+<a class="sourceLine" id="cb3-42" title="42">    <span class="kw">let</span> <span class="kw">mut</span> screen = <span class="pp">Screen::</span>new();</a>
+<a class="sourceLine" id="cb3-43" title="43">    screen.boxfill8(<span class="pp">Color::</span>Black, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">32</span> * <span class="dv">8</span> - <span class="dv">1</span>, <span class="dv">15</span>);</a>
+<a class="sourceLine" id="cb3-44" title="44">    <span class="kw">let</span> <span class="kw">mut</span> writer = <span class="pp">ScreenWriter::</span>new(<span class="pp">Screen::</span>new(), <span class="pp">Color::</span>White, <span class="dv">0</span>, <span class="dv">0</span>);</a>
+<a class="sourceLine" id="cb3-45" title="45">    <span class="kw">use</span> <span class="pp">core::fmt::</span>Write;</a>
+<a class="sourceLine" id="cb3-46" title="46">    <span class="pp">write!</span>(writer, <span class="st">&quot;INT 21 (IRQ-1) : PS/2 keyboard&quot;</span>).unwrap();</a>
+<a class="sourceLine" id="cb3-47" title="47">    <span class="kw">loop</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-48" title="48">        <span class="kw">crate</span>::<span class="pp">asm::</span>hlt();</a>
+<a class="sourceLine" id="cb3-49" title="49">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-50" title="50"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-51" title="51"></a>
+<a class="sourceLine" id="cb3-52" title="52"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> inthandler2c() <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-53" title="53">    <span class="kw">use</span> <span class="kw">crate</span>::<span class="pp">vga::</span><span class="op">{</span>Color, Screen, ScreenWriter<span class="op">}</span>;</a>
+<a class="sourceLine" id="cb3-54" title="54">    <span class="kw">let</span> <span class="kw">mut</span> screen = <span class="pp">Screen::</span>new();</a>
+<a class="sourceLine" id="cb3-55" title="55">    screen.boxfill8(<span class="pp">Color::</span>Black, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">32</span> * <span class="dv">8</span> - <span class="dv">1</span>, <span class="dv">15</span>);</a>
+<a class="sourceLine" id="cb3-56" title="56">    <span class="kw">let</span> <span class="kw">mut</span> writer = <span class="pp">ScreenWriter::</span>new(<span class="pp">Screen::</span>new(), <span class="pp">Color::</span>White, <span class="dv">0</span>, <span class="dv">0</span>);</a>
+<a class="sourceLine" id="cb3-57" title="57">    <span class="kw">use</span> <span class="pp">core::fmt::</span>Write;</a>
+<a class="sourceLine" id="cb3-58" title="58">    <span class="pp">write!</span>(writer, <span class="st">&quot;INT 2C (IRQ-12) : PS/2 mouse&quot;</span>).unwrap();</a>
+<a class="sourceLine" id="cb3-59" title="59">    <span class="kw">loop</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-60" title="60">        <span class="kw">crate</span>::<span class="pp">asm::</span>hlt();</a>
+<a class="sourceLine" id="cb3-61" title="61">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-62" title="62"><span class="op">}</span></a></code></pre></div>
+<h2 id="lib.rsの初期化処理を修正">lib.rsの初期化処理を修正</h2>
+<p>エントリポイントとなる関数は以下のように修正した。</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="co">// lib.rs</span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="at">#[</span>no_mangle<span class="at">]</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="at">#[</span>start<span class="at">]</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() -&gt; ! <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-5" title="5">    <span class="kw">use</span> <span class="pp">asm::</span><span class="op">{</span>hlt, sti<span class="op">}</span>;</a>
+<a class="sourceLine" id="cb4-6" title="6">    <span class="kw">use</span> <span class="pp">vga::</span><span class="op">{</span>Screen, ScreenWriter<span class="op">}</span>;</a>
+<a class="sourceLine" id="cb4-7" title="7"></a>
+<a class="sourceLine" id="cb4-8" title="8">    <span class="pp">descriptor_table::</span>init();</a>
+<a class="sourceLine" id="cb4-9" title="9">    <span class="pp">interrupt::</span>init();</a>
+<a class="sourceLine" id="cb4-10" title="10">    sti();</a>
+<a class="sourceLine" id="cb4-11" title="11">    <span class="pp">interrupt::</span>allow_input();</a>
+<a class="sourceLine" id="cb4-12" title="12"></a>
+<a class="sourceLine" id="cb4-13" title="13">    <span class="kw">let</span> <span class="kw">mut</span> screen = <span class="pp">Screen::</span>new();</a>
+<a class="sourceLine" id="cb4-14" title="14">    screen.init();</a>
+<a class="sourceLine" id="cb4-15" title="15">    <span class="kw">let</span> <span class="kw">mut</span> writer = <span class="pp">ScreenWriter::</span>new(screen, <span class="pp">vga::Color::</span>White, <span class="dv">0</span>, <span class="dv">0</span>);</a>
+<a class="sourceLine" id="cb4-16" title="16">    <span class="kw">use</span> <span class="pp">core::fmt::</span>Write;</a>
+<a class="sourceLine" id="cb4-17" title="17">    <span class="pp">write!</span>(writer, <span class="st">&quot;ABC&quot;</span>).unwrap();</a>
+<a class="sourceLine" id="cb4-18" title="18">    <span class="kw">loop</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-19" title="19">        hlt()</a>
+<a class="sourceLine" id="cb4-20" title="20">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-21" title="21"><span class="op">}</span></a></code></pre></div>
+<h2 id="実行結果">実行結果</h2>
+<h3 id="初期状態">初期状態</h3>
+<p><img src="../images/20190613/default.png" class="blog-img img-responsive" alt="初期状態" title="初期状態" /></p>
+<h3 id="キーボード打鍵後">キーボード打鍵後</h3>
+<p><img src="../images/20190613/keyboard.png" class="blog-img img-responsive" alt="キーボード打鍵後" title="キーボード打鍵後" /></p>
+<p>打鍵に反応して表示がかわったことがわかる。</p>
+<p>今回実装コードの差分自体は多くなかったが、ハマってしまいだいぶ時間がかかった。動かないときに何をデバッグしてよいのか最初はわからず、苦労した。gdbでメモリのdumpを見ながらデバッグをしたが、今まであまりしてこなかったので、gdbの操作含め勉強になった。</p>
+<p>6日目は以上となる。ここまでの内容のコードは<a href="https://github.com/yoshitsugu/hariboteos_in_rust/tree/day6">yoshitsugu/hariboteos_in_rustのday6</a>としてタグを打ってある。</p>
+<p><code>Screen</code> などは <a href="https://os.phil-opp.com/">Writing an OS in Rust</a> の <code>WRITER</code> のように、<code>spin_no_std</code> な <code>lazy_static!</code> を使って <code>static</code> として管理したいのだが、<code>entered unreachable code</code> というエラーがでてしまいできていない。調べても同様の事例がでてこないので、自分のHariboteOS環境特有の現象なのだろうか。</p>
+<h2 id="参考文献">参考文献</h2>
+<ul>
+<li><a href="https://os.phil-opp.com/first-edition/extra/naked-exceptions/">Handling Exceptions using naked Functions</a>
+<ul>
+<li>例外ハンドリングまわりの記事。参考になった。</li>
+</ul></li>
+</ul>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2019-06-13-haribote-os-in-rust-day6.html" class="hatena-bookmark-button" data-hatena-bookmark-title="「30日でできる！OS自作入門」をRustで。6日目 - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>

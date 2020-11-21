@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>Stateモナドについてメモ - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="Stateモナドについてメモ - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2016-03-15-state-monad.html" />
+        <meta property="og:description" content="Stateモナドについて、自分なりにまとめる。自分用のメモなので詳しくしりたい人は下の参考リンクなどをみるほうがよいと思う。 " />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="Stateモナドについてメモ - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="Stateモナドについて、自分なりにまとめる。自分用のメモなので詳しくしりたい人は下の参考リンクなどをみるほうがよいと思う。 " />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>Stateモナドについてメモ</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on March 15, 2016</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/Monad.html">Monad</a>, <a href="../tags/Haskell.html">Haskell</a></span>
+    
+</div>
+
+<p>Stateモナドについて、自分なりにまとめる。自分用のメモなので詳しくしりたい人は下の参考リンクなどをみるほうがよいと思う。 <!--more--></p>
+<h2 id="モナドとは">モナドとは</h2>
+<p>モナドについては箱にたとえる方法や、関数型言語で副作用をあつかうための仕組み、などいろいろな説明がある<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>。使ってみて感覚をつかむのがいいと思う。自分としてはコンテキストをあつかう、という説明がしっくりきた。そのうち自分の言葉で説明するエントリも書く予定。<br />
+モナドのインスタンスとするには <code>return</code> と <code>bind (&gt;&gt;=)</code>を定義する必要がある。</p>
+<h2 id="stateモナドとは">Stateモナドとは</h2>
+<p>変数の書き換えを行わない純粋な関数型言語で状態を扱うための仕組み。<br />
+どうやって副作用をともなわずに状態をあつかっているのかというと、基本的には「前の状態」を入力として「次の状態」を出力とする(多分厳密には違う)<br />
+モナドを使うことで手続的に状態を変更するように書くことができる。<br />
+<code>State s a</code>のような型となり、<code>s</code>は状態の型、<code>a</code>は最終的な値の型となる。この順番をいつも忘れてしまうのだが、型があるのでわかりやすいともいえる。</p>
+<p>現状のmtlパッケージの実装とは違うが、Monadのインスタンス化はだいたい以下のようにして行える。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">newtype</span> <span class="dt">State</span> state a <span class="ot">=</span> <span class="dt">State</span> {<span class="ot"> runState ::</span> state <span class="ot">-&gt;</span> (a, state) }</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">instance</span> <span class="dt">Monad</span> (<span class="dt">State</span> state) <span class="kw">where</span></a>
+<a class="sourceLine" id="cb1-3" title="3">  <span class="fu">return</span> a <span class="ot">=</span> <span class="dt">State</span> (\s <span class="ot">-&gt;</span> (a, s))</a>
+<a class="sourceLine" id="cb1-4" title="4">  <span class="dt">State</span> x <span class="op">&gt;&gt;=</span> f <span class="ot">=</span> <span class="dt">State</span> (\s <span class="ot">-&gt;</span> <span class="kw">let</span> (a, s') <span class="ot">=</span> x s <span class="kw">in</span> runState (f a) s')</a></code></pre></div>
+<h2 id="例">例</h2>
+<p><a href="https://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-State-Lazy.html" target="_blank">公式ドキュメント</a>から引用 <code>n + x</code>をStateモナドを使って実装している。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" title="1"><span class="ot">tick ::</span> <span class="dt">State</span> <span class="dt">Int</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb2-2" title="2">tick <span class="ot">=</span> <span class="kw">do</span> n <span class="ot">&lt;-</span> get</a>
+<a class="sourceLine" id="cb2-3" title="3">          put (n<span class="op">+</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb2-4" title="4">          <span class="fu">return</span> n</a>
+<a class="sourceLine" id="cb2-5" title="5"></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="ot">plusOne ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb2-7" title="7">plusOne n <span class="ot">=</span> execState tick n</a>
+<a class="sourceLine" id="cb2-8" title="8"></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="ot">plus ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb2-10" title="10">plus n x <span class="ot">=</span> execState (<span class="fu">sequence</span> <span class="op">$</span> <span class="fu">replicate</span> n tick) x</a></code></pre></div>
+<h2 id="基本的な操作">基本的な操作</h2>
+<h3 id="get">get</h3>
+<p>Stateから状態をとりだしてくる</p>
+<h3 id="put">put</h3>
+<p>Stateの状態を更新する</p>
+<h3 id="modify">modify</h3>
+<p>get + put</p>
+<h2 id="実行系の操作">実行系の操作</h2>
+<p>Monad系はよく<code>runXXX</code>のような関数をもち、手続的な書き方で処理を積んでおき、<code>runXXX</code>で実際に実行、という流れになる。Stateモナドは状態と値をもつので最終的にそれぞれを返す操作もある。</p>
+<h3 id="runstate">runState</h3>
+<p>(値,状態)のタプルを返す。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" title="1"><span class="ot">runState ::</span> (<span class="dt">State</span> s a) <span class="ot">-&gt;</span> s <span class="ot">-&gt;</span> (a, s)</a></code></pre></div>
+<h3 id="execstate">execState</h3>
+<p>値はすてて状態を返す。</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" title="1"><span class="ot">execState ::</span> (<span class="dt">State</span> s a) <span class="ot">-&gt;</span> s <span class="ot">-&gt;</span> s</a></code></pre></div>
+<h3 id="evalstate">evalState</h3>
+<p>状態はすてて値を返す。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" title="1"><span class="ot">evalState ::</span> (<span class="dt">State</span> s a) <span class="ot">-&gt;</span> s <span class="ot">-&gt;</span> a</a></code></pre></div>
+<h2 id="無限の猿定理">無限の猿定理</h2>
+<p>最近流行っているっぽい？無限の猿定理<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>の一種、「ズン」と「ドコ」をランダムに繰り返し、「ズンズンズンズンドコ」になったら停止して「キヨシ」と表示するプログラムもStateモナドを使って書ける。 「ズン」の回数をカウントするのにStateモナドを使った。</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb6-2" title="2"></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="kw">import</span>           <span class="dt">Control.Monad.State</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="kw">import</span>           <span class="dt">System.Random</span></a>
+<a class="sourceLine" id="cb6-5" title="5"></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="kw">data</span> <span class="dt">ZundokoCount</span> <span class="ot">=</span> <span class="dt">Start</span> <span class="op">|</span> <span class="dt">Zun1</span> <span class="op">|</span> <span class="dt">Zun2</span> <span class="op">|</span> <span class="dt">Zun3</span> <span class="op">|</span> <span class="dt">Zun4</span> <span class="op">|</span> <span class="dt">Doko</span> <span class="kw">deriving</span> (<span class="dt">Show</span>)</a>
+<a class="sourceLine" id="cb6-7" title="7"></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="ot">count ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">ZundokoCount</span> <span class="ot">-&gt;</span> <span class="dt">ZundokoCount</span></a>
+<a class="sourceLine" id="cb6-9" title="9">count <span class="st">&quot;ズン&quot;</span> <span class="dt">Start</span> <span class="ot">=</span> <span class="dt">Zun1</span></a>
+<a class="sourceLine" id="cb6-10" title="10">count <span class="st">&quot;ズン&quot;</span> <span class="dt">Zun1</span> <span class="ot">=</span> <span class="dt">Zun2</span></a>
+<a class="sourceLine" id="cb6-11" title="11">count <span class="st">&quot;ズン&quot;</span> <span class="dt">Zun2</span> <span class="ot">=</span> <span class="dt">Zun3</span></a>
+<a class="sourceLine" id="cb6-12" title="12">count <span class="st">&quot;ズン&quot;</span> <span class="dt">Zun3</span> <span class="ot">=</span> <span class="dt">Zun4</span></a>
+<a class="sourceLine" id="cb6-13" title="13">count <span class="st">&quot;ドコ&quot;</span> <span class="dt">Zun4</span> <span class="ot">=</span> <span class="dt">Doko</span></a>
+<a class="sourceLine" id="cb6-14" title="14">count _ <span class="dt">Doko</span> <span class="ot">=</span> <span class="dt">Doko</span></a>
+<a class="sourceLine" id="cb6-15" title="15">count _ _ <span class="ot">=</span> <span class="dt">Start</span></a>
+<a class="sourceLine" id="cb6-16" title="16"></a>
+<a class="sourceLine" id="cb6-17" title="17"><span class="ot">zundoko ::</span> <span class="dt">StdGen</span> <span class="ot">-&gt;</span> <span class="dt">StateT</span> <span class="dt">ZundokoCount</span> <span class="dt">IO</span> <span class="dt">ZundokoCount</span></a>
+<a class="sourceLine" id="cb6-18" title="18">zundoko gen <span class="ot">=</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb6-19" title="19">  z <span class="ot">&lt;-</span> get             <span class="co">-- 状態の取り出し</span></a>
+<a class="sourceLine" id="cb6-20" title="20">  <span class="kw">let</span> (r, genN) <span class="ot">=</span> randomR (<span class="dv">0</span>,<span class="dv">1</span>)<span class="ot"> gen ::</span> (<span class="dt">Int</span>, <span class="dt">StdGen</span>)</a>
+<a class="sourceLine" id="cb6-21" title="21">      str <span class="ot">=</span> <span class="kw">if</span> r <span class="op">==</span> <span class="dv">0</span> <span class="kw">then</span> <span class="st">&quot;ズン&quot;</span> <span class="kw">else</span> <span class="st">&quot;ドコ&quot;</span></a>
+<a class="sourceLine" id="cb6-22" title="22">      z' <span class="ot">=</span> count str z <span class="co">-- 次の状態</span></a>
+<a class="sourceLine" id="cb6-23" title="23">  liftIO <span class="op">$</span> <span class="fu">putStr</span> str</a>
+<a class="sourceLine" id="cb6-24" title="24">  put z'               <span class="co">-- 状態の更新</span></a>
+<a class="sourceLine" id="cb6-25" title="25">  <span class="kw">case</span> z' <span class="kw">of</span></a>
+<a class="sourceLine" id="cb6-26" title="26">    <span class="dt">Doko</span> <span class="ot">-&gt;</span> <span class="fu">return</span> z   <span class="co">-- Dokoだったらloop終了</span></a>
+<a class="sourceLine" id="cb6-27" title="27">    _ <span class="ot">-&gt;</span> zundoko genN</a>
+<a class="sourceLine" id="cb6-28" title="28"></a>
+<a class="sourceLine" id="cb6-29" title="29"><span class="ot">main ::</span> <span class="dt">IO</span> ()</a>
+<a class="sourceLine" id="cb6-30" title="30">main <span class="ot">=</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb6-31" title="31">  gen0 <span class="ot">&lt;-</span> newStdGen</a>
+<a class="sourceLine" id="cb6-32" title="32">  runStateT (zundoko gen0) <span class="dt">Start</span></a>
+<a class="sourceLine" id="cb6-33" title="33">  <span class="fu">putStrLn</span> <span class="st">&quot; &quot;</span></a>
+<a class="sourceLine" id="cb6-34" title="34">  <span class="fu">putStrLn</span> <span class="st">&quot;キヨシ&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" title="1">$ <span class="ex">stack</span> runghc Zundoko.hs </a>
+<a class="sourceLine" id="cb7-2" title="2">ズンズンズンズンズンドコズンズンドコドコズンズンズンズンズンドコズンドコ</a>
+<a class="sourceLine" id="cb7-3" title="3">ドコズンズンドコドコドコズンズンドコズンドコドコドコズンドコドコドコズン</a>
+<a class="sourceLine" id="cb7-4" title="4">ドコズンズンドコズンドコズンズンズンズンドコ </a>
+<a class="sourceLine" id="cb7-5" title="5">キヨシ</a></code></pre></div>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-State-Lazy.html" target="_blank">Control.Monad.State.Lazyドキュメント</a></li>
+<li><a href="https://wiki.haskell.org/State_Monad" target="_blank">Haskell Wiki - State Monad</a></li>
+<li><a href="http://qiita.com/7shi/items/2e9bff5d88302de1a9e9" target="_blank">Haskell 状態系モナド 超入門</a></li>
+<li><a href="http://qiita.com/lotz/items/503ef04b03433d29f77c" target="_blank">Stateモナドが便利に使えた！</a></li>
+<li><a href="http://gihyo.jp/book/2014/978-4-7741-6926-2" target="_blank">関数プログラミング実践入門</a></li>
+</ul>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="http://qiita.com/hiruberuto/items/8bbc0343bf794c368287" target="_blank">ポケモンにたとえるなんてものもある(!?)</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p><a href="https://ja.wikipedia.org/wiki/%E7%84%A1%E9%99%90%E3%81%AE%E7%8C%BF%E5%AE%9A%E7%90%86" target="_blank">Wikipedia</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2016-03-15-state-monad.html" class="hatena-bookmark-button" data-hatena-bookmark-title="Stateモナドについてメモ - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>

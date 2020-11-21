@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>Rust版Google IME skkserv を daemon化できるようにした - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="Rust版Google IME skkserv を daemon化できるようにした - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2017-04-05-daemonize-gskkserv.html" />
+        <meta property="og:description" content="以前の記事でRustでGoogle IMEのskkservを作ったことを紹介した。これをdaemon化できるオプションを追加した" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="Rust版Google IME skkserv を daemon化できるようにした - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="以前の記事でRustでGoogle IMEのskkservを作ったことを紹介した。これをdaemon化できるオプションを追加した" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>Rust版Google IME skkserv を daemon化できるようにした</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on April  5, 2017</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/Rust.html">Rust</a>, <a href="../tags/SKK.html">SKK</a></span>
+    
+</div>
+
+<p><a href="../posts/2016-11-01-google-ime-skkserv-in-rust.html">以前の記事</a>でRustでGoogle IMEのskkservを作ったことを紹介した。これをdaemon化できるオプションを追加した<!--more--></p>
+<h2 id="説明">説明</h2>
+<p>とは言ってもそれだけなので、記事にするほどのものでもないが。。。<br />
+<a href="https://github.com/yoshitsugu/google-ime-skkserv-rs">https://github.com/yoshitsugu/google-ime-skkserv-rs</a> をcloneし、 <code>cargo build --release</code> したあと、 <code>./target/release/gskkserv -d</code> するとdaemon化した状態で起動する。</p>
+<h2 id="実装について">実装について</h2>
+<p>この実装には <a href="http://knsd.github.io/daemonize/daemonize/index.html">http://knsd.github.io/daemonize/daemonize/index.html</a> のcrateを使用した。<br />
+サクっとdaemon化できて便利だった。</p>
+<p>ついでに <code>try!</code> の代わりに <code>?</code> を使用するようにしたり、ちょこちょこと修正した。</p>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2017-04-05-daemonize-gskkserv.html" class="hatena-bookmark-button" data-hatena-bookmark-title="Rust版Google IME skkserv を daemon化できるようにした - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>

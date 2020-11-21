@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>組織をエンジニアリングする - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="組織をエンジニアリングする - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2018-12-24-engineering-similarity.html" />
+        <meta property="og:description" content="組織をエンジニアリングする、ということについて EM.FM で述べられていたので、少し考えてみた。" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="組織をエンジニアリングする - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="組織をエンジニアリングする、ということについて EM.FM で述べられていたので、少し考えてみた。" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>組織をエンジニアリングする</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on December 24, 2018</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/Thinking.html">Thinking</a></span>
+    
+</div>
+
+<p>組織をエンジニアリングする、ということについて <a href="https://anchor.fm/em-fm/">EM.FM</a> で述べられていたので、少し考えてみた。<!--more--></p>
+<h2 id="組織をエンジニアリングするという考え方">組織をエンジニアリングする、という考え方</h2>
+<p>EM.FMや <a href="https://www.amazon.co.jp/dp/B079TLW41L/">エンジニアリング組織論への招待</a> で、組織論は、組織をエンジニアリングする、と考えることができる。ということが述べられていた。これについては確かにその通りであるなと思う。今回はその点について少し考えてみる。</p>
+<h2 id="エンジニアリングと組織の対応">エンジニアリングと組織の対応</h2>
+<ul>
+<li>サービス &lt;-&gt; 組織
+<ul>
+<li>自分はWebエンジニアなので、作るモノとしてはWebサービスがほとんどだが、組織自体がこれに相当するかと思う。</li>
+</ul></li>
+<li>サーバー &lt;-&gt; 組織の構成員
+<ul>
+<li>サーバー、つまりサービスを稼動するベースとなるのは組織の構成員だ。</li>
+</ul></li>
+<li>ユーザー &lt;-&gt; 組織の構成員
+<ul>
+<li>サービスのユーザーは組織の構成員になる。</li>
+</ul></li>
+<li>ソースコード &lt;-&gt; マニュアル、社内wiki、暗黙知、制度、ビジョン
+<ul>
+<li>動作を規定するのがソースコードなので、対応するのはマニュアルや社内wikiなどになる。また、明文化されていないところでもこの場合は上司に相談するほうがいい、などの暗黙知や文化的なものもある。会社のミッションやビジョンもここにあたるかもしれない。</li>
+</ul></li>
+</ul>
+<h2 id="エンジニアリングとして考えることで得られる発想">エンジニアリングとして考えることで得られる発想</h2>
+<p>上のように対応させて見ることで得られる発想として、例えば以下のようなものがあると思う。</p>
+<h3 id="要件定義">要件定義</h3>
+<p>エンジニアリングで考えると、ソースコードに落とし込んでいく前に、まず「なぜ必要なのか？」「何が必要なのか？」を詰める、いわゆる要件定義のフェーズが入ると思う。また、その目的によってはソースコードを追加して解決するべきではない、という判断をするかもしれない。<br />
+これを組織に適用すると、<strong>組織の構成員がなぜそれを必要としているのか？</strong>を考える必要があるということだ。もし新しい会議の導入が希望されている際、なぜその会議が必要なのか？会議以外の代替手段がないか？を考える必要がある、ということだ。</p>
+<h3 id="インフラの冗長構成">インフラの冗長構成</h3>
+<p>サーバーにあたる人(組織の構成員)は、サービス(組織)の可用性を担保するため、冗長構成をとるほうがよさそうに思える。人の冗長化とはつまりその組織におけるその人の提供価値を冗長化する、ということだ(人を分身させることではない)。<br />
+例えば、あるXさんがA社の案件を一人で対応していると、そのXさんが倒れるとサービス(組織)自体がとまってしまう。実際は組織自体はとまらないものの、A社における組織の価値がなくなる、ということだ。対応としては、Xさんが対応していたA社の案件の対応に必要な知識、職能を明文化し、それに見合う人を採用するなり社内で異動するなりして冗長化する必要がある。<br />
+同様にスケールアウトも必要かもしれない。A社からの発注が急激に増えたとき、1人だけではさばききれなくなる可能性がある。<br />
+ちょっと脇道にそれるが、最初に書いた、EM.FMでも及川さんがJob Descriptionを明記したほうがよい、ということを言っていた。これはとても同意で、例えば、上のXさんがA社に対応するために何をしていたか、XさんのA社対応スキルの内容がわかっていないと、<strong>どういう人が採用できれば冗長化が達成されたと言えるのかもわからない。</strong></p>
+<h3 id="本外部ライブラリ">本=外部ライブラリ</h3>
+<p>本来「図書館」の意味をもつライブラリを本にたとえるのは変(むしろ当然？)なのだが、本など、外部から仕入れた知識は外部ライブラリのように扱うといいかもしれない。<br />
+本に書いてある、いわゆるフレームワーク的な知識もエンジニアリング的に考えることができる。例えば、Webフレームワークを導入する際には、以下のようなメリット/デメリットがある。</p>
+<ul>
+<li>メリット
+<ul>
+<li>フレームワークの対応できる範囲内においては、開発が簡単になる</li>
+<li>広く使われている、枯れている技術なら、成果が保証されている</li>
+</ul></li>
+<li>デメリット
+<ul>
+<li><strong>フレームワークの想定していない使い方をするのは大変</strong></li>
+</ul></li>
+</ul>
+<p>これはWebフレームワークに限らず、本に書いてあるフレームワーク的な技法であればあてはまると思う。<br />
+また、外部ライブラリ自体のアップデートをチェックしておかないと、<strong>古いライブラリを使っていて、実はそのバージョンは脆弱性が広く知られていた</strong>、ということになりかねない。</p>
+<h2 id="エンジニアリングとして考えるメリット">エンジニアリングとして考えるメリット</h2>
+<p>組織をエンジニアリングする、と捉えることにより、エンジニアとしては以下のメリットがある。</p>
+<ul>
+<li>既に仕事で使っている知識の延長線上で問題を捉えることができる</li>
+<li>単純に問題のスコープが狭くなるので考えやすい</li>
+<li>身近に感じられて、興味を持ちやすい</li>
+</ul>
+<h2 id="エンジニアリングとして考えるデメリット">エンジニアリングとして考えるデメリット</h2>
+<p>当然、何かデメリットはあると思う。今、思いつくのは以下だ。</p>
+<ul>
+<li>ハンマーを持つ人にはすべてが釘に見える
+<ul>
+<li>知ってることに置き換えることはやりやすいのでついつい過剰に置き換えてしまう</li>
+</ul></li>
+<li>人間は個々人違うことを見落としやすい(かもしれない)
+<ul>
+<li>オブジェクト指向におけるクラスのインスタンスはいくつも同質のものを生成できるが、人間はそこまで同質ではないこともある。</li>
+<li>ある側面だけをうまく切り取れば同質にそろえられるかもしれない</li>
+</ul></li>
+</ul>
+<h2 id="まとめ">まとめ</h2>
+<p>組織をエンジニアリングする、という考え方はとても興味深く、個人的にもあっているので、自社の組織設計などにも活かしていきたい。</p>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2018-12-24-engineering-similarity.html" class="hatena-bookmark-button" data-hatena-bookmark-title="組織をエンジニアリングする - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>

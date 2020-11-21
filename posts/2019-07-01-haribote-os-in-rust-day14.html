@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>「30日でできる！OS自作入門」をRustで。14日目 - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="「30日でできる！OS自作入門」をRustで。14日目 - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2019-07-01-haribote-os-in-rust-day14.html" />
+        <meta property="og:description" content="「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は14日目の内容。 " />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。14日目 - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は14日目の内容。 " />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>「30日でできる！OS自作入門」をRustで。14日目</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on July  1, 2019</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a href="../tags/OS.html">OS</a>, <a href="../tags/Rust.html">Rust</a></span>
+    
+</div>
+
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は14日目の内容。 <!--more--></p>
+<h2 id="解像度の変更">解像度の変更</h2>
+<p>画面を高解像度にする。アセンブリ言語での処理になるので、ほぼ本の通りすすめる。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode asm"><code class="sourceCode fasm"><a class="sourceLine" id="cb1-1" title="1"><span class="co">; nasmhead.asm</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="co">; haribote-os boot asm</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="co">; TAB=4</span></a>
+<a class="sourceLine" id="cb1-4" title="4">VBEMODE	<span class="pp">EQU</span><span class="bn">		0x105			</span><span class="co">; 1024 x  768 x 8bitカラー</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co">; （画面モード一覧）</span></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="co">;	0x100 :  640 x  400 x 8bitカラー</span></a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="co">;	0x101 :  640 x  480 x 8bitカラー</span></a>
+<a class="sourceLine" id="cb1-8" title="8"><span class="co">;	0x103 :  800 x  600 x 8bitカラー</span></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="co">;	0x105 : 1024 x  768 x 8bitカラー</span></a>
+<a class="sourceLine" id="cb1-10" title="10"><span class="co">;	0x107 : 1280 x 1024 x 8bitカラー</span></a>
+<a class="sourceLine" id="cb1-11" title="11"></a>
+<a class="sourceLine" id="cb1-12" title="12"><span class="co">; 省略...</span></a>
+<a class="sourceLine" id="cb1-13" title="13"></a>
+<a class="sourceLine" id="cb1-14" title="14"><span class="co">; 画面モードを設定</span></a>
+<a class="sourceLine" id="cb1-15" title="15"><span class="co">; VBE存在確認</span></a>
+<a class="sourceLine" id="cb1-16" title="16"></a>
+<a class="sourceLine" id="cb1-17" title="17">		<span class="bu">MOV</span>		<span class="kw">AX</span><span class="bn">,0x9000</span></a>
+<a class="sourceLine" id="cb1-18" title="18">		<span class="bu">MOV</span>		<span class="kw">ES</span>,<span class="kw">AX</span></a>
+<a class="sourceLine" id="cb1-19" title="19">		<span class="bu">MOV</span>		<span class="kw">DI</span>,<span class="dv">0</span></a>
+<a class="sourceLine" id="cb1-20" title="20">		<span class="bu">MOV</span>		<span class="kw">AX</span><span class="bn">,0x4f00</span></a>
+<a class="sourceLine" id="cb1-21" title="21">		<span class="bu">INT</span><span class="bn">		0x10</span></a>
+<a class="sourceLine" id="cb1-22" title="22">		<span class="bu">CMP</span>		<span class="kw">AX</span><span class="bn">,0x004f</span></a>
+<a class="sourceLine" id="cb1-23" title="23">		<span class="bu">JNE</span>		scrn320</a>
+<a class="sourceLine" id="cb1-24" title="24"></a>
+<a class="sourceLine" id="cb1-25" title="25"><span class="co">; VBEのバージョンチェック</span></a>
+<a class="sourceLine" id="cb1-26" title="26"></a>
+<a class="sourceLine" id="cb1-27" title="27">		<span class="bu">MOV</span>		<span class="kw">AX</span>,[<span class="kw">ES</span>:<span class="kw">DI</span>+<span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb1-28" title="28">		<span class="bu">CMP</span>		<span class="kw">AX</span><span class="bn">,0x0200</span></a>
+<a class="sourceLine" id="cb1-29" title="29">		<span class="bu">JB</span>		scrn320			<span class="co">; if (AX &lt; 0x0200) goto scrn320</span></a>
+<a class="sourceLine" id="cb1-30" title="30"></a>
+<a class="sourceLine" id="cb1-31" title="31"><span class="co">; 画面モード情報を得る</span></a>
+<a class="sourceLine" id="cb1-32" title="32"></a>
+<a class="sourceLine" id="cb1-33" title="33">		<span class="bu">MOV</span>		<span class="kw">CX</span>,VBEMODE</a>
+<a class="sourceLine" id="cb1-34" title="34">		<span class="bu">MOV</span>		<span class="kw">AX</span><span class="bn">,0x4f01</span></a>
+<a class="sourceLine" id="cb1-35" title="35">		<span class="bu">INT</span><span class="bn">		0x10</span></a>
+<a class="sourceLine" id="cb1-36" title="36">		<span class="bu">CMP</span>		<span class="kw">AX</span><span class="bn">,0x004f</span></a>
+<a class="sourceLine" id="cb1-37" title="37">		<span class="bu">JNE</span>		scrn320</a>
+<a class="sourceLine" id="cb1-38" title="38"></a>
+<a class="sourceLine" id="cb1-39" title="39"><span class="co">; 画面モード情報の確認</span></a>
+<a class="sourceLine" id="cb1-40" title="40"></a>
+<a class="sourceLine" id="cb1-41" title="41">		<span class="bu">CMP</span>		<span class="dt">BYTE</span> [<span class="kw">ES</span>:<span class="kw">DI</span>+<span class="bn">0x19</span>],<span class="dv">8</span></a>
+<a class="sourceLine" id="cb1-42" title="42">		<span class="bu">JNE</span>		scrn320</a>
+<a class="sourceLine" id="cb1-43" title="43">		<span class="bu">CMP</span>		<span class="dt">BYTE</span> [<span class="kw">ES</span>:<span class="kw">DI</span>+<span class="bn">0x1b</span>],<span class="dv">4</span></a>
+<a class="sourceLine" id="cb1-44" title="44">		<span class="bu">JNE</span>		scrn320</a>
+<a class="sourceLine" id="cb1-45" title="45">		<span class="bu">MOV</span>		<span class="kw">AX</span>,[<span class="kw">ES</span>:<span class="kw">DI</span>+<span class="bn">0x00</span>]</a>
+<a class="sourceLine" id="cb1-46" title="46">		<span class="bu">AND</span>		<span class="kw">AX</span><span class="bn">,0x0080</span></a>
+<a class="sourceLine" id="cb1-47" title="47">		<span class="bu">JZ</span>		scrn320			<span class="co">; モード属性のbit7が0だったのであきらめる</span></a>
+<a class="sourceLine" id="cb1-48" title="48"></a>
+<a class="sourceLine" id="cb1-49" title="49"><span class="co">; 画面モードの切り替え</span></a>
+<a class="sourceLine" id="cb1-50" title="50"></a>
+<a class="sourceLine" id="cb1-51" title="51">		<span class="bu">MOV</span>		<span class="kw">BX</span>,VBEMODE+<span class="bn">0x4000</span></a>
+<a class="sourceLine" id="cb1-52" title="52">		<span class="bu">MOV</span>		<span class="kw">AX</span><span class="bn">,0x4f02</span></a>
+<a class="sourceLine" id="cb1-53" title="53">		<span class="bu">INT</span><span class="bn">		0x10</span></a>
+<a class="sourceLine" id="cb1-54" title="54">		<span class="bu">MOV</span>		<span class="dt">BYTE</span> [VMODE],<span class="dv">8</span>	<span class="co">; 画面モードをメモする（C言語が参照する）</span></a>
+<a class="sourceLine" id="cb1-55" title="55">		<span class="bu">MOV</span>		<span class="kw">AX</span>,[<span class="kw">ES</span>:<span class="kw">DI</span>+<span class="bn">0x12</span>]</a>
+<a class="sourceLine" id="cb1-56" title="56">		<span class="bu">MOV</span>		[SCRNX],<span class="kw">AX</span></a>
+<a class="sourceLine" id="cb1-57" title="57">		<span class="bu">MOV</span>		<span class="kw">AX</span>,[<span class="kw">ES</span>:<span class="kw">DI</span>+<span class="bn">0x14</span>]</a>
+<a class="sourceLine" id="cb1-58" title="58">		<span class="bu">MOV</span>		[SCRNY],<span class="kw">AX</span></a>
+<a class="sourceLine" id="cb1-59" title="59">		<span class="bu">MOV</span>		<span class="kw">EAX</span>,[<span class="kw">ES</span>:<span class="kw">DI</span>+<span class="bn">0x28</span>]</a>
+<a class="sourceLine" id="cb1-60" title="60">		<span class="bu">MOV</span>		[VRAM],<span class="kw">EAX</span></a>
+<a class="sourceLine" id="cb1-61" title="61">		<span class="bu">JMP</span>		keystatus</a>
+<a class="sourceLine" id="cb1-62" title="62"></a>
+<a class="sourceLine" id="cb1-63" title="63"><span class="fu">scrn320:</span></a>
+<a class="sourceLine" id="cb1-64" title="64"><span class="co">; 既存の部分は320x200モードとして扱う</span></a>
+<a class="sourceLine" id="cb1-65" title="65"><span class="co">; 省略</span></a></code></pre></div>
+<h3 id="実行結果">実行結果</h3>
+<p>以下の通り、高解像度で表示されることが確認できた。</p>
+<p><img src="../images/20190701/high_resolution.png" class="blog-img img-responsive" alt="高解像度モード" title="高解像度モード" /></p>
+<p>できたものの、以降、一旦320x200にもどして(<code>VBEMODE	EQU		0x104</code>として)すすめる。</p>
+<h2 id="キーボード入力の文字表示">キーボード入力の文字表示</h2>
+<p>現在キーボード入力は入力された値をそのまま表示するようになっている。<br />
+これを例えばAを打鍵したらAが表示されるようにする。<br />
+キーボードまわりの処理をまとめた<code>keyboard.rs</code>を新たに作り、そちらにキーボード入力値と文字の対応をもつようにする。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="co">// keyboard.rs</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">pub</span> <span class="kw">static</span> KEYTABLE: <span class="op">[</span><span class="dt">u8</span>; <span class="dv">84</span><span class="op">]</span> = <span class="op">[</span></a>
+<a class="sourceLine" id="cb2-3" title="3">    <span class="dv">0</span>, <span class="dv">0</span>, <span class="ch">b'1'</span>, <span class="ch">b'2'</span>, <span class="ch">b'3'</span>, <span class="ch">b'4'</span>, <span class="ch">b'5'</span>, <span class="ch">b'6'</span>, <span class="ch">b'7'</span>, <span class="ch">b'8'</span>, <span class="ch">b'9'</span>, <span class="ch">b'0'</span>, <span class="ch">b'-'</span>, <span class="ch">b'^'</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="ch">b'Q'</span>, <span class="ch">b'W'</span>,</a>
+<a class="sourceLine" id="cb2-4" title="4">    <span class="ch">b'E'</span>, <span class="ch">b'R'</span>, <span class="ch">b'T'</span>, <span class="ch">b'Y'</span>, <span class="ch">b'U'</span>, <span class="ch">b'I'</span>, <span class="ch">b'O'</span>, <span class="ch">b'P'</span>, <span class="ch">b'@'</span>, <span class="ch">b'['</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="ch">b'A'</span>, <span class="ch">b'S'</span>, <span class="ch">b'D'</span>, <span class="ch">b'F'</span>, <span class="ch">b'G'</span>,</a>
+<a class="sourceLine" id="cb2-5" title="5">    <span class="ch">b'H'</span>, <span class="ch">b'J'</span>, <span class="ch">b'K'</span>, <span class="ch">b'L'</span>, <span class="ch">b';'</span>, <span class="ch">b':'</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="ch">b']'</span>, <span class="ch">b'Z'</span>, <span class="ch">b'X'</span>, <span class="ch">b'C'</span>, <span class="ch">b'V'</span>, <span class="ch">b'B'</span>, <span class="ch">b'N'</span>, <span class="ch">b'M'</span>, <span class="ch">b','</span>,</a>
+<a class="sourceLine" id="cb2-6" title="6">    <span class="ch">b'.'</span>, <span class="ch">b'/'</span>, <span class="dv">0</span>, <span class="ch">b'*'</span>, <span class="dv">0</span>, <span class="ch">b' '</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="ch">b'7'</span>, <span class="ch">b'8'</span>, <span class="ch">b'9'</span>, <span class="ch">b'-'</span>,</a>
+<a class="sourceLine" id="cb2-7" title="7">    <span class="ch">b'4'</span>, <span class="ch">b'5'</span>, <span class="ch">b'6'</span>, <span class="ch">b'+'</span>, <span class="ch">b'1'</span>, <span class="ch">b'2'</span>, <span class="ch">b'3'</span>, <span class="ch">b'0'</span>, <span class="ch">b'.'</span>,</a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="op">]</span>;</a></code></pre></div>
+<p>この配列を使って、画面に文字を表示するようにする</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="co">// lib.rs</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="at">#[</span>no_mangle<span class="at">]</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="at">#[</span>start<span class="at">]</span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-5" title="5">    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb3-6" title="6"></a>
+<a class="sourceLine" id="cb3-7" title="7">    <span class="co">// カーソル</span></a>
+<a class="sourceLine" id="cb3-8" title="8">    <span class="kw">let</span> min_cursor_x = <span class="dv">8</span>;</a>
+<a class="sourceLine" id="cb3-9" title="9">    <span class="kw">let</span> max_cursor_x = <span class="dv">144</span>;</a>
+<a class="sourceLine" id="cb3-10" title="10">    <span class="kw">let</span> <span class="kw">mut</span> cursor_x = min_cursor_x;</a>
+<a class="sourceLine" id="cb3-11" title="11">    <span class="kw">let</span> <span class="kw">mut</span> cursor_c = <span class="pp">Color::</span>White;</a>
+<a class="sourceLine" id="cb3-12" title="12"></a>
+<a class="sourceLine" id="cb3-13" title="13">    <span class="kw">loop</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-14" title="14">        cli();</a>
+<a class="sourceLine" id="cb3-15" title="15">        <span class="kw">if</span> FIFO_BUF.lock().status() != <span class="dv">0</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-16" title="16">            <span class="kw">let</span> i = FIFO_BUF.lock().get().unwrap();</a>
+<a class="sourceLine" id="cb3-17" title="17">            sti();</a>
+<a class="sourceLine" id="cb3-18" title="18">            <span class="kw">if</span> KEYBOARD_OFFSET &lt;= i &amp;&amp; i &lt;= <span class="dv">511</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-19" title="19">                <span class="kw">let</span> key = i - KEYBOARD_OFFSET;</a>
+<a class="sourceLine" id="cb3-20" title="20">                <span class="pp">write_with_bg!</span>(</a>
+<a class="sourceLine" id="cb3-21" title="21">                    sheet_manager,</a>
+<a class="sourceLine" id="cb3-22" title="22">                    shi_bg,</a>
+<a class="sourceLine" id="cb3-23" title="23">                    buf_bg_addr,</a>
+<a class="sourceLine" id="cb3-24" title="24">                    *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">isize</span>,</a>
+<a class="sourceLine" id="cb3-25" title="25">                    *SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">isize</span>,</a>
+<a class="sourceLine" id="cb3-26" title="26">                    <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb3-27" title="27">                    <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb3-28" title="28">                    <span class="pp">Color::</span>White,</a>
+<a class="sourceLine" id="cb3-29" title="29">                    <span class="pp">Color::</span>DarkCyan,</a>
+<a class="sourceLine" id="cb3-30" title="30">                    <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb3-31" title="31">                    <span class="st">&quot;{:x}&quot;</span>,</a>
+<a class="sourceLine" id="cb3-32" title="32">                    key</a>
+<a class="sourceLine" id="cb3-33" title="33">                );</a>
+<a class="sourceLine" id="cb3-34" title="34">                <span class="kw">if</span> key &lt; KEYTABLE.len() <span class="kw">as</span> <span class="dt">u32</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-35" title="35">                    <span class="co">// ウィンドウのテキスト領域内に表示</span></a>
+<a class="sourceLine" id="cb3-36" title="36">                    <span class="kw">if</span> KEYTABLE<span class="op">[</span>key <span class="kw">as</span> <span class="dt">usize</span><span class="op">]</span> != <span class="dv">0</span> &amp;&amp; cursor_x &lt; max_cursor_x <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-37" title="37">                        <span class="pp">write_with_bg!</span>(</a>
+<a class="sourceLine" id="cb3-38" title="38">                            sheet_manager,</a>
+<a class="sourceLine" id="cb3-39" title="39">                            shi_win,</a>
+<a class="sourceLine" id="cb3-40" title="40">                            buf_win_addr,</a>
+<a class="sourceLine" id="cb3-41" title="41">                            <span class="dv">160</span>,</a>
+<a class="sourceLine" id="cb3-42" title="42">                            <span class="dv">52</span>,</a>
+<a class="sourceLine" id="cb3-43" title="43">                            cursor_x,</a>
+<a class="sourceLine" id="cb3-44" title="44">                            <span class="dv">28</span>,</a>
+<a class="sourceLine" id="cb3-45" title="45">                            <span class="pp">Color::</span>Black,</a>
+<a class="sourceLine" id="cb3-46" title="46">                            <span class="pp">Color::</span>White,</a>
+<a class="sourceLine" id="cb3-47" title="47">                            <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb3-48" title="48">                            <span class="st">&quot;{}&quot;</span>,</a>
+<a class="sourceLine" id="cb3-49" title="49">                            KEYTABLE<span class="op">[</span>key <span class="kw">as</span> <span class="dt">usize</span><span class="op">]</span> <span class="kw">as</span> <span class="dt">char</span>,</a>
+<a class="sourceLine" id="cb3-50" title="50">                        );</a>
+<a class="sourceLine" id="cb3-51" title="51">                        cursor_x += <span class="dv">8</span>;</a>
+<a class="sourceLine" id="cb3-52" title="52">                    <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-53" title="53">                    <span class="co">// バックスペースの場合は空白を表示してカーソルをもどす</span></a>
+<a class="sourceLine" id="cb3-54" title="54">                    <span class="kw">if</span> key == <span class="dv">0x0e</span> &amp;&amp; cursor_x &gt; min_cursor_x <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-55" title="55">                        <span class="pp">write_with_bg!</span>(</a>
+<a class="sourceLine" id="cb3-56" title="56">                            sheet_manager,</a>
+<a class="sourceLine" id="cb3-57" title="57">                            shi_win,</a>
+<a class="sourceLine" id="cb3-58" title="58">                            buf_win_addr,</a>
+<a class="sourceLine" id="cb3-59" title="59">                            <span class="dv">160</span>,</a>
+<a class="sourceLine" id="cb3-60" title="60">                            <span class="dv">52</span>,</a>
+<a class="sourceLine" id="cb3-61" title="61">                            cursor_x,</a>
+<a class="sourceLine" id="cb3-62" title="62">                            <span class="dv">28</span>,</a>
+<a class="sourceLine" id="cb3-63" title="63">                            <span class="pp">Color::</span>Black,</a>
+<a class="sourceLine" id="cb3-64" title="64">                            <span class="pp">Color::</span>White,</a>
+<a class="sourceLine" id="cb3-65" title="65">                            <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb3-66" title="66">                            <span class="st">&quot; &quot;</span></a>
+<a class="sourceLine" id="cb3-67" title="67">                        );</a>
+<a class="sourceLine" id="cb3-68" title="68">                        cursor_x -= <span class="dv">8</span>;</a>
+<a class="sourceLine" id="cb3-69" title="69">                    <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-70" title="70">                    boxfill(buf_win_addr, <span class="dv">160</span>, cursor_c, cursor_x, <span class="dv">28</span>, cursor_x + <span class="dv">8</span>, <span class="dv">43</span>);</a>
+<a class="sourceLine" id="cb3-71" title="71">                    sheet_manager.refresh(shi_win, cursor_x <span class="kw">as</span> <span class="dt">i32</span>, <span class="dv">28</span>, cursor_x <span class="kw">as</span> <span class="dt">i32</span> + <span class="dv">8</span>, <span class="dv">44</span>);</a>
+<a class="sourceLine" id="cb3-72" title="72">        <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb3-73" title="73">        <span class="co">// カーソル表示部分</span></a>
+<a class="sourceLine" id="cb3-74" title="74">            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-75" title="75">                <span class="kw">if</span> i != <span class="dv">0</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-76" title="76">                    TIMER_MANAGER.lock().init_timer(timer_index3, <span class="dv">0</span>);</a>
+<a class="sourceLine" id="cb3-77" title="77">                    cursor_c = <span class="pp">Color::</span>Black;</a>
+<a class="sourceLine" id="cb3-78" title="78">                <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-79" title="79">                    TIMER_MANAGER.lock().init_timer(timer_index3, <span class="dv">1</span>);</a>
+<a class="sourceLine" id="cb3-80" title="80">                    cursor_c = <span class="pp">Color::</span>White;</a>
+<a class="sourceLine" id="cb3-81" title="81">                <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-82" title="82">                TIMER_MANAGER.lock().set_time(timer_index3, <span class="dv">50</span>);</a>
+<a class="sourceLine" id="cb3-83" title="83">                boxfill(buf_win_addr, <span class="dv">160</span>, cursor_c, cursor_x, <span class="dv">28</span>, cursor_x + <span class="dv">8</span>, <span class="dv">43</span>);</a>
+<a class="sourceLine" id="cb3-84" title="84">                sheet_manager.refresh(shi_win, cursor_x <span class="kw">as</span> <span class="dt">i32</span>, <span class="dv">28</span>, cursor_x <span class="kw">as</span> <span class="dt">i32</span> + <span class="dv">8</span>, <span class="dv">44</span>)</a>
+<a class="sourceLine" id="cb3-85" title="85">            <span class="op">}</span></a></code></pre></div>
+<p>カウンター表示をなくしたので、<code>stlhlt</code>でループをまわすのをやめている。<br />
+カウンターを表示していたウィンドウを使い、入力された文字を表示するようにした。</p>
+<h3 id="実行結果-1">実行結果</h3>
+<p>以下のように文字の入力、削除ができるようになった。</p>
+<p><img src="../images/20190701/input.gif" class="blog-img img-responsive" alt="文字入力" title="文字入力" /></p>
+<h2 id="ウィンドウの移動ができるようにする">ウィンドウの移動ができるようにする</h2>
+<p>マウス入力のハンドリング時に左クリックがおされていたらウィンドウが追従するようにする。</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="co">//lib.rs</span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="at">#[</span>no_mangle<span class="at">]</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="at">#[</span>start<span class="at">]</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-5" title="5">            <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb4-6" title="6">            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="dv">512</span> &lt;= i &amp;&amp; i &lt;= <span class="dv">767</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-7" title="7">                    <span class="co">// 省略</span></a>
+<a class="sourceLine" id="cb4-8" title="8">                    <span class="kw">let</span> (new_x, new_y) =</a>
+<a class="sourceLine" id="cb4-9" title="9">                        sheet_manager.get_new_point(shi_mouse, mouse_dec.x.get(), mouse_dec.y.get());</a>
+<a class="sourceLine" id="cb4-10" title="10">                    sheet_manager.slide(shi_mouse, new_x, new_y);</a>
+<a class="sourceLine" id="cb4-11" title="11">                    <span class="co">// 左クリックをおしていた場合</span></a>
+<a class="sourceLine" id="cb4-12" title="12">                    <span class="kw">if</span> (mouse_dec.btn.get() &amp; <span class="dv">0x01</span>) != <span class="dv">0</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-13" title="13">                        sheet_manager.slide(shi_win, new_x - <span class="dv">80</span>, new_y - <span class="dv">8</span>);</a>
+<a class="sourceLine" id="cb4-14" title="14">                    <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-15" title="15">                    <span class="co">// 省略</span></a></code></pre></div>
+<p>以前までは<code>slide_by_diff</code>という相対位置から絶対位置を計算して移動する関数を作っていたが、<code>get_new_point</code>で絶対値の計算するように分割した。</p>
+<h3 id="実行結果-2">実行結果</h3>
+<p>以下の通り、マウスの動きにあわせてウィンドウが動くことが確認できた。</p>
+<p><img src="../images/20190701/window.gif" class="blog-img img-responsive" alt="ウィンドウの移動" title="ウィンドウの移動" /></p>
+<p>14日目は以上となる。ここまでの内容のコードは<a href="https://github.com/yoshitsugu/hariboteos_in_rust/tree/day14">yoshitsugu/hariboteos_in_rustのday14</a>としてタグを打ってある。</p>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2019-07-01-haribote-os-in-rust-day14.html" class="hatena-bookmark-button" data-hatena-bookmark-title="「30日でできる！OS自作入門」をRustで。14日目 - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>

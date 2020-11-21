@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>Chaos Engineeringメモ - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="Chaos Engineeringメモ - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2018-10-31-chaos-engineering-memo.html" />
+        <meta property="og:description" content="今さらながらChaos Engineeringについて勉強した。" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="Chaos Engineeringメモ - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="今さらながらChaos Engineeringについて勉強した。" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>Chaos Engineeringメモ</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on October 31, 2018</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/Chaos%20Engineering.html">Chaos Engineering</a></span>
+    
+</div>
+
+<p>今さらながらChaos Engineeringについて勉強した。<!--more--></p>
+<h2 id="背景">背景</h2>
+<p>最近Chaos Engineeringという単語を日本語の記事でもよく見かけるようになったので、概要だけでも知っておこうと思い、勉強してみることにした。<br />
+今回読んだのは<a href="https://arxiv.org/abs/1702.05843">この論文</a>である。</p>
+<h2 id="ポイントだと理解したところ">ポイントだと理解したところ</h2>
+<ul>
+<li>Chaos Engineeringとは、<strong>分散システムにおいて</strong>実世界での可用性や耐障害性を測るための方法</li>
+<li>CPUロードなどマイクロな指標ではなく、<strong>ユーザーから見たときのシステムを表す指標</strong>を計測する</li>
+<li><strong>本番環境</strong>で試験する</li>
+</ul>
+<p>以下は個人的なメモで内容は保証しない。そこまで難しい内容を書いているわけではないので、ちゃんと勉強したい人は原文を読むとよいと思う。</p>
+<h2 id="chaos-engineeringとは">Chaos Engineeringとは</h2>
+<h3 id="chaos-engineering">Chaos Engineering</h3>
+<ul>
+<li>定義: Chaos Engineeringは分散システムにおいて可用性や耐障害性を確認するために試験を行っていく訓練である
+<ul>
+<li>障害はハードウェア障害から予期せぬ大量アクセス、悪意ある攻撃も含む</li>
+</ul></li>
+<li>AmazonやGoogle, Microsoft、Facebookといった大きな企業が似たような手法を取っていることに気づいた</li>
+<li>この手法にChaos Engineeringと名前をつけた</li>
+</ul>
+<h3 id="chaos-monkey">Chaos Monkey</h3>
+<ul>
+<li>Netflixですでに数年間運用中</li>
+<li>production環境のvirtual machineをランダムに選び、停止する</li>
+<li>エンジニアに障害に強いソフトウェアサービスをデザインすることを奨励する</li>
+<li>エンジニアがすぐに対応できる営業時間内だけ起動している。</li>
+</ul>
+<h3 id="chaos-kong">Chaos Kong</h3>
+<ul>
+<li>Amazon EC2のリージョン1つが全て落ちた場合を想定してエラーをおこす</li>
+</ul>
+<h2 id="システム全体で見る">システム全体で見る</h2>
+<ul>
+<li>Chaos Engineeringの真髄はたくさんのサービスをひとつのシステムとして見ることにある
+<ul>
+<li>実世界からシステムへの入力を理解し、システム境界において何がおきているのかを理解するのに役立つ</li>
+</ul></li>
+<li>古典的なアプローチでは、 y=f(x) というように関数でシステムをあらわす</li>
+<li>分散システムでは古典的なアプローチでは不十分
+<ul>
+<li>ユーザーのスケールの大きさや複雑さ</li>
+</ul></li>
+<li>システム全体をひとつのサービスとみなし、典型的なユーザーフローを計測する必要がある
+<ul>
+<li>steady-state(定常状態) behavior</li>
+</ul></li>
+</ul>
+<h2 id="chaos-engineeringの原則">Chaos Engineeringの原則</h2>
+<ul>
+<li>Chaos Enginneringは試験を中心にまわる。試験の設計には以下の要素が必要
+<ul>
+<li>hypotheses (仮説)</li>
+<li>indendent variables (独立変数)</li>
+<li>dependent varibles (従属変数)</li>
+<li>context</li>
+</ul></li>
+<li>Chaos Engineeringの4つの原則
+<ol type="1">
+<li>steady state behaviorについての仮説をたてる</li>
+<li>実世界で起こりうることで試験する</li>
+<li>本番で試験する</li>
+<li>継続的に試験するために自動化する</li>
+</ol></li>
+</ul>
+<h3 id="steady-state-behaviorについての仮説をたてる">1. steady state behaviorについての仮説をたてる</h3>
+<ul>
+<li>Netflixではレコメンドやブックマークなどたくさんの機能がある</li>
+<li>システム内部的にはフォールバックの機能がある
+<ul>
+<li>たとえばキャッシュ用のサーバーAがコンテンツサーバーBの前段にあり、Aに障害がおきた場合はBに直接リクエストがくるようになる</li>
+</ul></li>
+<li>Netflixではシステム全体が「ちゃんと動いているか」の指標として「SPS」を使っている
+<ul>
+<li>(Stream) starts per second</li>
+<li>毎秒どのくらいのユーザーが動画を見始めたか</li>
+</ul></li>
+<li>SPSはsteady state behaviorのよい指標になる
+<ul>
+<li>他にも毎秒どのくらいのユーザーがサインアップしたか、も計測している</li>
+</ul></li>
+<li>Chaos Engineeringの試験の前に、試験がSPSにどの程度のインパクトを与えるかの仮説をたてる
+<ul>
+<li>たとえば、Netflixが使っている複数リージョンのうちの一つがおちてもフォールバックがうまくはたらけば、SPSの変動はごく軽微だろう、という感じ</li>
+<li>CPU loadなどの粒度の細かい指標ももちろん採っているが、最終的にSPSが変わらない=ユーザーへの影響がないことがChaos Engineeringの目的になる</li>
+</ul></li>
+</ul>
+<h3 id="実世界で起こりうることで試験する">2. 実世界で起こりうることで試験する</h3>
+<ul>
+<li>happy path: エラーやコーナーケースをひきおこさないプログラムの実行順序(正常系のスモークテスト)
+<ul>
+<li>エンジニアが開発するときはhappy pathに注力しがち</li>
+</ul></li>
+<li>実世界では想定してなかったコーナーケースがおこる
+<ul>
+<li>ユーザーが悪意のあるリクエストをおくってきたり</li>
+<li>ディスクがいっぱいになったり</li>
+<li>メモリが枯渇したり etc…</li>
+</ul></li>
+<li>最近の研究で、92%の壊滅的なシステム障害は、元は致命的ではないエラーのとりまわしが不適切だったことによって引き起こされている</li>
+<li>実世界で起こりうることで試験することが必要</li>
+<li>例えば、前回の障害自のログなどを参考に、試験でどういうinputがを与えるかを設計する
+<ul>
+<li>ポストモーテムも参考になる</li>
+</ul></li>
+<li>Netflixでの例
+<ul>
+<li>virutal macineのインスタンスの停止</li>
+<li>サービス間のリクエストのレイテンシーの増大</li>
+<li>サービス間のリクエストの失敗</li>
+<li>内部サービスの障害</li>
+<li>Amazonのリージョンの利用不可</li>
+</ul></li>
+<li>Netflixではハードウェアやソフトウェアの障害を重点的に試験しているが、他のinputも考えられる
+<ul>
+<li>リクエスト数の増大</li>
+<li>ランタイムのパラメータの変更</li>
+<li>システム全体で使用されるメタデータの変更</li>
+</ul></li>
+<li>実際に実現させるのが難しい障害もある
+<ul>
+<li>実際にAWSのリージョンをおとすことはできない</li>
+<li>リアリズムとのトレードオフとなるが、仮想的に障害を発生させることもある</li>
+</ul></li>
+<li>ユーザーへの影響を制限するため、ユーザーのサブセットについて試験を行う</li>
+</ul>
+<h3 id="本番で試験する">3. 本番で試験する</h3>
+<ul>
+<li>分散システムにおいては古典的なソフトウェアテストのアプローチでは不十分
+<ul>
+<li>サービス間の連携によって引き起されるような問題は検知できない</li>
+<li>キャッシュサーバーにエラーがキャッシュされ、バックエンドのサーバが復活しても以前としてエラーが返ってしまう、など</li>
+</ul></li>
+<li>試験の再現性のため、本番環境で試験する</li>
+</ul>
+<h3 id="継続的に試験するために自動化する">4. 継続的に試験するために自動化する</h3>
+<ul>
+<li>Netflixでは日々新機能が追加されている</li>
+<li>何度も継続的に試験を行うために、自動化は必須</li>
+<li>Chaos Monkeyを平日に毎日、Chaos Kongを月に1回まわしている</li>
+</ul>
+<h2 id="chaos試験の運用">Chaos試験の運用</h2>
+<ul>
+<li>上記原則をもとに、試験を定義する</li>
+</ul>
+<ol type="1">
+<li>steady state(定常状態)を定義する。システムの通常の状態を計測可能にする</li>
+<li>コントロール群と実験群で同じsteady stateとなることを仮説としてたてる</li>
+<li>サーバーのクラッシュやハードドライブの故障、ネットワーク接続の不通などの実世界のイベントを発生させる</li>
+<li>コントロール群と実験群でsteady stateの違いがないことを確認する</li>
+</ol>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2018-10-31-chaos-engineering-memo.html" class="hatena-bookmark-button" data-hatena-bookmark-title="Chaos Engineeringメモ - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>
