@@ -26,12 +26,12 @@ jobs:
           mkdir -p docs
           mv _site/* docs/
       - name: git setting
-      - run: |
+        run: |
           git config --local user.email yoshitsugu@users.noreply.github.com
           git config --local user.name yoshitsugu
           git config pull.rebase false
       - name: commit files
-      - run: |
+        run: |
           git add .
           git commit -am "Commit by GitHub Actions"
       - name: push
