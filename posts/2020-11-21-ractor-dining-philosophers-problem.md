@@ -130,7 +130,7 @@ gem 'ractor-tvar'
 $ bundle install
 ```
 
-この後、手元で ractor-tvar のサンプルコードを動かしたところ `cannot load such file -- ractor/tvar/ractor_tvar.so (LoadError)` というエラーがでた。そのため `ractor_tvar.so` の場所を手動で変更して回避した。自分の手元環境だけかもしれないが一応[issue を起票しておいた](https://github.com/ko1/ractor-tvar/issues/1)。
+この後、手元で ractor-tvar のサンプルコードを動かしたところ `cannot load such file -- ractor/tvar/ractor_tvar.so (LoadError)` というエラーがでた。そのため `ractor_tvar.so` の場所を手動で変更して回避した。自分の手元環境だけかもしれないが一応[issue を起票しておいた](https://github.com/ko1/ractor-tvar/issues/1)。**(2020/11/24 追記) この問題は 0.2.0 で修正された。**
 
 STM での実装だが、今回は以下のように実装した。
 
