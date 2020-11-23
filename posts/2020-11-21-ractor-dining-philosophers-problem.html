@@ -157,7 +157,7 @@ ractor-tvar を使えば同じように実装できるのかやってみる。<b
 <a class="sourceLine" id="cb3-6" title="6"></a>
 <a class="sourceLine" id="cb3-7" title="7">gem <span class="st">'ractor-tvar'</span></a></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1">$ <span class="ex">bundle</span> install</a></code></pre></div>
-<p>この後、手元で ractor-tvar のサンプルコードを動かしたところ <code>cannot load such file -- ractor/tvar/ractor_tvar.so (LoadError)</code> というエラーがでた。そのため <code>ractor_tvar.so</code> の場所を手動で変更して回避した。自分の手元環境だけかもしれないが一応<a href="https://github.com/ko1/ractor-tvar/issues/1">issue を起票しておいた</a>。</p>
+<p>この後、手元で ractor-tvar のサンプルコードを動かしたところ <code>cannot load such file -- ractor/tvar/ractor_tvar.so (LoadError)</code> というエラーがでた。そのため <code>ractor_tvar.so</code> の場所を手動で変更して回避した。自分の手元環境だけかもしれないが一応<a href="https://github.com/ko1/ractor-tvar/issues/1">issue を起票しておいた</a>。<strong>(2020/11/24 追記) この問題は 0.2.0 で修正された。</strong></p>
 <p>STM での実装だが、今回は以下のように実装した。</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># frozen_string_literal: true</span></a>
 <a class="sourceLine" id="cb5-2" title="2"></a>
