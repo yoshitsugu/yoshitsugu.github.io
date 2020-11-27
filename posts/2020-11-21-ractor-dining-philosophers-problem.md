@@ -210,6 +210,8 @@ Ractor::TVar に自分の名前を入れることでロックの代わりとし�
 
 <img src="/images/20201121_stm.gif" class="blog-img img-responsive" >
 
+(2020/11/27 追記) `Ractor::RetryTransaction` を使えばループいらないのではという指摘をいただいたので[そのように修正](https://github.com/yoshitsugu/dining_philosophers_problem_ractor/commit/217014ad4b9405a5b57f6e172d71ae6ed1aff117)した。感謝。
+
 ## まとめ
 
 STM を使うことで、食事する哲学者の問題のデッドロックを回避できた。
