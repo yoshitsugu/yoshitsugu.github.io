@@ -230,6 +230,7 @@ ractor-tvar を使えば同じように実装できるのかやってみる。<b
 <p>Ractor::TVar に自分の名前を入れることでロックの代わりとした。<br />
 これを実行してみると以下のように、デッドロックになることなく進むことが確認できた。</p>
 <p><img src="../images/20201121_stm.gif" class="blog-img img-responsive"></p>
+<p>(2020/11/27 追記) <code>Ractor::RetryTransaction</code> を使えばループいらないのではという指摘をいただいたので<a href="https://github.com/yoshitsugu/dining_philosophers_problem_ractor/commit/217014ad4b9405a5b57f6e172d71ae6ed1aff117">そのように修正</a>した。感謝。</p>
 <h2 id="まとめ">まとめ</h2>
 <p>STM を使うことで、食事する哲学者の問題のデッドロックを回避できた。 今回作ったコードは <a href="https://github.com/yoshitsugu/dining_philosophers_problem_ractor">yoshitsugu/dining_philosophers_problem_ractor</a> として GitHub に公開してある。</p>
 
