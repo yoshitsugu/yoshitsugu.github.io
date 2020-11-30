@@ -1,6 +1,6 @@
 ---
 title: このブログのデプロイをTravis CIからGitHub Actionsにした
-tags: GitHub Actions, Ractor, Ractor::TVar
+tags: GitHub Actions
 ---
 
 表題の通り、このブログのデプロイを Travis CI から GitHub Actions にしたので概要を書く。
