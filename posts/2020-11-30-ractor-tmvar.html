@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>Ractor::TMVarを作った - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="Ractor::TMVarを作った - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2020-11-30-ractor-tmvar.html" />
+        <meta property="og:description" content="Ractor::TVar に対応する TMVar がほしくなったので作った
+" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="Ractor::TMVarを作った - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="Ractor::TVar に対応する TMVar がほしくなったので作った
+" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>Ractor::TMVarを作った</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on November 30, 2020</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/GitHub%20Actions.html">GitHub Actions</a></span>
+    
+</div>
+
+<p><a href="https://github.com/ko1/ractor-tvar">Ractor::TVar</a> に対応する <a href="https://hackage.haskell.org/package/stm-2.5.0.0/docs/Control-Concurrent-STM-TMVar.html">TMVar</a> がほしくなったので作った</p>
+<!--more-->
+<h2 id="tmvar">TMVar</h2>
+<p>先日、<a href="../posts/2020-11-21-ractor-dining-philosophers-problem.html">Ractor で「食事する哲学者の問題」を解く</a> という記事を書いた。その後、やはり TMVar に相当するものがほしい、という気持ちになった。<br />
+元々参考にしていた、<a href="https://kazu-yamamoto.hatenablog.jp/entry/20120704/1341378177">STM で解く「食事する哲学者の問題」 - あどけない話</a> では TVar をそのまま使うのではなく、TMVar のほうを使っており、それに倣った形となる。<br />
+現状、ractor-tvar には <code>retry</code> に相当するものとしては、 <code>raise Ractor::RetryTransaction</code> するしかなく、例外処理で通常の分岐処理を行うのはあまり気持ちよくない、と感じたことも一因である。</p>
+<h2 id="taketmvar-puttmvar">takeTMVar, putTMVar</h2>
+<p>今回はとりあえず <code>takeTMVar</code> および <code>putTMVar</code> に相当する機能があれば十分と考えた。<br />
+<a href="https://hackage.haskell.org/package/stm-2.5.0.0/docs/src/Control.Concurrent.STM.TMVar.html">これらのソース</a>を参考にしながら実装をすすめる。</p>
+<h3 id="taketmvar">takeTMVar</h3>
+<p>実装は以下の通り。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" title="1"><span class="ot">takeTMVar ::</span> <span class="dt">TMVar</span> a <span class="ot">-&gt;</span> <span class="dt">STM</span> a</a>
+<a class="sourceLine" id="cb1-2" title="2">takeTMVar (<span class="dt">TMVar</span> t) <span class="ot">=</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb1-3" title="3">  m <span class="ot">&lt;-</span> readTVar t</a>
+<a class="sourceLine" id="cb1-4" title="4">  <span class="kw">case</span> m <span class="kw">of</span></a>
+<a class="sourceLine" id="cb1-5" title="5">    <span class="dt">Nothing</span> <span class="ot">-&gt;</span> retry</a>
+<a class="sourceLine" id="cb1-6" title="6">    <span class="dt">Just</span> a  <span class="ot">-&gt;</span> <span class="kw">do</span> writeTVar t <span class="dt">Nothing</span>; <span class="fu">return</span> a</a></code></pre></div>
+<p>TVar の値を読み込み、値が <code>Nothing</code> だったら <code>retry</code>, <code>Just a</code> だったら TVar を空にしてから a を返している。</p>
+<h3 id="puttmvar">putTMVar</h3>
+<p>実装は以下の通り。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" title="1"><span class="ot">putTMVar ::</span> <span class="dt">TMVar</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">STM</span> ()</a>
+<a class="sourceLine" id="cb2-2" title="2">putTMVar (<span class="dt">TMVar</span> t) a <span class="ot">=</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb2-3" title="3">  m <span class="ot">&lt;-</span> readTVar t</a>
+<a class="sourceLine" id="cb2-4" title="4">  <span class="kw">case</span> m <span class="kw">of</span></a>
+<a class="sourceLine" id="cb2-5" title="5">    <span class="dt">Nothing</span> <span class="ot">-&gt;</span> <span class="kw">do</span> writeTVar t (<span class="dt">Just</span> a); <span class="fu">return</span> ()</a>
+<a class="sourceLine" id="cb2-6" title="6">    <span class="dt">Just</span> _  <span class="ot">-&gt;</span> retry</a></code></pre></div>
+<p>今度は TVar の値が <code>Nothing</code> だったら値の書き込み、<code>Just _</code> だったら <code>retry</code> となっている。</p>
+<h2 id="実装">実装</h2>
+<p>Ruby での実装は以下のようにした</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># frozen_string_literal: true</span></a>
+<a class="sourceLine" id="cb3-2" title="2"></a>
+<a class="sourceLine" id="cb3-3" title="3">require <span class="st">&quot;ractor/tvar&quot;</span></a>
+<a class="sourceLine" id="cb3-4" title="4"></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="kw">class</span> <span class="dt">Ractor</span></a>
+<a class="sourceLine" id="cb3-6" title="6">  <span class="kw">class</span> <span class="dt">TMVar</span></a>
+<a class="sourceLine" id="cb3-7" title="7"></a>
+<a class="sourceLine" id="cb3-8" title="8">    <span class="co"># Ractor::TMVarの値が空であることを示すマーク代わり</span></a>
+<a class="sourceLine" id="cb3-9" title="9">    <span class="dt">BLANK</span> = <span class="st">:RACTOR_TMVAR_BLANK</span></a>
+<a class="sourceLine" id="cb3-10" title="10"></a>
+<a class="sourceLine" id="cb3-11" title="11">    <span class="kw">def</span> initialize(tvar = <span class="dv">nil</span>)</a>
+<a class="sourceLine" id="cb3-12" title="12">      <span class="ot">@tvar</span> = <span class="dt">Ractor</span>::<span class="dt">TVar</span>.new(tvar)</a>
+<a class="sourceLine" id="cb3-13" title="13">    <span class="kw">end</span></a>
+<a class="sourceLine" id="cb3-14" title="14"></a>
+<a class="sourceLine" id="cb3-15" title="15">    <span class="co"># takeTMVarに相当する</span></a>
+<a class="sourceLine" id="cb3-16" title="16">    <span class="kw">def</span> value</a>
+<a class="sourceLine" id="cb3-17" title="17">      v = <span class="ot">@tvar</span>.value</a>
+<a class="sourceLine" id="cb3-18" title="18">      raise <span class="dt">Ractor</span>::<span class="dt">RetryTransaction</span> <span class="kw">if</span> v == <span class="dt">BLANK</span></a>
+<a class="sourceLine" id="cb3-19" title="19"></a>
+<a class="sourceLine" id="cb3-20" title="20">      <span class="co"># Ractor::TVarはatomicallyの中でしか代入できないので、atomicallyで包んでいる</span></a>
+<a class="sourceLine" id="cb3-21" title="21">      <span class="dt">Ractor</span>.atomically <span class="kw">do</span></a>
+<a class="sourceLine" id="cb3-22" title="22">        <span class="ot">@tvar</span>.value = <span class="dt">BLANK</span></a>
+<a class="sourceLine" id="cb3-23" title="23">      <span class="kw">end</span></a>
+<a class="sourceLine" id="cb3-24" title="24">      v</a>
+<a class="sourceLine" id="cb3-25" title="25">    <span class="kw">end</span></a>
+<a class="sourceLine" id="cb3-26" title="26"></a>
+<a class="sourceLine" id="cb3-27" title="27">    <span class="co"># putTMVarに相当する</span></a>
+<a class="sourceLine" id="cb3-28" title="28">    <span class="kw">def</span> value=(new_value)</a>
+<a class="sourceLine" id="cb3-29" title="29">      raise <span class="dt">Ractor</span>::<span class="dt">RetryTransaction</span> <span class="kw">if</span> <span class="ot">@tvar</span>.value != <span class="dt">BLANK</span></a>
+<a class="sourceLine" id="cb3-30" title="30"></a>
+<a class="sourceLine" id="cb3-31" title="31">      <span class="ot">@tvar</span>.value = new_value</a>
+<a class="sourceLine" id="cb3-32" title="32">    <span class="kw">end</span></a>
+<a class="sourceLine" id="cb3-33" title="33">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb3-34" title="34"><span class="kw">end</span></a></code></pre></div>
+<p><code>takeTMVar</code> を <code>value</code> 、 <code>putTMVar</code> を <code>value=</code> として、それぞれ同等の仕組みを実装した。<br />
+Haskell の TMVar では Maybe 型を使っているが、Ruby では使えない。そこで <code>:RACTOR_TMVAR_BLANK</code> というシンボルを用意して、それを <code>Nothing</code> 相当として動くようにした。 <code>nil</code> を <code>Nothing</code> 代わりにすることも考えたが、Ruby では <code>nil</code> を値として取得したいパターンもあるかもしれないという仮定の下、特別なシンボルを用意した。<br />
+こちらの実装を gem 化したものが <a href="https://rubygems.org/gems/ractor-tmvar">ractor-tmvar</a> となる。</p>
+<h2 id="食事する賢者の問題を-ractortmvar-で解く">「食事する賢者の問題」を Ractor::TMVar で解く</h2>
+<p>Ractor::TVar で解いた「食事する賢者の問題」を上記で実装した Ractor::TMVar で解くことにする。</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># frozen_string_literal: true</span></a>
+<a class="sourceLine" id="cb4-2" title="2"></a>
+<a class="sourceLine" id="cb4-3" title="3">require <span class="st">'securerandom'</span></a>
+<a class="sourceLine" id="cb4-4" title="4">require <span class="st">'ractor/tmvar'</span></a>
+<a class="sourceLine" id="cb4-5" title="5"></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="dt">NUM_OF_PHILOSOPHERS</span> = <span class="dv">5</span></a>
+<a class="sourceLine" id="cb4-7" title="7"></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="kw">class</span> <span class="dt">Philosopher</span></a>
+<a class="sourceLine" id="cb4-9" title="9">  <span class="kw">def</span> initialize(name, left, right)</a>
+<a class="sourceLine" id="cb4-10" title="10">    <span class="ot">@name</span> = name.freeze</a>
+<a class="sourceLine" id="cb4-11" title="11">    <span class="ot">@left</span> = left</a>
+<a class="sourceLine" id="cb4-12" title="12">    <span class="ot">@right</span> = right</a>
+<a class="sourceLine" id="cb4-13" title="13">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-14" title="14"></a>
+<a class="sourceLine" id="cb4-15" title="15">  <span class="kw">def</span> eat</a>
+<a class="sourceLine" id="cb4-16" title="16">    puts <span class="st">&quot;</span><span class="ot">#{@name}</span><span class="st"> eating...&quot;</span></a>
+<a class="sourceLine" id="cb4-17" title="17">    sleep <span class="dt">SecureRandom</span>.random_number * <span class="dv">5</span></a>
+<a class="sourceLine" id="cb4-18" title="18">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-19" title="19"></a>
+<a class="sourceLine" id="cb4-20" title="20">  <span class="kw">def</span> think</a>
+<a class="sourceLine" id="cb4-21" title="21">    puts <span class="st">&quot;</span><span class="ot">#{@name}</span><span class="st"> thinking...&quot;</span></a>
+<a class="sourceLine" id="cb4-22" title="22">    sleep <span class="dt">SecureRandom</span>.random_number * <span class="dv">5</span></a>
+<a class="sourceLine" id="cb4-23" title="23">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-24" title="24"></a>
+<a class="sourceLine" id="cb4-25" title="25">  <span class="kw">def</span> take_forks</a>
+<a class="sourceLine" id="cb4-26" title="26">    <span class="dt">Ractor</span>.atomically <span class="kw">do</span></a>
+<a class="sourceLine" id="cb4-27" title="27">      <span class="ot">@left</span>.value</a>
+<a class="sourceLine" id="cb4-28" title="28">      <span class="ot">@right</span>.value</a>
+<a class="sourceLine" id="cb4-29" title="29">    <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-30" title="30">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-31" title="31"></a>
+<a class="sourceLine" id="cb4-32" title="32">  <span class="kw">def</span> put_forks</a>
+<a class="sourceLine" id="cb4-33" title="33">    <span class="dt">Ractor</span>.atomically <span class="kw">do</span></a>
+<a class="sourceLine" id="cb4-34" title="34">      <span class="ot">@right</span>.value = <span class="dv">nil</span></a>
+<a class="sourceLine" id="cb4-35" title="35">      <span class="ot">@left</span>.value = <span class="dv">nil</span></a>
+<a class="sourceLine" id="cb4-36" title="36">    <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-37" title="37">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-38" title="38"></a>
+<a class="sourceLine" id="cb4-39" title="39">  <span class="kw">def</span> start</a>
+<a class="sourceLine" id="cb4-40" title="40">    loop <span class="kw">do</span></a>
+<a class="sourceLine" id="cb4-41" title="41">      take_forks</a>
+<a class="sourceLine" id="cb4-42" title="42">      eat</a>
+<a class="sourceLine" id="cb4-43" title="43">      put_forks</a>
+<a class="sourceLine" id="cb4-44" title="44">      think</a>
+<a class="sourceLine" id="cb4-45" title="45">    <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-46" title="46">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-47" title="47"><span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-48" title="48"></a>
+<a class="sourceLine" id="cb4-49" title="49">forks = <span class="dt">NUM_OF_PHILOSOPHERS</span>.times.map <span class="kw">do</span></a>
+<a class="sourceLine" id="cb4-50" title="50">  <span class="dt">Ractor</span>::<span class="dt">TMVar</span>.new</a>
+<a class="sourceLine" id="cb4-51" title="51"><span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-52" title="52"></a>
+<a class="sourceLine" id="cb4-53" title="53">rs = <span class="dt">NUM_OF_PHILOSOPHERS</span>.times.map <span class="kw">do</span> |i|</a>
+<a class="sourceLine" id="cb4-54" title="54">  <span class="dt">Ractor</span>.new(<span class="st">&quot;philosopher </span><span class="ot">#{</span>i + <span class="dv">1</span><span class="ot">}</span><span class="st">&quot;</span>, forks[i], forks[(i + <span class="dv">1</span>) % <span class="dt">NUM_OF_PHILOSOPHERS</span>]) <span class="kw">do</span> |n, l, r|</a>
+<a class="sourceLine" id="cb4-55" title="55">    <span class="dt">Philosopher</span>.new(n, l, r).start</a>
+<a class="sourceLine" id="cb4-56" title="56">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-57" title="57"><span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-58" title="58"><span class="dt">Ractor</span>.select(*rs)</a></code></pre></div>
+<p>Ractor::TVar で解くため、ループでのロック取得や、raise Ractor::RetryTransaction を使った retry で行っていた制御を Ractor::TMVar に隠蔽でき、スッキリしたコードになったと思う。</p>
+<h2 id="まとめ">まとめ</h2>
+<p>Haskell の TMVar を参考にした、Ractor::TMVar を作った。<br />
+ソースコードは <a href="https://github.com/yoshitsugu/ractor-tmvar">yoshitsugu/ractor-tmvar</a> にある。<br />
+また、<a href="https://github.com/yoshitsugu/dining_philosophers_problem_ractor">「食事する賢者の問題」を解いたリポジトリ</a>も更新した。</p>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2020-11-30-ractor-tmvar.html" class="hatena-bookmark-button" data-hatena-bookmark-title="Ractor::TMVarを作った - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>
