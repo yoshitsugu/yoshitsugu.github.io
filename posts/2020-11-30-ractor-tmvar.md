@@ -1,6 +1,6 @@
 ---
 title: Ractor::TMVarを作った
-tags: GitHub Actions
+tags: Ractor, Ractor::TMVar, Ractor::TVar, STM
 ---
 
 [Ractor::TVar](https://github.com/ko1/ractor-tvar) に対応する [TMVar](https://hackage.haskell.org/package/stm-2.5.0.0/docs/Control-Concurrent-STM-TMVar.html) がほしくなったので作った
