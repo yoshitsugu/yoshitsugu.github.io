@@ -50,7 +50,8 @@ putTMVar (TMVar t) a = do
 
 ## 実装
 
-Ruby での実装は以下のようにした
+Ruby での実装は以下のようにした。  
+**(2020/12/01 追記) Ractor::TVar にあわせて以下のようなメソッド構成にしたが、あまりあわせる意味もないかと思い直し、Haskell の TMVar にあうように名前を変更した。ractor-tmvar 0.2.0 として push 済。**
 
 ```ruby
 # frozen_string_literal: true
