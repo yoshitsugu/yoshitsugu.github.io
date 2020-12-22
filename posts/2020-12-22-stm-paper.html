@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>Software Transactional Memoryの論文を読んだ - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="Software Transactional Memoryの論文を読んだ - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2020-12-22-stm-paper.html" />
+        <meta property="og:description" content="Software Transactional Memory(STM) の論文を読んだので、メモを公開しておく
+" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="Software Transactional Memoryの論文を読んだ - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="Software Transactional Memory(STM) の論文を読んだので、メモを公開しておく
+" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight-pygments.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>Software Transactional Memoryの論文を読んだ</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on December 22, 2020</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/STM.html">STM</a></span>
+    
+</div>
+
+<p>Software Transactional Memory(STM) の論文を読んだので、メモを公開しておく</p>
+<!--more-->
+<h2 id="software-transactional-memory">Software Transactional Memory</h2>
+<p><a href="../posts/2020-11-30-ractor-tmvar.html">前回</a>、Haskell の STM 実装から TMVar を参考にして、Ractor::TMVar を作成した。<br />
+その後、STM についてもう少し理解してみたいと思い、論文を読んだ。軽くまとめたメモレベルではあるが、今後の自分が参考にするためにも、ここに公開しておく。</p>
+<h2 id="論文">論文</h2>
+<ul>
+<li><a href="https://link.springer.com/article/10.1007%252Fs004460050028">Nir Shavit, Dan Touitou: Software Transactional Memory</a></li>
+<li>現時点で Google Scholar での引用数は 2022 になっている。</li>
+</ul>
+<h2 id="背景">背景</h2>
+<ul>
+<li>並行処理の同期処理について、単純に排他制御するブロッキングな方法だと問題がある。
+<ul>
+<li>デッドロックへの配慮が必要になる。</li>
+</ul></li>
+<li>ノンブロッキングな方法がこの時点でもいくつか提案されていた。</li>
+</ul>
+<h2 id="既存手法の課題">既存手法の課題</h2>
+<ul>
+<li>既存手法では、独自の命令セットを追加することで解決するものが多い。
+<ul>
+<li>この時点では Load Linked/Store Conditional くらいの命令しかない CPU がほとんどだった。</li>
+<li>Load Linked/Store Conditional とは
+<ul>
+<li>Atomic な Read-Modify-Write を提供するための命令</li>
+<li>Load Linked で共有メモリからロードしたデータを書き変えて Store Conditional で共有メモリに書き戻す。</li>
+<li>Store Conditional は、Load Linked 移行にメモリの値が変わっていたら失敗する。</li>
+<li>ちなみに x86 は Load Linked/Store Conditional の変わりに CAS(Compare &amp; Swap)という命令があるとのこと。
+<ul>
+<li>これは x86 が CISC だから。(&lt;-&gt; RISC)</li>
+<li><a href="https://www.sigbus.info/compilerbook">C コンパイラ作成入門</a> 「コラム: CISC と RISC」が参考になる。</li>
+</ul></li>
+</ul></li>
+<li>Load Linked/Store Conditional で並行処理の制御を行っている既存研究もあった。「協調(cooperative)」な手法。
+<ul>
+<li>あるプロセス P が a, b を書き換えようとしてプロセス Q が b を持っていたら、先に Q の処理を協力しておわらせて、a, b の処理に戻る。</li>
+<li>このとき他のプロセス R が a にアクセスしたいとすると、R は P を待たないといけないため、再帰的に待ちプロセスが発生してしまう</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="stm-とは">STM とは</h2>
+<ul>
+<li>Hardware Transactional Memory をソフトウェアで実現できるようにしたもの</li>
+<li>Hardware Transactional Memory は Transactional Memory 用の命令を追加する想定の手法</li>
+</ul>
+<h2 id="stm-の新規性">STM の新規性</h2>
+<ul>
+<li>Load Linked/Store Conditional のみをサポートしている CPU でも k-word compare and swap が実現できるようにしたこと</li>
+</ul>
+<h2 id="stm-の動きの概要">STM の動きの概要</h2>
+<ul>
+<li>論文中に疑似コードがあるので、それを見るとよい。以下にかなり大雑把にまとめる。</li>
+<li>共有メモリの番地ごとに、version、ownership 情報を持てるようにしておく。
+<ul>
+<li><code>memory[i]</code> に対して <code>version[i]</code>、<code>ownership[i]</code>があるようなイメージ</li>
+</ul></li>
+<li>まず、操作したいメモリの所有権(ownership)を取得
+<ul>
+<li>Load Linkd(LL)で所有権情報取得 -&gt; version チェック -&gt; Store Conditional(SC)で所有権情報を書き込み</li>
+</ul></li>
+<li>現状の書き込み対象の共有メモリの値をローカル用メモリにコピー
+<ul>
+<li>LL でローカル用メモリ取得 -&gt; version チェック -&gt; SC で共有メモリの値を書き込み</li>
+</ul></li>
+<li>ローカル用メモリに新しい値を書き込み</li>
+<li>共有メモリに書き込み
+<ul>
+<li>LL で共有メモリ取得 -&gt; version チェック -&gt; SC でローカル用メモリの値を書き込み</li>
+</ul></li>
+<li>所有権の開放
+<ul>
+<li>LL で所有権情報取得 -&gt; version チェック -&gt; SC で所有権情報を空にする</li>
+</ul></li>
+<li>version++</li>
+<li>「version チェック」 では、開始時の version から version が変わってないかチェックし、変わっていたら最初からやりなおす
+<ul>
+<li>LL と SC の間で実行することで他のプロセスと競合しないことを保証する</li>
+</ul></li>
+</ul>
+<h2 id="実験結果">実験結果</h2>
+<p>パフォーマンスについて、既存手法と比べて、おおむねよかったようだ。<br />
+元々 transactional memory は共有メモリ操作の衝突は現実では少ない、という仮定を置いているので、少ない共有メモリを複数のプロセスで触るような場合は極端に性能が落ちる。(例えば、同じメモリ番地にある数値を複数プロセスでカウントアップしていく場合など)</p>
+<h2 id="まとめ">まとめ</h2>
+<p>STM が当初 LL/SC 向けに作られていたことを知らず、勉強になった。さらに言うと、LL/SC もぼんやりとしか理解できていなかったので、この機会に復習できた。x86 は Compare and Swap があるので、現代の STM はどうしているのかと思ったが、例えば Haskell(GHC)では<a href="https://gitlab.haskell.org/ghc/ghc/-/blob/master/includes/stg/SMP.h#L292-301">ここで cas 関数を定義して</a>、そちらを使っているようだ。C/C++にあまり詳しくないが、これが CAS や LL/SC の CPU 命令に変換されると推測している。</p>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2020-12-22-stm-paper.html" class="hatena-bookmark-button" data-hatena-bookmark-title="Software Transactional Memoryの論文を読んだ - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>
