@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>このブログをダークモード対応した - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="このブログをダークモード対応した - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2020-12-29-dark-theme.html" />
+        <meta property="og:description" content="表題の通り、対応した。
+" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="このブログをダークモード対応した - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="表題の通り、対応した。
+" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>このブログをダークモード対応した</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on December 29, 2020</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/Dark%20Theme.html">Dark Theme</a>, <a href="../tags/Dark%20Mode.html">Dark Mode</a>, <a href="../tags/Hakyll.html">Hakyll</a></span>
+    
+</div>
+
+<p>表題の通り、対応した。</p>
+<!--more-->
+<h2 id="ダークモード">ダークモード</h2>
+<p>最近だと<a href="https://github.blog/jp/2020-12-11-dark-mode-github-sponsors-for-companies-and-more/#dark-mode">GitHub がダークモードに対応</a>したり、いろいろなアプリ、サービスもダークモードに対応してきたように感じている。<br />
+このブログもダークテーマが OS で選択されていたらダークモードになるようにした。</p>
+<h2 id="対応内容">対応内容</h2>
+<p>基本的には <code>@media (prefers-color-scheme: dark)</code> のメディアクエリを使って対応した。<br />
+CSS のカスタムプロパティを使って、まとめて色だけ宣言できるようにした。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode css"><code class="sourceCode css"><a class="sourceLine" id="cb1-1" title="1"><span class="in">:root</span> {</a>
+<a class="sourceLine" id="cb1-2" title="2">  <span class="va">--background-color</span>: <span class="cn">#fff</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-3" title="3">  <span class="va">--color</span>: <span class="cn">#222</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-4" title="4">  <span class="va">--main-color</span>: <span class="cn">#237dac</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-5" title="5">  <span class="va">--link-active-color</span>: <span class="cn">#2d3e4a</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-6" title="6">  <span class="va">--menu-link-color</span>: <span class="cn">#555</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-7" title="7">  <span class="va">--menu-link-background-color</span>: <span class="cn">#eee</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-8" title="8">  <span class="va">--muted-color</span>: <span class="cn">#999</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-9" title="9">  <span class="va">--code-border-color</span>: <span class="cn">#e1e4e8</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-10" title="10">  <span class="va">--code-background-color</span>: <span class="cn">#fafbfc</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-11" title="11">}</a>
+<a class="sourceLine" id="cb1-12" title="12"></a>
+<a class="sourceLine" id="cb1-13" title="13"><span class="im">@media</span> (<span class="kw">prefers-color-scheme</span>: dark) {</a>
+<a class="sourceLine" id="cb1-14" title="14">  <span class="in">:root</span> {</a>
+<a class="sourceLine" id="cb1-15" title="15">    <span class="va">--background-color</span>: <span class="fu">rgb(</span><span class="dv">21</span><span class="op">,</span> <span class="dv">32</span><span class="op">,</span> <span class="dv">43</span><span class="fu">)</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-16" title="16">    <span class="va">--color</span>: <span class="cn">#fff</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-17" title="17">    <span class="va">--main-color</span>: <span class="cn">#35b8ff</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-18" title="18">    <span class="va">--link-active-color</span>: <span class="cn">#8cb3d3</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-19" title="19">    <span class="va">--menu-link-color</span>: <span class="cn">#eee</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-20" title="20">    <span class="va">--menu-link-background-color</span>: <span class="fu">rgb(</span><span class="dv">28</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">59</span><span class="fu">)</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-21" title="21">    <span class="va">--muted-color</span>: <span class="cn">#ddd</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-22" title="22">    <span class="va">--code-border-color</span>: <span class="cn">#444444</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-23" title="23">    <span class="va">--code-background-color</span>: <span class="fu">rgb(</span><span class="dv">31</span><span class="op">,</span> <span class="dv">31</span><span class="op">,</span> <span class="dv">31</span><span class="fu">)</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-24" title="24">  }</a>
+<a class="sourceLine" id="cb1-25" title="25">}</a></code></pre></div>
+<p>シンタックスハイライト部分は <a href="https://github.com/jgm/skylighting">Skylighting</a>というライブラリを使っており、細かい対応が面倒だったので、Hakyll でハイライト用の CSS を生成する際、メディアクエリつきの CSS を後ろにくっつけるようにした。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" title="1">  create [<span class="st">&quot;css/highlight.css&quot;</span>] <span class="op">$</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb2-2" title="2">    route idRoute</a>
+<a class="sourceLine" id="cb2-3" title="3">    compile <span class="op">$</span> makeItem <span class="op">$</span> (compressCss <span class="op">$</span> SF.styleToCss SS.haddock) <span class="op">++</span> <span class="st">&quot;@media (prefers-color-scheme: dark) {&quot;</span> <span class="op">++</span> (compressCss <span class="op">$</span> SF.styleToCss SS.breezeDark) <span class="op">++</span> <span class="st">&quot;}&quot;</span></a></code></pre></div>
+<h3 id="結果">結果</h3>
+<p>以下のようにメディアクエリに応じて見た目が切り替わるようになった。</p>
+<p><img src="../images/20201229/light_and_dark.png" class="blog-img img-responsive"></p>
+<p>GitHub のダークモードのようにブログ上で手動で切り替えられるようにはしていないが、それもそのうち対応したい。</p>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2020-12-29-dark-theme.html" class="hatena-bookmark-button" data-hatena-bookmark-title="このブログをダークモード対応した - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>
