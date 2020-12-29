@@ -3,9 +3,33 @@ html {
   position: relative;
 }
 
-$mainColor: #237dac;
 $siteWidth: 920px;
 $contentWidth: 780px;
+:root {
+  --background-color: #fff;
+  --color: #222;
+  --main-color: #237dac;
+  --link-active-color: #2d3e4a;
+  --menu-link-color: #555;
+  --menu-link-background-color: #eee;
+  --muted-color: #999;
+  --code-border-color: #e1e4e8;
+  --code-background-color: #fafbfc;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: rgb(21, 32, 43);
+    --color: #fff;
+    --main-color: #35b8ff;
+    --link-active-color: #8cb3d3;
+    --menu-link-color: #eee;
+    --menu-link-background-color: rgb(28, 44, 59);
+    --muted-color: #ddd;
+    --code-border-color: #444444;
+    --code-background-color: rgb(31, 31, 31);
+  }
+}
 
 body {
   @font-face {
@@ -18,23 +42,24 @@ body {
   line-height: 1.8em;
   margin-bottom: 6em;
   font-size: 14px;
+  background-color: var(--background-color);
+  color: var(--color);
   @media only screen and (max-width: 768px) {
     font-size: 90%;
   }
-
   .header-menu {
     margin-left: 1em;
   }
 
   a {
-    color: $mainColor;
+    color: var(--main-color);
     text-decoration: none;
     font-weight: bold;
     word-break: break-all;
 
     &:hover,
     &:focus {
-      color: #2d3e4a;
+      color: var(--link-active-color);
     }
   }
   #container {
@@ -61,36 +86,46 @@ body {
         }
         font-weight: bold;
         text-transform: none;
-        color: $mainColor;
+        color: var(--main-color);
         padding: 0.2rem 1rem 0.2rem 0;
-        .pure-menu-link {
-          padding: 0;
-          color: #555;
-        }
+        background-color: transparent;
         &:hover,
-        a:hover {
+        &:focus,
+        &:active {
           background-color: transparent;
         }
-        a:hover {
-          color: #999;
+        .pure-menu-link {
+          padding: 0;
+          color: var(--menu-link-color);
+          background-color: transparent;
+          &:hover,
+          &:focus,
+          &:active {
+            background-color: transparent;
+          }
+        }
+      }
+      .pure-menu-link {
+        background-color: var(--background-color);
+        &:hover,
+        &:focus,
+        &:active {
+          background-color: var(--menu-link-background-color);
         }
       }
       border-bottom: 2px #777 solid;
       padding-top: 4px;
       padding-bottom: 4px;
-      a:hover {
-        transition: background-color 0.5s ease;
-      }
     }
     #content {
       margin: 0 auto;
       max-width: $contentWidth;
-      color: #222;
+      color: var(--color);
       line-height: 2;
       font-size: 1rem;
       h1 {
         font-size: 1.6rem;
-        color: $mainColor;
+        color: var(--main-color);
         margin: 1.5rem 0;
         @media only screen and (max-width: 768px) {
           margin: 0.8em 0;
@@ -101,7 +136,7 @@ body {
         font-size: 1.2rem;
         margin-top: 40px;
         margin-bottom: 20px;
-        color: darken($mainColor, 10%);
+        color: var(--main-color);
         @media only screen and (max-width: 768px) {
           margin-top: 0.7em;
           margin-bottom: 0.7em;
@@ -111,7 +146,7 @@ body {
         font-size: 1.1rem;
         margin-top: 20px;
         margin-bottom: 10px;
-        color: #555;
+        color: var(--main-color);
         @media only screen and (max-width: 768px) {
           margin-top: 0.3em;
           margin-bottom: 0.3em;
@@ -124,10 +159,10 @@ body {
         font-size: 0.9rem;
         text-align: right;
         .date {
-          color: #999;
+          color: var(--muted-color);
         }
         .tags {
-          color: #999;
+          color: var(--muted-color);
           a {
             font-weight: normal;
           }
@@ -137,10 +172,12 @@ body {
         p {
           margin: 0;
         }
-        a,
+        a {
+          color: var(--main-color);
+        }
         a:hover,
-        a:visited {
-          color: #2d3e4a;
+        a:active {
+          color: var(--link-active-color);
         }
         @media only screen and (max-width: 768px) {
           font-size: 0.9em;
@@ -168,7 +205,7 @@ body {
           margin-bottom: 1rem;
           padding: 0.5rem 0;
           .date {
-            color: #999;
+            color: var(--muted-color);
             font-size: 0.8rem;
             @media only screen and (max-width: 768px) {
               text-align: right;
@@ -177,9 +214,9 @@ body {
         }
       }
       div.sourceCode {
-        border: 1px solid #e1e4e8;
+        border: 1px solid var(--code-border-color);
         border-radius: 0.2em;
-        background-color: #fafbfc;
+        background-color: var(--code-background-color);
         padding: 0.2em 0.5em;
         line-height: 1.1em;
         pre {
@@ -202,17 +239,17 @@ body {
       }
     }
     code {
-      border: 1px solid #e1e4e8;
+      border: 1px solid var(--code-border-color);
       border-radius: 0.2em;
       padding: 0.2em;
-      background-color: #fafbfc;
+      background-color: var(--code-background-color);
       font-size: 0.9rem;
       font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier,
         monospace;
     }
     .blog-img {
       max-width: 600px;
-      border: 1px #555 solid;
+      border: 1px var(--muted-color) solid;
       @media only screen and (max-width: 768px) {
         max-width: 100%;
       }
@@ -231,11 +268,13 @@ body {
     margin-top: 1em;
     width: 100%;
     text-align: center;
-    color: #666;
+    color: var(--muted-color);
     a {
-      color: #666;
-      &:hover {
-        color: #000;
+      color: var(--muted-color);
+      &:hover,
+      &:active,
+      &:visited {
+        color: var(--muted-color);
       }
     }
   }
