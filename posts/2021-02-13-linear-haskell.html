@@ -13,13 +13,13 @@
         <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
         <meta property="og:site_name" content="TSUGULOG" />
         <meta property="og:url" content="https://yoshitsugu.net/posts/2021-02-13-linear-haskell.html" />
-        <meta property="og:description" content="最近リリースされた GHC 9.0.1 から使えるようになった LinearTypes 言語拡張について気になったので調べた。
+        <meta property="og:description" content="最近リリースされた GHC 9.0.1 で使えるようになった LinearTypes 言語拡張について気になったので調べた。
 " />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="HaskellのLinearTypes言語拡張について少し調べた - TSUGULOG" />
         <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
-        <meta name="twitter:description" content="最近リリースされた GHC 9.0.1 から使えるようになった LinearTypes 言語拡張について気になったので調べた。
+        <meta name="twitter:description" content="最近リリースされた GHC 9.0.1 で使えるようになった LinearTypes 言語拡張について気になったので調べた。
 " />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
@@ -50,22 +50,24 @@
     
 </div>
 
-<p>最近リリースされた <a href="https://www.haskell.org/ghc/blog/20210204-ghc-9.0.1-released.html">GHC 9.0.1</a> から使えるようになった <code>LinearTypes</code> 言語拡張について気になったので調べた。</p>
+<p>最近リリースされた <a href="https://www.haskell.org/ghc/blog/20210204-ghc-9.0.1-released.html">GHC 9.0.1</a> で使えるようになった <code>LinearTypes</code> 言語拡張について気になったので調べた。</p>
 <!--more-->
 <h2 id="lineartypes言語拡張とは">LinearTypes言語拡張とは</h2>
-<p>GHC9.0.1から使えるようになった言語拡張で、Linear Typeを導入できる。ただ、上記リリースノートに <code>a first cut</code> とある通り、まだ実験的な機能としてリリースされた段階のようだ。通常のGHCの言語拡張のように</p>
+<p>GHC9.0.1から使えるようになった言語拡張で、Linear Typeを導入できる。ただ、上記リリースノートに “a first cut” とある通り、まだ実験的な機能としてリリースされた段階のようだ。<br />
+通常のGHCの言語拡張のように</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" title="1"><span class="ot">{-# LANGUAGE LinearTypes #-}</span></a></code></pre></div>
 <p>とすることで使えるようになる</p>
 <h2 id="linear-typeとは">Linear Typeとは</h2>
-<p>そもそもLinearTypesで使えるようになるLinear Typeとはどのような概念なのか、簡単に説明すると、「関数のある引数がちょうど1度だけ評価される、という条件を指定できるもの」のようだ。<br />
+<p>そもそもLinear Typeとはどのような概念なのか、簡単に説明すると、「関数の引数がちょうど1度だけ評価される」、という条件を指定できるもののようだ。<br />
+理論的な基礎となるLinear type systemsについては前から広く知られていたものの、なかなか実装までは至らず、今回Haskellで晴れて実装までこぎつけたとのことだった。<br />
 具体例を挙げる。</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" title="1"><span class="ot">{-# LANGUAGE LinearTypes #-}</span></a>
 <a class="sourceLine" id="cb2-2" title="2"></a>
 <a class="sourceLine" id="cb2-3" title="3"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></a>
 <a class="sourceLine" id="cb2-4" title="4"></a>
 <a class="sourceLine" id="cb2-5" title="5"><span class="co">-- a %1 -&gt; b でaがLinear Typeであることを指定できる</span></a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="ot">tuple ::</span> <span class="dt">Int</span> <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Int</span>)</a>
-<a class="sourceLine" id="cb2-7" title="7">tuple a b <span class="ot">=</span> (a, b)</a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="ot">tuple1 ::</span> <span class="dt">Int</span> <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Int</span>)</a>
+<a class="sourceLine" id="cb2-7" title="7">tuple1 a b <span class="ot">=</span> (a, b)</a>
 <a class="sourceLine" id="cb2-8" title="8"></a>
 <a class="sourceLine" id="cb2-9" title="9"><span class="ot">tuple2 ::</span> <span class="dt">Int</span> <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Int</span>)</a>
 <a class="sourceLine" id="cb2-10" title="10">tuple2 a b <span class="ot">=</span> (a, a) </a></code></pre></div>
@@ -87,16 +89,16 @@
 <a class="sourceLine" id="cb3-15" title="15">   <span class="kw">|</span></a>
 <a class="sourceLine" id="cb3-16" title="16"><span class="ex">10</span> <span class="kw">|</span> <span class="ex">tuple2</span> a b = (a, a)</a>
 <a class="sourceLine" id="cb3-17" title="17">   <span class="kw">|</span>          ^</a></code></pre></div>
-<p>tupleはコンパイル可能だが、tuple2は2箇所でエラーとなる。 エラー内容はそれぞれ</p>
+<p>tuple1はコンパイル可能だが、tuple2は2箇所でエラーとなる。 エラー内容はそれぞれ</p>
 <ul>
 <li>a はLinear Typeなのに2回評価されているのでエラー</li>
 <li>b はLinear Typeなのに1回も評価されていないのでエラー</li>
 </ul>
-<p>となる。このように「ただ1度だけ評価される」という制約を導入できるのがLinear Typeである。Linear type systemsというのは前から理論的には知られていたものの、なかなか実装までは至らず、今回Haskellで晴れて実装までこぎつけたようだ。<br />
-proposalは <a href="https://github.com/ghc-proposals/ghc-proposals/blob/master/proposals/0111-linear-types.rst">こちら</a> にある。<br />
+<p>となる。「ただ1度だけ評価される」という制約を導入できる、という意味がなんとなくつかめただろうか。</p>
+<p>LinearTypes言語拡張のproposalは <a href="https://github.com/ghc-proposals/ghc-proposals/blob/master/proposals/0111-linear-types.rst">こちら</a> にある。<br />
 また、論文も <a href="https://arxiv.org/abs/1710.09756">こちら</a> で公開されていたため、かいつまんで読んでみた。</p>
 <h2 id="linear-typeが何の役に立つのか">Linear Typeが何の役に立つのか</h2>
-<p>論文によると、下記2点にフォーカスして実装をすすめたそうだ。</p>
+<p>論文によると、GHCにLinear Typeを導入するにあたって、下記2点にフォーカスして仕様策定すすめたそうだ。</p>
 <ul>
 <li>値の変更の安全性</li>
 <li>外部リソース(ファイルやネットワークなど)にアクセスする際の安全性</li>
@@ -150,10 +152,10 @@ proposalは <a href="https://github.com/ghc-proposals/ghc-proposals/blob/master/
 通常のIOと異なり、 <code>IO_L</code> では返り値をLinear Typeで指定できる。これにより返り値の <code>FileHandler</code> をただ1度だけ消費する、という制限をかける。<br />
 上記により、close忘れやclose後の呼出を防ぐことができる。</p>
 <h2 id="後方互換性">後方互換性</h2>
-<p>論文によると、Linear Typeの設計として、Linear Typeについての型注釈がない場合はmultiplicity(linearかどうか)をmany(linearじゃない状態)にする、という設計にしたそうだ。これにより言語拡張を使ってもLinear Typeを明示的に指定しないところは通常のHaskellとして書ける。後方互換性を大事にしている旨が何度か言及されていた。</p>
+<p>論文によると、Linear Typeの設計として、multiplicity(linearかどうか)の型注釈がない場合はmultiplicityをmany(linearじゃない状態)にする、という設計にしたそうだ。これにより言語拡張を使ってもLinear Typeを明示的に指定しないところは通常のHaskellとして書ける。このように後方互換性を大事にしている旨が何度か言及されていた。</p>
 <h2 id="rustとの比較">Rustとの比較</h2>
 <p>Linear Typeの挙動や目的について、Rustのmoveやborrowに似てるな、と思ったが、Rustのborrowについても論文内で言及があった。<br />
-borrowシステムはその性質上、あるvが関数fによってborrowされていたら、fが処理を終えるまでvを保持しないといけない。そのため、tail-call eliminationができない。関数型言語ではtail-call eliminationは必須のため導入できない、という言及だった。<br />
+論文によると、borrowシステムはその性質上、あるvが関数fによってborrowされていたら、fが処理を終えるまでvを保持しないといけない。そのため、tail-call eliminationができない。関数型言語ではtail-call eliminationは必須のため導入できないそうだ。<br />
 tail-call elimination(いわゆる末尾再帰最適化)ができないという制約があるとは知らなかったため、あとで調べてみようかと思う。</p>
 <h2 id="パフォーマンス">パフォーマンス</h2>
 <p>詳しくは読めていないが、Linear TypeによってUnboxed valueを使った最適化なども安全に行うことができ、性能向上にもつながった、というようなことが書いてあるようだ。</p>
