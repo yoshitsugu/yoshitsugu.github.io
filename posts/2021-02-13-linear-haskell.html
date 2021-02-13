@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>HaskellのLinearTypes言語拡張について少し調べた - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="HaskellのLinearTypes言語拡張について少し調べた - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2021-02-13-linear-haskell.html" />
+        <meta property="og:description" content="最近リリースされた GHC 9.0.1 から使えるようになった LinearTypes 言語拡張について気になったので調べた。
+" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="HaskellのLinearTypes言語拡張について少し調べた - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="最近リリースされた GHC 9.0.1 から使えるようになった LinearTypes 言語拡張について気になったので調べた。
+" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>HaskellのLinearTypes言語拡張について少し調べた</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on February 13, 2021</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/Linear%20Haskell.html">Linear Haskell</a>, <a href="../tags/Haskell.html">Haskell</a>, <a href="../tags/LinearTypes.html">LinearTypes</a></span>
+    
+</div>
+
+<p>最近リリースされた <a href="https://www.haskell.org/ghc/blog/20210204-ghc-9.0.1-released.html">GHC 9.0.1</a> から使えるようになった <code>LinearTypes</code> 言語拡張について気になったので調べた。</p>
+<!--more-->
+<h2 id="lineartypes言語拡張とは">LinearTypes言語拡張とは</h2>
+<p>GHC9.0.1から使えるようになった言語拡張で、Linear Typeを導入できる。ただ、上記リリースノートに <code>a first cut</code> とある通り、まだ実験的な機能としてリリースされた段階のようだ。通常のGHCの言語拡張のように</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" title="1"><span class="ot">{-# LANGUAGE LinearTypes #-}</span></a></code></pre></div>
+<p>とすることで使えるようになる</p>
+<h2 id="linear-typeとは">Linear Typeとは</h2>
+<p>そもそもLinearTypesで使えるようになるLinear Typeとはどのような概念なのか、簡単に説明すると、「関数のある引数がちょうど1度だけ評価される、という条件を指定できるもの」のようだ。<br />
+具体例を挙げる。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" title="1"><span class="ot">{-# LANGUAGE LinearTypes #-}</span></a>
+<a class="sourceLine" id="cb2-2" title="2"></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb2-4" title="4"></a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="co">-- a %1 -&gt; b でaがLinear Typeであることを指定できる</span></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="ot">tuple ::</span> <span class="dt">Int</span> <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Int</span>)</a>
+<a class="sourceLine" id="cb2-7" title="7">tuple a b <span class="ot">=</span> (a, b)</a>
+<a class="sourceLine" id="cb2-8" title="8"></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="ot">tuple2 ::</span> <span class="dt">Int</span> <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Int</span>)</a>
+<a class="sourceLine" id="cb2-10" title="10">tuple2 a b <span class="ot">=</span> (a, a) </a></code></pre></div>
+<p>としてコンパイルすると以下のようなエラーがでる</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" title="1">$ <span class="ex">cabal</span> build</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="co"># ...</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="ex">Main.hs</span>:10:8: error:</a>
+<a class="sourceLine" id="cb3-4" title="4">    • <span class="ex">Couldn</span><span class="st">'t match type ‘'</span>Many’ with ‘<span class="st">'One’</span></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="st">        arising from multiplicity of ‘a’</span></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="st">    • In an equation for ‘tuple2’: tuple2 a b = (a, a)</span></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="st">   |</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="st">10 | tuple2 a b = (a, a)</span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="st">   |        ^</span></a>
+<a class="sourceLine" id="cb3-10" title="10"></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="st">Main.hs:10:10: error:</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="st">    • Couldn'</span>t match type ‘<span class="st">'Many’ with ‘'</span>One’</a>
+<a class="sourceLine" id="cb3-13" title="13">        <span class="ex">arising</span> from multiplicity of ‘b’</a>
+<a class="sourceLine" id="cb3-14" title="14">    • <span class="ex">In</span> an equation for ‘tuple2’: tuple2 a b = (a, a)</a>
+<a class="sourceLine" id="cb3-15" title="15">   <span class="kw">|</span></a>
+<a class="sourceLine" id="cb3-16" title="16"><span class="ex">10</span> <span class="kw">|</span> <span class="ex">tuple2</span> a b = (a, a)</a>
+<a class="sourceLine" id="cb3-17" title="17">   <span class="kw">|</span>          ^</a></code></pre></div>
+<p>tupleはコンパイル可能だが、tuple2は2箇所でエラーとなる。 エラー内容はそれぞれ</p>
+<ul>
+<li>a はLinear Typeなのに2回評価されているのでエラー</li>
+<li>b はLinear Typeなのに1回も評価されていないのでエラー</li>
+</ul>
+<p>となる。このように「ただ1度だけ評価される」という制約を導入できるのがLinear Typeである。Linear type systemsというのは前から理論的には知られていたものの、なかなか実装までは至らず、今回Haskellで晴れて実装までこぎつけたようだ。<br />
+proposalは <a href="https://github.com/ghc-proposals/ghc-proposals/blob/master/proposals/0111-linear-types.rst">こちら</a> にある。<br />
+また、論文も <a href="https://arxiv.org/abs/1710.09756">こちら</a> で公開されていたため、かいつまんで読んでみた。</p>
+<h2 id="linear-typeが何の役に立つのか">Linear Typeが何の役に立つのか</h2>
+<p>論文によると、下記2点にフォーカスして実装をすすめたそうだ。</p>
+<ul>
+<li>値の変更の安全性</li>
+<li>外部リソース(ファイルやネットワークなど)にアクセスする際の安全性</li>
+</ul>
+<p>Linear Typeがこの2点にどのように対応できるのか、論文の例を挙げつつ見ていく。</p>
+<h3 id="値の変更の安全性">値の変更の安全性</h3>
+<p>以下のようなArrayに関する変更を安全にすることを考える</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" title="1"><span class="ot">array ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [(<span class="dt">Int</span>, a)] <span class="ot">-&gt;</span> <span class="dt">Array</span> a</a>
+<a class="sourceLine" id="cb4-2" title="2">array size pairs <span class="ot">=</span> runST <span class="op">$</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb4-3" title="3">  ma <span class="ot">&lt;-</span> newMArray size</a>
+<a class="sourceLine" id="cb4-4" title="4">  forM_ pairs (write ma)</a>
+<a class="sourceLine" id="cb4-5" title="5">  unsafeFreeze ma</a>
+<a class="sourceLine" id="cb4-6" title="6"></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="co">-- Arrayまわりの関数の型が以下のようになっているとする</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="kw">type</span> <span class="dt">MArray</span> s a</a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="kw">type</span> <span class="dt">Array</span> a</a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="ot">newMArray ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">ST</span> s (<span class="dt">MArray</span> s a)</a>
+<a class="sourceLine" id="cb4-11" title="11"><span class="fu">read</span><span class="ot"> ::</span> <span class="dt">MArray</span> s a <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">ST</span> s a</a>
+<a class="sourceLine" id="cb4-12" title="12"><span class="ot">write ::</span> <span class="dt">MArray</span> s a <span class="ot">-&gt;</span> (<span class="dt">Int</span>, a) <span class="ot">-&gt;</span> <span class="dt">ST</span> s ()</a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="ot">unsafeFreeze ::</span> <span class="dt">MArray</span> s a <span class="ot">-&gt;</span> <span class="dt">ST</span> s (<span class="dt">Array</span> a)</a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="ot">forM_ ::</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> m()) <span class="ot">-&gt;</span> m()</a>
+<a class="sourceLine" id="cb4-15" title="15"><span class="ot">runST ::</span> (<span class="kw">forall</span> s<span class="op">.</span> <span class="dt">ST</span> s a) <span class="ot">-&gt;</span> a</a></code></pre></div>
+<p>上記 <code>array</code> という関数はarrayの長さを第1引数に、インデックスと値のタプルのリストを第2引数に受けとり、immutableなArrayを生成する。ここで <code>unsafeFreeze</code> は、freeze後の挙動については制約をかけることができず、状況によってはfreeze後にwriteされる可能性もあり得る。<br />
+これをLinear Typeを使って以下のように定義し直す。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" title="1"><span class="ot">array ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [(<span class="dt">Int</span>, a)] <span class="ot">-&gt;</span> <span class="dt">Array</span> a</a>
+<a class="sourceLine" id="cb5-2" title="2">array size pairs <span class="ot">=</span> newMArray size (\ma <span class="ot">-&gt;</span> freeze (<span class="fu">foldl</span> write ma pairs))</a>
+<a class="sourceLine" id="cb5-3" title="3"></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="kw">type</span> <span class="dt">MArray</span> a</a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="kw">type</span> <span class="dt">Array</span> a</a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="ot">newMArray ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> (<span class="dt">MArray</span> a <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> <span class="dt">Unrestricted</span> b) <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> b</a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="fu">read</span><span class="ot"> ::</span> <span class="dt">MArray</span> a <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> (<span class="dt">MArray</span> a, <span class="dt">Unrestricted</span> a)</a>
+<a class="sourceLine" id="cb5-8" title="8"><span class="ot">write ::</span> <span class="dt">MArray</span> a <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, a) <span class="ot">-&gt;</span> <span class="dt">MArray</span> a</a>
+<a class="sourceLine" id="cb5-9" title="9"><span class="ot">freeze ::</span> <span class="dt">MArray</span> a <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> <span class="dt">Unrestricted</span> (<span class="dt">Array</span> a)</a></code></pre></div>
+<p>ここで、 <code>read</code> や <code>write</code> はLinear Typeになっているので1度しかMArrayを評価できない。ただ、返り値としてMArrayを返すので、論理的には新しい <code>MArray</code> ということになり、 <code>read</code> と <code>write</code> をつなげて書くことができる。<br />
+<code>freeze</code> は引数を消費して、 <code>Unrestricted (Array a)</code> としてimmutableなArrayを返している。そのため、これ以上 <code>MArray</code> として <code>read</code> や <code>write</code> ができない。 <code>Unrestricted</code> というのはLinear Typeの制限を受けない値として扱うことを意味する。つまり何度でも評価されるかもしれないし、1度も評価されないかもしれない。 <code>Array</code> 自体はimmutableなので <code>Unrestricted</code> でも安全、ということだろう。<br />
+この <strong>「関数は引数を消費する。その後の関数でも続けて消費できる場合は論理的に新しい値として返す」</strong> という流れがLinear Typeでの安全性保証の肝になっているようだ。</p>
+<h3 id="外部リソースアクセスの安全性">外部リソースアクセスの安全性</h3>
+<p>Linear Typeを使ったファイルアクセスについても見ておく。</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" title="1"><span class="ot">firstLine ::</span> <span class="dt">FilePath</span> <span class="ot">-&gt;</span> <span class="dt">IO_L</span> <span class="dt">ByteString</span></a>
+<a class="sourceLine" id="cb6-2" title="2">firstLine fp <span class="ot">=</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb6-3" title="3">  f <span class="ot">&lt;-</span> openFile fp</a>
+<a class="sourceLine" id="cb6-4" title="4">  (f, <span class="dt">Unrestricted</span> bs) <span class="ot">&lt;-</span> readLine f</a>
+<a class="sourceLine" id="cb6-5" title="5">  closeFile f</a>
+<a class="sourceLine" id="cb6-6" title="6">  <span class="fu">return</span> bs</a>
+<a class="sourceLine" id="cb6-7" title="7"></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="kw">type</span> <span class="dt">File</span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="ot">openFile ::</span> <span class="dt">FilePath</span> <span class="ot">-&gt;</span> <span class="dt">IO_L</span> <span class="dt">FileHandler</span></a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="ot">readLine ::</span> <span class="dt">FileHandler</span> <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> <span class="dt">IO_L</span> (<span class="dt">FileHandler</span>, <span class="dt">Unrestricted</span> <span class="dt">ByteString</span>)</a>
+<a class="sourceLine" id="cb6-11" title="11"><span class="ot">closeFile ::</span> <span class="dt">FileHandler</span> <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> <span class="dt">IO_L</span> ()</a></code></pre></div>
+<p><code>readLine</code> は <code>FileHandler</code> を消費し、返り値として新しい <code>FileHandler</code> を返す。一方 <code>closeFile</code> は <code>FileHandler</code> を消費し、新しい <code>FileHandler</code> は返さない。<br />
+通常のIOと異なり、 <code>IO_L</code> では返り値をLinear Typeで指定できる。これにより返り値の <code>FileHandler</code> をただ1度だけ消費する、という制限をかける。<br />
+上記により、close忘れやclose後の呼出を防ぐことができる。</p>
+<h2 id="後方互換性">後方互換性</h2>
+<p>論文によると、Linear Typeの設計として、Linear Typeについての型注釈がない場合はmultiplicity(linearかどうか)をmany(linearじゃない状態)にする、という設計にしたそうだ。これにより言語拡張を使ってもLinear Typeを明示的に指定しないところは通常のHaskellとして書ける。後方互換性を大事にしている旨が何度か言及されていた。</p>
+<h2 id="rustとの比較">Rustとの比較</h2>
+<p>Linear Typeの挙動や目的について、Rustのmoveやborrowに似てるな、と思ったが、Rustのborrowについても論文内で言及があった。<br />
+borrowシステムはその性質上、あるvが関数fによってborrowされていたら、fが処理を終えるまでvを保持しないといけない。そのため、tail-call eliminationができない。関数型言語ではtail-call eliminationは必須のため導入できない、という言及だった。<br />
+tail-call elimination(いわゆる末尾再帰最適化)ができないという制約があるとは知らなかったため、あとで調べてみようかと思う。</p>
+<h2 id="パフォーマンス">パフォーマンス</h2>
+<p>詳しくは読めていないが、Linear TypeによってUnboxed valueを使った最適化なども安全に行うことができ、性能向上にもつながった、というようなことが書いてあるようだ。</p>
+<h2 id="future-work">Future work</h2>
+<p>future workとしては以下のような内容があげられていた。</p>
+<ul>
+<li>プログラム最適化
+<ul>
+<li>最適なインライン化を行うためにカーディナリティの宣言にこのmultiplicityの型注釈を使うのはどうか、という話</li>
+</ul></li>
+<li>multiplicitiesを拡張
+<ul>
+<li>今回は引数をちょうど1度呼びだすかそれ以外か、という話だったが、もっと拡張はできる、という話</li>
+</ul></li>
+<li>Streaming I/OやProgramming foreign heapsなどの実際の例への適用
+<ul>
+<li>引数が評価される回数の制約がつけられるなら、引数が使いおわった時点で開放すればいいので、GCがいらなくなるためメモリ管理も容易になる</li>
+</ul></li>
+</ul>
+<h2 id="感想">感想</h2>
+<p>引数の評価される回数を型で表現する、というのがなかなか興味深いなと思って調べはじめた。<br />
+調べてみると、Rustのmoveやborrowのようにリソースが使われている状態、もう使えなくなった状態をうまく扱うために設計されたものということが理解できた。<br />
+また、 <a href="http://syocy.hatenablog.com/entry/try-linear-types">こちら</a> に言及されている通り、HaskellからWebAssemblyへのコンパイラを開発しているところでもあるので、WASMでGCどうするのか問題を解決する案としても意義があるのかなと思う。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://github.com/ghc-proposals/ghc-proposals/blob/master/proposals/0111-linear-types.rst#motivation">ghc-proposals/0111-linear-types.rst</a></li>
+<li><a href="https://arxiv.org/abs/1710.09756">Linear Haskell: practical linearity in a higher-order polymorphic language</a></li>
+<li><a href="https://gitlab.haskell.org/ghc/ghc/-/wikis/linear-types">linear types · Wiki · Glasgow Haskell Compiler / GHC</a></li>
+<li><a href="http://syocy.hatenablog.com/entry/try-linear-types">GHCの線形型プロトタイプを試すだけ - syocy’s diary</a></li>
+<li><a href="https://github.com/lotz84/haskell/blob/master/docs/linear-type.md">haskell/linear-type.md at master · lotz84/haskell</a></li>
+</ul>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2021-02-13-linear-haskell.html" class="hatena-bookmark-button" data-hatena-bookmark-title="HaskellのLinearTypes言語拡張について少し調べた - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>
