@@ -3,13 +3,14 @@ title: HaskellのLinearTypes言語拡張について少し調べた
 tags: Linear Haskell, Haskell, LinearTypes
 ---
 
-最近リリースされた [GHC 9.0.1](https://www.haskell.org/ghc/blog/20210204-ghc-9.0.1-released.html) から使えるようになった `LinearTypes` 言語拡張について気になったので調べた。
+最近リリースされた [GHC 9.0.1](https://www.haskell.org/ghc/blog/20210204-ghc-9.0.1-released.html) で使えるようになった `LinearTypes` 言語拡張について気になったので調べた。
 
 <!--more-->
 
 ## LinearTypes言語拡張とは
 
-GHC9.0.1から使えるようになった言語拡張で、Linear Typeを導入できる。ただ、上記リリースノートに `a first cut` とある通り、まだ実験的な機能としてリリースされた段階のようだ。通常のGHCの言語拡張のように
+GHC9.0.1から使えるようになった言語拡張で、Linear Typeを導入できる。ただ、上記リリースノートに "a first cut" とある通り、まだ実験的な機能としてリリースされた段階のようだ。   
+通常のGHCの言語拡張のように
 
 ```haskell
 {-# LANGUAGE LinearTypes #-}
@@ -19,7 +20,8 @@ GHC9.0.1から使えるようになった言語拡張で、Linear Typeを導入�
 
 ## Linear Typeとは
 
-そもそもLinearTypesで使えるようになるLinear Typeとはどのような概念なのか、簡単に説明すると、「関数のある引数がちょうど1度だけ評価される、という条件を指定できるもの」のようだ。  
+そもそもLinear Typeとはどのような概念なのか、簡単に説明すると、「関数の引数がちょうど1度だけ評価される」、という条件を指定できるもののようだ。  
+理論的な基礎となるLinear type systemsについては前から広く知られていたものの、なかなか実装までは至らず、今回Haskellで晴れて実装までこぎつけたとのことだった。  
 具体例を挙げる。
 
 ```haskell
@@ -28,8 +30,8 @@ GHC9.0.1から使えるようになった言語拡張で、Linear Typeを導入�
 module Main where
 
 -- a %1 -> b でaがLinear Typeであることを指定できる
-tuple :: Int %1 -> Int %1 -> (Int, Int)
-tuple a b = (a, b)
+tuple1 :: Int %1 -> Int %1 -> (Int, Int)
+tuple1 a b = (a, b)
 
 tuple2 :: Int %1 -> Int %1 -> (Int, Int)
 tuple2 a b = (a, a) 
@@ -57,19 +59,20 @@ Main.hs:10:10: error:
    |          ^
 ```
 
-tupleはコンパイル可能だが、tuple2は2箇所でエラーとなる。
+tuple1はコンパイル可能だが、tuple2は2箇所でエラーとなる。
 エラー内容はそれぞれ
 
 - a はLinear Typeなのに2回評価されているのでエラー
 - b はLinear Typeなのに1回も評価されていないのでエラー
 
-となる。このように「ただ1度だけ評価される」という制約を導入できるのがLinear Typeである。Linear type systemsというのは前から理論的には知られていたものの、なかなか実装までは至らず、今回Haskellで晴れて実装までこぎつけたようだ。  
-proposalは [こちら](https://github.com/ghc-proposals/ghc-proposals/blob/master/proposals/0111-linear-types.rst) にある。  
+となる。「ただ1度だけ評価される」という制約を導入できる、という意味がなんとなくつかめただろうか。  
+  
+LinearTypes言語拡張のproposalは [こちら](https://github.com/ghc-proposals/ghc-proposals/blob/master/proposals/0111-linear-types.rst) にある。  
 また、論文も [こちら](https://arxiv.org/abs/1710.09756) で公開されていたため、かいつまんで読んでみた。
 
 ## Linear Typeが何の役に立つのか
 
-論文によると、下記2点にフォーカスして実装をすすめたそうだ。
+論文によると、GHCにLinear Typeを導入するにあたって、下記2点にフォーカスして仕様策定すすめたそうだ。
 
 - 値の変更の安全性
 - 外部リソース(ファイルやネットワークなど)にアクセスする際の安全性
@@ -142,12 +145,12 @@ closeFile :: FileHandler %1 -> IO_L ()
 
 ## 後方互換性
 
-論文によると、Linear Typeの設計として、Linear Typeについての型注釈がない場合はmultiplicity(linearかどうか)をmany(linearじゃない状態)にする、という設計にしたそうだ。これにより言語拡張を使ってもLinear Typeを明示的に指定しないところは通常のHaskellとして書ける。後方互換性を大事にしている旨が何度か言及されていた。
+論文によると、Linear Typeの設計として、multiplicity(linearかどうか)の型注釈がない場合はmultiplicityをmany(linearじゃない状態)にする、という設計にしたそうだ。これにより言語拡張を使ってもLinear Typeを明示的に指定しないところは通常のHaskellとして書ける。このように後方互換性を大事にしている旨が何度か言及されていた。
 
 ## Rustとの比較
 
 Linear Typeの挙動や目的について、Rustのmoveやborrowに似てるな、と思ったが、Rustのborrowについても論文内で言及があった。  
-borrowシステムはその性質上、あるvが関数fによってborrowされていたら、fが処理を終えるまでvを保持しないといけない。そのため、tail-call eliminationができない。関数型言語ではtail-call eliminationは必須のため導入できない、という言及だった。  
+論文によると、borrowシステムはその性質上、あるvが関数fによってborrowされていたら、fが処理を終えるまでvを保持しないといけない。そのため、tail-call eliminationができない。関数型言語ではtail-call eliminationは必須のため導入できないそうだ。  
 tail-call elimination(いわゆる末尾再帰最適化)ができないという制約があるとは知らなかったため、あとで調べてみようかと思う。
 
 ## パフォーマンス
