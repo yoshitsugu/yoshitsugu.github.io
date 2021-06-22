@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>圏論の勉強をはじめた - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="圏論の勉強をはじめた - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2021-06-22-start-learning-category-theory.html" />
+        <meta property="og:description" content="圏論の勉強をはじめたので、現状を記録しておく。
+" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="圏論の勉強をはじめた - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="圏論の勉強をはじめたので、現状を記録しておく。
+" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>圏論の勉強をはじめた</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on June 22, 2021</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/%E5%9C%8F%E8%AB%96.html">圏論</a></span>
+    
+</div>
+
+<p>圏論の勉強をはじめたので、現状を記録しておく。</p>
+<!--more-->
+<h2 id="なぜはじめたのか">なぜはじめたのか</h2>
+<p>個人的にHaskellを時々触っているため、前々から圏論を勉強してみたい、とは思っていたが、今回、ふと一念発起してはじめた。</p>
+<h2 id="どう勉強しているか">どう勉強しているか</h2>
+<p><a href="https://bitterharvest.hatenablog.com/entry/2016/11/24/203021">プログラマのための圏論</a> という素晴らしい導入記事があるので、まずはこちらを見ながら雰囲気を掴んでいった。<br />
+その後、一度有名な参考書のいずれかを見てみようと思い、参考書を探した。</p>
+<ul>
+<li><a href="https://www.amazon.co.jp/dp/4621063243">圏論の基礎</a></li>
+<li><a href="https://www.amazon.co.jp/dp/4621300709/">ベーシック圏論 普遍性からの速習コース</a></li>
+</ul>
+<p>などいくつか候補があったが、 <a href="https://www.amazon.co.jp/dp/0199237182">Category Theory / Steve Awodey</a> の評判がよさそうだったので、こちらにした。尚、和訳版はあまり評判がよくなさそうだったので、原著を読むことにした。</p>
+<p>読んでいる間はできるだけ細かく書き出しながら精読することを心掛けた<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>。<br />
+また、 <a href="https://www.orecoli.com/entry/2016/02/27/221008">Steve Awodey の Category Theory を読む</a> という証明の補足をしている有り難いブログがあるので、大いに参考にさせてもらった。<br />
+わからないことが多い中、悪戦苦闘するのに<a href="https://www.amazon.co.jp/dp/B08DR7YL5J/">独学大全</a>が参考になった。</p>
+<p>去年末くらいからを少しずつ読みはじめ、半年かかったが一旦最後まで目を通したので、ここまでで一旦記録をしておこうと思い、この記事を書いている。</p>
+<h2 id="現状の理解度">現状の理解度</h2>
+<p>現状の主観的な理解度だが、もしこれが大学の講義であれば、まだ単位は取れないであろう、というのが率直な感想だ。 上記の「Steve Awodey の Category Theory を読む」 のブログ記事にもあるが、素養がないとやはり難しいところが多かった。 とはいえ、上記の記事で補足されていることや、そもそも書籍の内容も、良書とされるだけあって、素人でも部分的には理解できるところもあった。</p>
+<h2 id="今後について">今後について</h2>
+<p>数学については素養が足りないと感じることが多いので、 <a href="https://www.orecoli.com/entry/2016/01/19/131207">圏論に最短で入門する</a> で紹介されている集合論からマイペースにすすめていこうと思う。 また、元々の興味となった、Haskellとのつながりについては、<a href="ttps://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/">Category Theory for Programmers</a> という有名な記事があるので、こちらも読んでいきたいと思っている。</p>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>ちなみにノートは<a href="https://remarkable.com/store/remarkable-2">reMarkable2</a>を使っている<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2021-06-22-start-learning-category-theory.html" class="hatena-bookmark-button" data-hatena-bookmark-title="圏論の勉強をはじめた - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>
