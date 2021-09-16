@@ -94,9 +94,9 @@ end
 Haskell の TMVar では Maybe 型を使っているが、Ruby では使えない。そこで `:RACTOR_TMVAR_BLANK` というシンボルを用意して、それを `Nothing` 相当として動くようにした。 `nil` を `Nothing` 代わりにすることも考えたが、Ruby では `nil` を値として取得したいパターンもあるかもしれないという仮定の下、特別なシンボルを用意した。  
 こちらの実装を gem 化したものが [ractor-tmvar](https://rubygems.org/gems/ractor-tmvar) となる。
 
-## 「食事する賢者の問題」を Ractor::TMVar で解く
+## 「食事する哲学者の問題」を Ractor::TMVar で解く
 
-Ractor::TVar で解いた「食事する賢者の問題」を上記で実装した Ractor::TMVar で解くことにする。
+Ractor::TVar で解いた「食事する哲学者の問題」を上記で実装した Ractor::TMVar で解くことにする。
 
 ```ruby
 # frozen_string_literal: true
@@ -165,4 +165,4 @@ Ractor::TVar で解くため、ループでのロック取得や、raise Ractor:
 
 Haskell の TMVar を参考にした、Ractor::TMVar を作った。  
 ソースコードは [yoshitsugu/ractor-tmvar](https://github.com/yoshitsugu/ractor-tmvar) にある。  
-また、[「食事する賢者の問題」を解いたリポジトリ](https://github.com/yoshitsugu/dining_philosophers_problem_ractor)も更新した。
+また、[「食事する哲学者の問題」を解いたリポジトリ](https://github.com/yoshitsugu/dining_philosophers_problem_ractor)も更新した。
