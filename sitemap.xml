@@ -4,518 +4,525 @@
     <url>
         <loc>https://yoshitsugu.net/about.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://yoshitsugu.net/posts/2021-11-23-review-ruby-cherry-book-2nd-edition.html</loc>
+        <changefreq>weekly</changefreq>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2021-07-02-start-fjord-bootcamp-mentor.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2021-06-22-start-learning-category-theory.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2021-04-20-effective-retrospective.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2021-02-13-linear-haskell.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2020-12-29-dark-theme.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2020-12-22-stm-paper.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2020-11-30-ractor-tmvar.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2020-11-24-deployment-travis-to-github-actions.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2020-11-21-ractor-dining-philosophers-problem.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2020-11-20-recently-work.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-12-07-emgergency-button.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-11-23-zero-trust-network.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-11-12-dx-book.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-08-23-haribote-os-in-rust-day30.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-08-20-haribote-os-in-rust-day29.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-08-17-haribote-os-in-rust-day28.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-08-13-haribote-os-in-rust-day27.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-08-10-haribote-os-in-rust-day26.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-08-07-haribote-os-in-rust-day25.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-08-05-haribote-os-in-rust-day24.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-08-03-haribote-os-in-rust-day23.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-08-01-haribote-os-in-rust-day22.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-07-27-haribote-os-in-rust-day21.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-07-16-haribote-os-in-rust-day20.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-07-14-haribote-os-in-rust-day19.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-07-13-haribote-os-in-rust-day18.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-07-10-haribote-os-in-rust-day17.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-07-07-haribote-os-in-rust-day16.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-07-04-haribote-os-in-rust-day15.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-07-01-haribote-os-in-rust-day14.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-06-29-haribote-os-in-rust-day13.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-06-28-haribote-os-in-rust-day12.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-06-26-haribote-os-in-rust-day11.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-06-24-haribote-os-in-rust-day10.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-06-20-haribote-os-in-rust-day9.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-06-19-haribote-os-in-rust-day8.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-06-18-haribote-os-in-rust-day7.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-06-13-haribote-os-in-rust-day6.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-06-06-haribote-os-in-rust-day5.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-06-05-haribote-os-in-rust-day4.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2019-06-04-haribote-os-in-rust-day3.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2018-12-24-engineering-similarity.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2018-12-21-lean-devops-and-dx.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2018-10-31-chaos-engineering-memo.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2018-06-15-rust-yew.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2018-03-22-jailing-in-rust.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2018-03-15-programming-rust.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2018-02-01-deploy-with-docker.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2018-01-29-change-others-or-change-yourself.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2017-12-12-service-design.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2017-11-14-beginning-machine-learning-with-rust.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2017-11-06-what-i-want-to-do.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2017-09-14-how-to-tell.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2017-08-24-always-forget-idioms-on-rails.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2017-08-08-principles-of-the-system-architecture.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2017-07-23-doing-nothing-is-evil.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2017-06-13-perfect-ruby.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2017-05-10-move-to-iwate.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2017-04-05-daemonize-gskkserv.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2017-02-24-productivity.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2017-02-10-slack-slash-pomo.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2017-01-24-books-read-recently.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2016-12-17-work-remotely-updates.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2016-11-01-google-ime-skkserv-in-rust.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2016-08-21-joel-on-hiring.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2016-06-25-work-remotely.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2016-04-08-how-to-work-effectively.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2016-03-27-servant-hrr-elm-spa.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2016-03-15-state-monad.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2016-03-11-code-review-and-communication.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2016-03-07-ldap-from-ruby.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://yoshitsugu.net/posts/2016-03-05-greeting.html</loc>
         <changefreq>weekly</changefreq>
-        <lastmod>2021-09-16</lastmod>
+        <lastmod>2021-11-23</lastmod>
         <priority>0.8</priority>
     </url>
 
