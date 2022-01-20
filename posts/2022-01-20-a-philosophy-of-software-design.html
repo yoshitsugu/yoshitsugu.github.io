@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>「A Philosophy of Software Design」を読んだ - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="「A Philosophy of Software Design」を読んだ - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2022-01-20-a-philosophy-of-software-design.html" />
+        <meta property="og:description" content="A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout を読んだので感想を書く。
+" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="「A Philosophy of Software Design」を読んだ - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout を読んだので感想を書く。
+" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>「A Philosophy of Software Design」を読んだ</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on January 20, 2022</span>
+    
+    
+    <span class="tags">, Tags: <a href="../tags/Software%20Design.html">Software Design</a>, <a href="../tags/Book%20Review.html">Book Review</a></span>
+    
+</div>
+
+<p><a href="https://www.amazon.co.jp/dp/B09B8LFKQL/">A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout</a> を読んだので感想を書く。</p>
+<!--more-->
+<h2 id="きっかけ">きっかけ</h2>
+<p><a href="https://e34.fm/">e34.fm</a>で紹介されており、Software Designというキーワードに興味が湧き、何か得るものがあるかもしれないと思い読んだ。</p>
+<h2 id="感想">感想</h2>
+<p>英語の書籍ではあるものの、平易な文章がほとんどだった。主題としては「ソフトウェアの複雑さ(complexity)に立ち向かっていくためのSoftware Designとは」というものだった。<br />
+e34.fmでも言及されていたDeep Module, Shallow Moduleの話をはじめ、コード中のコメントに対する考え方など、新しい発見や改めて考えさせられるものも多く、面白かった。</p>
+<h3 id="complexityとは">complexityとは？</h3>
+<p>システムのcomplexity <span class="math inline"><em>C</em></span> を以下のように定義しているところが興味深い。</p>
+<p>\[ C = _{p} c_p t_p \]</p>
+<p>ここで <span class="math inline"><em>p</em></span> はシステムのある部分、 <span class="math inline"><em>c</em><sub><em>p</em></sub></span> がその部分のcomplexity、 <span class="math inline"><em>t</em><sub><em>p</em></sub></span> が開発者がその部分に費している時間の割合だ。 つまり、読んだり改修したりするのに時間がかかる部分ほど複雑、ということのようだ。 単純に時間でいいのか？という疑問も湧いたが、代案と呼べるほどのものは思いつかなかった。</p>
+<h3 id="complexityの原因とは">complexityの原因とは？</h3>
+<p>以上のようにcomplexityを定義したあと、 “dependencies”(依存関係) と “obscurity”(不明瞭さ) の2点がcomplexityの原因となると述べられていた。</p>
+<h3 id="対策とは">対策とは？</h3>
+<p>これらの原因に対応するため、いくつかのdesignのポイントや心得などが述べられていく。<br />
+個人的に興味深かったものをいくつかピックアップしていく。<br />
+まず大事なのはtacticalではなくstrategicにプログラミングを行うことだと述べられており、抽象的な構造を考えてデザインしていくことの大切さが説かれていた。もちろん目の前のタスクをこなすのに、場当たり的なコードを書いたほうがその場の改修コストは小さくすむこともある。しかし、全体の10-20%時間をstrategicなdesignにするための投資時間に充てるほうがいいのではないか、という提案がされていた。これについては科学的な根拠はないとのことだったが、数ヶ月後にはそのメリットを享受できるだろう、とされていた。このあたりはt_wadaさんの「質とスピード」の話<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>でも似たような話がでてきたかと思う。<br />
+また、コードがstrategicになるように2回設計(Design It Twice)するように薦められている。凡人である自分も、一度手を動かしてみてやっと見えてくる部分があるため、2回設計と聞くと手間はかかりそうだが、長期的な視点に立ってやってみてもよいかもしれないと思えた。</p>
+<h3 id="deep-module-shallow-module">Deep Module, Shallow Module</h3>
+<p>Deep Module, Shallow Moduleの話の説明はいろいろなところで言及されているので、他のブログ<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>に譲るとして、作者が <em>classitis</em> と揶揄している症状が面白かったのでそこに言及しておく。<em>-itis</em> というsuffixは「炎症」という意味があり、adenitis(リンパ節炎)、tonsillitis(扁桃炎)などで使われる。 <em>classitis</em> は和訳すると“クラス病”、“クラス炎”などになるだろうか。shallowなクラスが大量にできてしまう状態を作者はこう言っている。自分は普段Ruby on Railsアプリケーションを書くことが多いので、Rubocopなどのlinterにクラスの行数が多すぎることの警告を受けることがある。もちろん分割することにもある程度利点はあると思うが(もちろん、利点がなければlinterに入らないだろう。)、一方で意味のない分割になりがちだな、と思うことも多々ある。classitisとはそのようにクラスが長くなるから、という理由だけで意味のない分割をする衝動に駆られて続々とクラスを作ってしまうという状態なのだろう。</p>
+<h3 id="information-leakage">Information Leakage</h3>
+<p>Deep Moduleを作る上で注意することとして、Information Leakageを避けよ、という話もあった。Information Leakageとは複数の場所に同じ情報が書かれていることを指す。<br />
+ざっくり言うと「高凝集・疎結合」の反対、と言い換えることもできるだろう。また、DDDにおける「ドメインモデル貧血症」もこのInformation Leakageと似た話だと認識している。<br />
+また、よく使われる「decoratorパターン」についても著者は導入前によく検討すべきだと書いていた。Ruby on Railsアプリケーションを書いているとview用のロジックをmodelに書くのではなく、decoratorなどにまとめるべき、という話がよくあるが、その切り分けは自明ではないことも多い。そのため、あとからview以外の他の箇所でも使いたくなることがある。自分も最近はむやみに切り分けず、ある程度fat modelを許容してmodelにまとめるほうが結局いいのではないか、と思っている。もちろんこの辺りはアプリケーションの規模やコンテキストに依るところも大きいだろう。</p>
+<h3 id="コメントについて">コメントについて</h3>
+<p>コード中のコメントは忌避されることも多い。「コードを読めばいいからコメントは不要」という話を聞くこともある(し、自分も言ったことがあると思う)。この本ではコメントは基本的に書くべきもの、と位置づけていて、「コードを読めばいいからコメントは不要」などの言説についても反論を書いていて興味深かった。 もちろん無闇にコメントを書けばいいわけではなく、コードと重複するようなコメントはやはり不要で、もっと抽象的な部分、例えばその実装に至った意図や背景の説明に使うように書いてある。</p>
+<h2 id="まとめ">まとめ</h2>
+<p>DRY原則への配慮やlinterからの指摘により「コードの見た目を整える」意味での形だけのコード整理をしてしまっている、というのをときどき見かける。とりあえず目の前のタスクを倒すコードを書き出す前に一回立ち止まって、strategicなdesignのコードになっているか？deepなクラス、モジュールを作れているか？を自問してみてるといいかもしれない。全体像の把握が難しければ、ある程度書いたあとに、Design It Twiceの精神でstrategicに最初からコードを書き直すとどうなるか？を考えてみてもいいかもしれない。</p>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="https://speakerdeck.com/twada/quality-and-speed-2020-autumn-edition">質とスピード（2020秋100分拡大版）</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p><a href="https://ky-yk-d.hatenablog.com/entry/2022/01/04/100000">ソフトウェアの複雑さに立ち向かう1つの哲学 :『A Philosophy of Software Design』 を読んだ - こまぶろ</a> 等<a href="#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2022-01-20-a-philosophy-of-software-design.html" class="hatena-bookmark-button" data-hatena-bookmark-title="「A Philosophy of Software Design」を読んだ - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="_yoshitsugu">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+      <script type="text/javascript" src="../js/ga.js"></script>
+    </body>
+</html>
