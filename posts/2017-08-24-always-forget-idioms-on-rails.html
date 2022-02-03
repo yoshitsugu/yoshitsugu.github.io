@@ -45,7 +45,7 @@
     <span class="date">Posted on August 24, 2017</span>
     
     
-    <span class="tags">, Tags: <a href="../tags/Ruby%20on%20Rails.html">Ruby on Rails</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Ruby on Rails'." href="../tags/Ruby%20on%20Rails.html">Ruby on Rails</a></span>
     
 </div>
 
@@ -54,62 +54,62 @@
 <h3 id="idiom">Idiom</h3>
 <p><code>ApplicationController.helpers.(helper name)</code></p>
 <h3 id="example">Example</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">class</span> <span class="dt">Post</span> &lt; <span class="dt">ApplicationRecord</span></a>
-<a class="sourceLine" id="cb1-2" title="2">  <span class="kw">def</span> title_asterisk</a>
-<a class="sourceLine" id="cb1-3" title="3">    <span class="dt">ApplicationController</span>.helpers.with_asterisk(title)</a>
-<a class="sourceLine" id="cb1-4" title="4">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw">end</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Post</span> <span class="kw">&lt;</span> <span class="dt">ApplicationRecord</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> title_asterisk</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">ApplicationController</span><span class="at">.helpers.with_asterisk</span>(title)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <h2 id="calling-routing-helper-methods-in-model-methods">2. Calling routing helper methods in Model methods</h2>
 <h3 id="idiom-1">Idiom</h3>
 <p><code>Rails.application.routes.url_helpers.(routing helper name)</code></p>
 <h3 id="example-1">Example</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">class</span> <span class="dt">Post</span> &lt; <span class="dt">ApplicationRecord</span></a>
-<a class="sourceLine" id="cb2-2" title="2">  <span class="kw">def</span> new_or_edit_path</a>
-<a class="sourceLine" id="cb2-3" title="3">    <span class="kw">if</span> persisted?</a>
-<a class="sourceLine" id="cb2-4" title="4">      <span class="dt">Rails</span>.application.routes.url_helpers.new_post_path</a>
-<a class="sourceLine" id="cb2-5" title="5">    <span class="kw">else</span></a>
-<a class="sourceLine" id="cb2-6" title="6">      <span class="dt">Rails</span>.application.routes.url_helpers.post_path(<span class="dv">self</span>)</a>
-<a class="sourceLine" id="cb2-7" title="7">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb2-8" title="8">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="kw">end</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Post</span> <span class="kw">&lt;</span> <span class="dt">ApplicationRecord</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> new_or_edit_path</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> persisted?</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">Rails</span><span class="at">.application.routes.url_helpers.new_post_path</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">Rails</span><span class="at">.application.routes.url_helpers.post_path</span>(<span class="dv">self</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <h2 id="updating-models-attributes-without-saving-it-to-database">3. Updating Model’s attributes without saving it to Database</h2>
 <h3 id="idiom-2">Idiom</h3>
 <p><code>model.assign_attributes(attributes)</code></p>
 <h3 id="example-2">Example</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">class</span> <span class="dt">PostController</span> &lt; <span class="dt">ApplicationController</span></a>
-<a class="sourceLine" id="cb3-2" title="2">  <span class="kw">def</span> update</a>
-<a class="sourceLine" id="cb3-3" title="3">    post = <span class="dt">Post</span>.find(params[<span class="st">:id</span>])</a>
-<a class="sourceLine" id="cb3-4" title="4">    post.assign_attributes(post_params)</a>
-<a class="sourceLine" id="cb3-5" title="5">    post.save! <span class="kw">if</span> post.valid?</a>
-<a class="sourceLine" id="cb3-6" title="6">    redirect_to posts_path</a>
-<a class="sourceLine" id="cb3-7" title="7">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="kw">end</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">PostController</span> <span class="kw">&lt;</span> <span class="dt">ApplicationController</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> update</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    post <span class="kw">=</span> <span class="dt">Post</span><span class="at">.find</span>(params<span class="kw">[</span><span class="wa">:id</span><span class="kw">]</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    post<span class="at">.assign_attributes</span>(post_params)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    post<span class="at">.save!</span> <span class="cf">if</span> post<span class="at">.valid?</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    redirect_to posts_path</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <h2 id="turning-off-updating-updated_at-when-saving-models">4. Turning off updating <code>updated_at</code> when saving Models</h2>
 <h3 id="idiom-3">Idiom</h3>
 <p><code>ActiveRecord::Base.record_timestamps = false</code></p>
 <h3 id="example-3">Example</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">class</span> <span class="dt">PostImageUpdater</span></a>
-<a class="sourceLine" id="cb4-2" title="2">  <span class="kw">def</span> execute</a>
-<a class="sourceLine" id="cb4-3" title="3">    <span class="dt">ActiveRecord</span>::<span class="dt">Base</span>.record_timestamps = <span class="dv">false</span></a>
-<a class="sourceLine" id="cb4-4" title="4">    <span class="dt">Post</span>.all.find_each <span class="kw">do</span> |post|</a>
-<a class="sourceLine" id="cb4-5" title="5">      post.image = get_updated_image(post)</a>
-<a class="sourceLine" id="cb4-6" title="6">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-7" title="7">    <span class="dt">ActiveRecord</span>::<span class="dt">Base</span>.record_timestamps = <span class="dv">true</span></a>
-<a class="sourceLine" id="cb4-8" title="8">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-9" title="9"><span class="kw">end</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">PostImageUpdater</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> execute</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">ActiveRecord</span><span class="kw">::</span><span class="dt">Base</span><span class="at">.record_timestamps</span> <span class="kw">=</span> <span class="dv">false</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Post</span><span class="at">.all.find_each</span> <span class="cf">do</span> <span class="kw">|</span>post<span class="kw">|</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      post<span class="at">.image</span> <span class="kw">=</span> get_updated_image(post)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">ActiveRecord</span><span class="kw">::</span><span class="dt">Base</span><span class="at">.record_timestamps</span> <span class="kw">=</span> <span class="dv">true</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <h2 id="basic-auth">5. Basic Auth</h2>
 <h3 id="idiom-4">Idiom</h3>
 <p><code>authenticate_or_request_with_http_basic(realm = "Application", &amp;login_procedure)</code></p>
 <h3 id="example-4">Example</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">class</span> <span class="dt">WithBasicAuthController</span> &lt; <span class="dt">ApplicationController</span></a>
-<a class="sourceLine" id="cb5-2" title="2">  before_action <span class="st">:basic_auth</span></a>
-<a class="sourceLine" id="cb5-3" title="3"></a>
-<a class="sourceLine" id="cb5-4" title="4">  <span class="kw">def</span> basic_auth</a>
-<a class="sourceLine" id="cb5-5" title="5">    authenticate_or_request_with_http_basic(<span class="st">&quot;Application&quot;</span>) <span class="kw">do</span> |name, password|</a>
-<a class="sourceLine" id="cb5-6" title="6">      name == <span class="dt">ENV</span>[<span class="st">'BASIC_AUTH_NAME'</span>] &amp;&amp; password == <span class="dt">ENV</span>[<span class="st">'BASIC_AUTH_PASSWORD'</span>]</a>
-<a class="sourceLine" id="cb5-7" title="7">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb5-8" title="8">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb5-9" title="9"><span class="kw">end</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">WithBasicAuthController</span> <span class="kw">&lt;</span> <span class="dt">ApplicationController</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  before_action <span class="wa">:basic_auth</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> basic_auth</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    authenticate_or_request_with_http_basic(<span class="st">&quot;Application&quot;</span>) <span class="cf">do</span> <span class="kw">|</span>name, password<span class="kw">|</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      name <span class="kw">==</span> <span class="cn">ENV</span><span class="kw">[</span><span class="vs">'BASIC_AUTH_NAME'</span><span class="kw">]</span> <span class="kw">&amp;&amp;</span> password <span class="kw">==</span> <span class="cn">ENV</span><span class="kw">[</span><span class="vs">'BASIC_AUTH_PASSWORD'</span><span class="kw">]</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <h2 id="and-more">And More…</h2>
 <p>Maybe there are more idioms I always googling them. If anyone who have a good idea to remember them, please tell me :)</p>
 

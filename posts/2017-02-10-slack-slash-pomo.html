@@ -49,7 +49,7 @@ https://github.com/yoshitsugu/slash-pomo
     <span class="date">Posted on February 10, 2017</span>
     
     
-    <span class="tags">, Tags: <a href="../tags/Slack.html">Slack</a>, <a href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Slack'." href="../tags/Slack.html">Slack</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
     
 </div>
 
@@ -71,17 +71,17 @@ RustからRedisを呼び出すのには<a href="https://github.com/mitsuhiko/red
 <h2 id="実行環境">実行環境</h2>
 <h3 id="ibm-bluemix"><a href="https://www.ibm.com/cloud-computing/jp/ja/bluemix/">IBM Bluemix</a></h3>
 <p>Webサーバを動かす環境としてはIBMのBluemixを使った。<br />
-HerokuではないのはSlashコマンドの仕様として3秒以内にレスポンスしないとタイムアウトしてしまう<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>ため、しばらくするとsleepしてしまうHerokuだと厳しかったから。<br />
+HerokuではないのはSlashコマンドの仕様として3秒以内にレスポンスしないとタイムアウトしてしまう<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>ため、しばらくするとsleepしてしまうHerokuだと厳しかったから。<br />
 Redisは<a href="https://console.ng.bluemix.net/catalog/services/redis-cloud">Redis Cloud</a>を使った。30MBのプランなら無料なので便利だ。<br />
 <a href="https://github.com/cloudfoundry-community/cf-docs-contrib/wiki/Buildpacks">公式wiki？</a>には<a href="https://github.com/emk/heroku-buildpack-rust">heroku-buildpack-rust</a>がそのまま使えると書いてあったが使えなかった。<a href="https://github.com/yoshitsugu/heroku-buildpack-rust">仕方なくforkしてちょっと修正した。</a></p>
 <h2 id="感想">感想</h2>
 <p>とりあえず動くものができたので追ってリファクタリングや自動テストなどやりたい。<br />
 多分慣れている人が見たらまだまだツッコミどころ満載のコードだと思うが個人的には大分Rustの感覚が養われてきたように思う。この段階で再度基礎の勉強をしてもいいかもしれないと思っている。<br />
 また、こういうオモチャみたいなものでも、動くものを作るのはやはり楽しい。</p>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p><a href="https://api.slack.com/slash-commands">https://api.slack.com/slash-commands</a> には一応3秒以内に返せない場合の解決策もあるがシンプルにやりたかった。<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p><a href="https://api.slack.com/slash-commands">https://api.slack.com/slash-commands</a> には一応3秒以内に返せない場合の解決策もあるがシンプルにやりたかった。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

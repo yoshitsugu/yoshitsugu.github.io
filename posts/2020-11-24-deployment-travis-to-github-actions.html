@@ -47,7 +47,7 @@
     <span class="date">Posted on November 24, 2020</span>
     
     
-    <span class="tags">, Tags: <a href="../tags/GitHub%20Actions.html">GitHub Actions</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'GitHub Actions'." href="../tags/GitHub%20Actions.html">GitHub Actions</a></span>
     
 </div>
 
@@ -58,82 +58,82 @@
 これは単純に GitHub Actions が存在する前からこのブログがあったため、当時のやりやすさで選択した。デプロイについては以前、 <a href="../posts/2016-03-05-greeting.html">こちら</a> や <a href="../posts/2018-02-01-deploy-with-docker.html">こちら</a> で記事を書いた。</p>
 <h2 id="github-actions-への移行">GitHub Actions への移行</h2>
 <p><a href="https://matsubara0507.github.io/posts/2019-12-02-haskell-with-gh-actions.html">Haskell で GitHub Actions する</a> の記事を参考に、ビルドキャッシュされるようにして、GitHub Actions を記述した</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb1-1" title="1"><span class="fu">name:</span><span class="at"> Publish</span></a>
-<a class="sourceLine" id="cb1-2" title="2"></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="fu">on:</span></a>
-<a class="sourceLine" id="cb1-4" title="4">  <span class="fu">push:</span></a>
-<a class="sourceLine" id="cb1-5" title="5">    <span class="fu">branches:</span><span class="at"> </span><span class="kw">[</span>main<span class="kw">]</span></a>
-<a class="sourceLine" id="cb1-6" title="6"></a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="fu">jobs:</span></a>
-<a class="sourceLine" id="cb1-8" title="8">  <span class="fu">publish:</span></a>
-<a class="sourceLine" id="cb1-9" title="9">    <span class="fu">runs-on:</span><span class="at"> ubuntu-20.04</span></a>
-<a class="sourceLine" id="cb1-10" title="10">    <span class="fu">steps:</span></a>
-<a class="sourceLine" id="cb1-11" title="11">      <span class="kw">-</span> <span class="fu">uses:</span><span class="at"> actions/checkout@v2</span></a>
-<a class="sourceLine" id="cb1-12" title="12">      <span class="kw">-</span> <span class="fu">name:</span><span class="at"> Cache .stack</span></a>
-<a class="sourceLine" id="cb1-13" title="13">        <span class="fu">id:</span><span class="at"> cache-stack</span></a>
-<a class="sourceLine" id="cb1-14" title="14">        <span class="fu">uses:</span><span class="at"> actions/cache@v1</span></a>
-<a class="sourceLine" id="cb1-15" title="15">        <span class="fu">with:</span></a>
-<a class="sourceLine" id="cb1-16" title="16">          <span class="fu">path:</span><span class="at"> ~/.stack</span></a>
-<a class="sourceLine" id="cb1-17" title="17">          <span class="fu">key:</span><span class="at"> v1-stack-${{ hashFiles('**/stack.yaml.lock') }}</span></a>
-<a class="sourceLine" id="cb1-18" title="18"><span class="fu">          restore-keys:</span> <span class="st">|</span></a>
-<a class="sourceLine" id="cb1-19" title="19">            v1-stack-</a>
-<a class="sourceLine" id="cb1-20" title="20">      <span class="kw">-</span> <span class="fu">name:</span><span class="at"> Cache .stack/pantry</span></a>
-<a class="sourceLine" id="cb1-21" title="21">        <span class="fu">id:</span><span class="at"> cache-pantry</span></a>
-<a class="sourceLine" id="cb1-22" title="22">        <span class="fu">uses:</span><span class="at"> actions/cache@v1</span></a>
-<a class="sourceLine" id="cb1-23" title="23">        <span class="fu">with:</span></a>
-<a class="sourceLine" id="cb1-24" title="24">          <span class="fu">path:</span><span class="at"> ~/.stack-temp/pantry</span></a>
-<a class="sourceLine" id="cb1-25" title="25">          <span class="fu">key:</span><span class="at"> v1-pantry-${{ hashFiles('**/stack.yaml.lock') }}</span></a>
-<a class="sourceLine" id="cb1-26" title="26"><span class="fu">          restore-keys:</span> <span class="st">|</span></a>
-<a class="sourceLine" id="cb1-27" title="27">            v1-pantry-</a>
-<a class="sourceLine" id="cb1-28" title="28">      <span class="kw">-</span> <span class="fu">name:</span><span class="at"> Move .stack/pantry to temp</span></a>
-<a class="sourceLine" id="cb1-29" title="29">        <span class="fu">uses:</span><span class="at"> matsubara0507/actions/move-files@master</span></a>
-<a class="sourceLine" id="cb1-30" title="30">        <span class="fu">with:</span></a>
-<a class="sourceLine" id="cb1-31" title="31">          <span class="fu">source_dir:</span><span class="at"> ~/.stack-temp/pantry</span></a>
-<a class="sourceLine" id="cb1-32" title="32"><span class="fu">          source_files:</span> <span class="st">|</span></a>
-<a class="sourceLine" id="cb1-33" title="33">            pantry</a>
-<a class="sourceLine" id="cb1-34" title="34">          <span class="fu">target_dir:</span><span class="at"> ~/.stack</span></a>
-<a class="sourceLine" id="cb1-35" title="35">      <span class="kw">-</span> <span class="fu">uses:</span><span class="at"> actions/setup-haskell@v1.1.4</span></a>
-<a class="sourceLine" id="cb1-36" title="36">        <span class="fu">id:</span><span class="at"> setup-haskell-cabal</span></a>
-<a class="sourceLine" id="cb1-37" title="37">        <span class="fu">name:</span><span class="at"> Setup Haskell</span></a>
-<a class="sourceLine" id="cb1-38" title="38">        <span class="fu">with:</span></a>
-<a class="sourceLine" id="cb1-39" title="39">          <span class="fu">ghc-version:</span><span class="at"> </span><span class="fl">8.6.5</span></a>
-<a class="sourceLine" id="cb1-40" title="40">          <span class="fu">cabal-version:</span><span class="at"> </span><span class="fl">2.4.0.1</span></a>
-<a class="sourceLine" id="cb1-41" title="41">          <span class="fu">enable-stack:</span><span class="at"> </span><span class="ch">true</span></a>
-<a class="sourceLine" id="cb1-42" title="42">          <span class="fu">stack-version:</span><span class="at"> </span><span class="st">&quot;latest&quot;</span></a>
-<a class="sourceLine" id="cb1-43" title="43">      <span class="kw">-</span> <span class="fu">name:</span><span class="at"> Install sass</span></a>
-<a class="sourceLine" id="cb1-44" title="44"><span class="fu">        run:</span> <span class="st">|</span></a>
-<a class="sourceLine" id="cb1-45" title="45">          wget -O /opt/sass.tar.gz https://github.com/sass/dart-sass/releases/download/1.29.0/dart-sass-1.29.0-linux-x64.tar.gz</a>
-<a class="sourceLine" id="cb1-46" title="46">          cd /opt</a>
-<a class="sourceLine" id="cb1-47" title="47">          sudo tar xvf sass.tar.gz</a>
-<a class="sourceLine" id="cb1-48" title="48">          sudo mv dart-sass/* /usr/local/bin/</a>
-<a class="sourceLine" id="cb1-49" title="49">          cd -</a>
-<a class="sourceLine" id="cb1-50" title="50">      <span class="kw">-</span> <span class="fu">name:</span><span class="at"> Install dependencies</span></a>
-<a class="sourceLine" id="cb1-51" title="51">        <span class="fu">run:</span><span class="at"> stack --system-ghc build</span></a>
-<a class="sourceLine" id="cb1-52" title="52">      <span class="kw">-</span> <span class="fu">name:</span><span class="at"> Build blog</span></a>
-<a class="sourceLine" id="cb1-53" title="53"><span class="fu">        run:</span> <span class="st">|</span></a>
-<a class="sourceLine" id="cb1-54" title="54">          stack --system-ghc exec -- blog clean</a>
-<a class="sourceLine" id="cb1-55" title="55">          stack --system-ghc exec -- blog build</a>
-<a class="sourceLine" id="cb1-56" title="56">      <span class="kw">-</span> <span class="fu">name:</span><span class="at"> Checkout blog branch</span></a>
-<a class="sourceLine" id="cb1-57" title="57">        <span class="fu">uses:</span><span class="at"> actions/checkout@v2</span></a>
-<a class="sourceLine" id="cb1-58" title="58">        <span class="fu">with:</span></a>
-<a class="sourceLine" id="cb1-59" title="59">          <span class="fu">ref:</span><span class="at"> blog</span></a>
-<a class="sourceLine" id="cb1-60" title="60">          <span class="fu">path:</span><span class="at"> blog</span></a>
-<a class="sourceLine" id="cb1-61" title="61">      <span class="kw">-</span> <span class="fu">name:</span><span class="at"> Move assets to blog branch</span></a>
-<a class="sourceLine" id="cb1-62" title="62"><span class="fu">        run:</span> <span class="st">|</span></a>
-<a class="sourceLine" id="cb1-63" title="63">          cp -r _site/* blog/</a>
-<a class="sourceLine" id="cb1-64" title="64">      <span class="kw">-</span> <span class="fu">name:</span><span class="at"> Set git config</span></a>
-<a class="sourceLine" id="cb1-65" title="65"><span class="fu">        run:</span> <span class="st">|</span></a>
-<a class="sourceLine" id="cb1-66" title="66">          cd blog</a>
-<a class="sourceLine" id="cb1-67" title="67">          git config --local user.email yoshitsugu@users.noreply.github.com</a>
-<a class="sourceLine" id="cb1-68" title="68">          git config --local user.name yoshitsugu</a>
-<a class="sourceLine" id="cb1-69" title="69">          git config pull.rebase false</a>
-<a class="sourceLine" id="cb1-70" title="70">      <span class="kw">-</span> <span class="fu">name:</span><span class="at"> Commit and Push</span></a>
-<a class="sourceLine" id="cb1-71" title="71"><span class="fu">        run:</span> <span class="st">|</span></a>
-<a class="sourceLine" id="cb1-72" title="72">          cd blog</a>
-<a class="sourceLine" id="cb1-73" title="73">          git add .</a>
-<a class="sourceLine" id="cb1-74" title="74">          git diff --quiet &amp;&amp; git diff --staged --quiet || git commit -am &quot;Commit by GitHub Actions (triggered by ${GITHUB_SHA})&quot;</a>
-<a class="sourceLine" id="cb1-75" title="75">          git pull --prune</a>
-<a class="sourceLine" id="cb1-76" title="76">          git push origin blog</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Publish</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">main</span><span class="kw">]</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">publish</span><span class="kw">:</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-20.04</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v2</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Cache .stack</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">id</span><span class="kw">:</span><span class="at"> cache-stack</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/cache@v1</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">path</span><span class="kw">:</span><span class="at"> ~/.stack</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">key</span><span class="kw">:</span><span class="at"> v1-stack-${{ hashFiles('**/stack.yaml.lock') }}</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">          restore-keys</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>            v1-stack-</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Cache .stack/pantry</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">id</span><span class="kw">:</span><span class="at"> cache-pantry</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/cache@v1</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">path</span><span class="kw">:</span><span class="at"> ~/.stack-temp/pantry</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">key</span><span class="kw">:</span><span class="at"> v1-pantry-${{ hashFiles('**/stack.yaml.lock') }}</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">          restore-keys</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>            v1-pantry-</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Move .stack/pantry to temp</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> matsubara0507/actions/move-files@master</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">source_dir</span><span class="kw">:</span><span class="at"> ~/.stack-temp/pantry</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">          source_files</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>            pantry</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">target_dir</span><span class="kw">:</span><span class="at"> ~/.stack</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/setup-haskell@v1.1.4</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">id</span><span class="kw">:</span><span class="at"> setup-haskell-cabal</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Setup Haskell</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">ghc-version</span><span class="kw">:</span><span class="at"> </span><span class="fl">8.6.5</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">cabal-version</span><span class="kw">:</span><span class="at"> </span><span class="fl">2.4.0.1</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">enable-stack</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">stack-version</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;latest&quot;</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Install sass</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>          wget -O /opt/sass.tar.gz https://github.com/sass/dart-sass/releases/download/1.29.0/dart-sass-1.29.0-linux-x64.tar.gz</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>          cd /opt</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>          sudo tar xvf sass.tar.gz</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>          sudo mv dart-sass/* /usr/local/bin/</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>          cd -</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Install dependencies</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> stack --system-ghc build</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Build blog</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>          stack --system-ghc exec -- blog clean</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>          stack --system-ghc exec -- blog build</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Checkout blog branch</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v2</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">ref</span><span class="kw">:</span><span class="at"> blog</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">path</span><span class="kw">:</span><span class="at"> blog</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Move assets to blog branch</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>          cp -r _site/* blog/</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Set git config</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>          cd blog</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>          git config --local user.email yoshitsugu@users.noreply.github.com</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>          git config --local user.name yoshitsugu</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>          git config pull.rebase false</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Commit and Push</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>          cd blog</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>          git add .</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>          git diff --quiet &amp;&amp; git diff --staged --quiet || git commit -am &quot;Commit by GitHub Actions (triggered by ${GITHUB_SHA})&quot;</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>          git pull --prune</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>          git push origin blog</span></code></pre></div>
 <p>ブログ記事の最終的な HTML や CSS,JS などは <code>blog</code> ブランチを用意して、その root に配置するようにした。現在 GitHub Pages では同一ブランチで、 <code>/docs</code> 以下に配置ということもできるようだが、ブランチをわけて管理したほうが手元に毎回 pull してこなくていい分ラクなように思えたからであり、そこまでちゃんとは考えていない。<br />
 また、サポートされなくなった Ruby Sass のかわりに Dart Sass を使うようにした。</p>
 <h2 id="実行時間">実行時間</h2>

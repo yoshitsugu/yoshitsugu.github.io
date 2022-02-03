@@ -45,7 +45,7 @@
     <span class="date">Posted on June 13, 2017</span>
     
     
-    <span class="tags">, Tags: <a href="../tags/Ruby.html">Ruby</a>, <a href="../tags/Book%20Review.html">Book Review</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Ruby'." href="../tags/Ruby.html">Ruby</a>, <a title="All pages tagged 'Book Review'." href="../tags/Book%20Review.html">Book Review</a></span>
     
 </div>
 
@@ -56,60 +56,60 @@
 <h3 id="part1-ruby-overview-part2-ruby言語仕様">Part1 Ruby overview, Part2 Ruby言語仕様</h3>
 <p>だいたい知っている内容だった。 細かいところだが、caseのwhenにProcを使えるのは知らなかった。<br />
 FizzBuzzも</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">def</span> fizz_buzz(n)</a>
-<a class="sourceLine" id="cb1-2" title="2">  <span class="kw">case</span> n</a>
-<a class="sourceLine" id="cb1-3" title="3">  <span class="kw">when</span> -&gt; (n) { n % <span class="dv">15</span> == <span class="dv">0</span> }</a>
-<a class="sourceLine" id="cb1-4" title="4">    <span class="st">'FizzBuzz'</span></a>
-<a class="sourceLine" id="cb1-5" title="5">  <span class="kw">when</span> -&gt; (n) { n % <span class="dv">3</span> == <span class="dv">0</span> }</a>
-<a class="sourceLine" id="cb1-6" title="6">    <span class="st">'Fizz'</span></a>
-<a class="sourceLine" id="cb1-7" title="7">  <span class="kw">when</span> -&gt; (n) { n % <span class="dv">5</span> == <span class="dv">0</span> }</a>
-<a class="sourceLine" id="cb1-8" title="8">    <span class="st">'Buzz'</span></a>
-<a class="sourceLine" id="cb1-9" title="9">  <span class="kw">else</span></a>
-<a class="sourceLine" id="cb1-10" title="10">    n</a>
-<a class="sourceLine" id="cb1-11" title="11">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-12" title="12"><span class="kw">end</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> fizz_buzz(n)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> n</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">when</span> <span class="kw">-&gt;</span> (n) <span class="kw">{</span> n <span class="kw">%</span> <span class="dv">15</span> <span class="kw">==</span> <span class="dv">0</span> <span class="kw">}</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="vs">'FizzBuzz'</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">when</span> <span class="kw">-&gt;</span> (n) <span class="kw">{</span> n <span class="kw">%</span> <span class="dv">3</span> <span class="kw">==</span> <span class="dv">0</span> <span class="kw">}</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="vs">'Fizz'</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">when</span> <span class="kw">-&gt;</span> (n) <span class="kw">{</span> n <span class="kw">%</span> <span class="dv">5</span> <span class="kw">==</span> <span class="dv">0</span> <span class="kw">}</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="vs">'Buzz'</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    n</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <p>のように書ける。こんな風に書くことはないだろうが。</p>
 <p>Thread, Fiberあたりの並行処理の話は今まであまり必要になったことがないので、勉強になった。<br />
 次の版では話題のGuildの話もはいってくるのだろうか。</p>
 <h3 id="part3-メタプログラミング">Part3 メタプログラミング</h3>
 <p>恥ずかしながら(なのかどうかはよくわからないが)<a href="https://www.oreilly.co.jp/books/9784873117430/">メタプログラミングRuby</a>は読んだことがなく、メタプログラミングは普段あまりやらないので、結構知らないこと、もしくは今まであまり理解できていなかったことが書いてあった。ClassやModuleの構造を理解する上では非常に勉強になった。<br />
 そういえば、以下Animalモジュールのような動的なメソッド生成を行っているmoduleを見たことがある。DogではAnimalをextendして、<code>define_animal_methods</code> を呼べばメソッドが展開されるという寸法である。</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">module</span> <span class="dt">Animal</span></a>
-<a class="sourceLine" id="cb2-2" title="2">  <span class="kw">def</span> define_animal_methods</a>
-<a class="sourceLine" id="cb2-3" title="3">    define_method <span class="st">:name</span> <span class="kw">do</span> |&amp;block|</a>
-<a class="sourceLine" id="cb2-4" title="4">      puts <span class="st">'animal_name'</span></a>
-<a class="sourceLine" id="cb2-5" title="5">      block.call <span class="kw">if</span> block</a>
-<a class="sourceLine" id="cb2-6" title="6">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb2-7" title="7"></a>
-<a class="sourceLine" id="cb2-8" title="8">    <span class="co"># define_methodが続く...</span></a>
-<a class="sourceLine" id="cb2-9" title="9">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb2-10" title="10"><span class="kw">end</span></a>
-<a class="sourceLine" id="cb2-11" title="11"></a>
-<a class="sourceLine" id="cb2-12" title="12"><span class="kw">class</span> <span class="dt">Dog</span></a>
-<a class="sourceLine" id="cb2-13" title="13">  extend <span class="dt">Animal</span></a>
-<a class="sourceLine" id="cb2-14" title="14">  define_animal_methods</a>
-<a class="sourceLine" id="cb2-15" title="15"><span class="kw">end</span></a>
-<a class="sourceLine" id="cb2-16" title="16"></a>
-<a class="sourceLine" id="cb2-17" title="17"><span class="dt">Dog</span>.new.name</a>
-<a class="sourceLine" id="cb2-18" title="18"><span class="co">#=&gt; animal_name</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">module</span> <span class="dt">Animal</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> define_animal_methods</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    define_method <span class="wa">:name</span> <span class="cf">do</span> <span class="kw">|&amp;</span>block<span class="kw">|</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">puts</span> <span class="vs">'animal_name'</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      block<span class="at">.call</span> <span class="cf">if</span> block</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># define_methodが続く...</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Dog</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extend</span> <span class="dt">Animal</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  define_animal_methods</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="dt">Dog</span><span class="at">.new.name</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">#=&gt; animal_name</span></span></code></pre></div>
 <p>ここで、展開先のClassにおいて、Animalの <code>name</code> をoverrideするようなイメージで、 <code>block.call</code> しているところにblockを渡して新しい <code>name</code> メソッドにしたい。どうしたらいいだろうか。<br />
 自分は結果的には以下のように <code>instance_method</code> で一旦退避させた上で、 <code>define_method</code> で定義するような荒技を使った。</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">class</span> <span class="dt">Cat</span></a>
-<a class="sourceLine" id="cb3-2" title="2">  extend <span class="dt">Animal</span></a>
-<a class="sourceLine" id="cb3-3" title="3">  define_animal_methods</a>
-<a class="sourceLine" id="cb3-4" title="4"></a>
-<a class="sourceLine" id="cb3-5" title="5">  _name = instance_method(<span class="st">:name</span>)</a>
-<a class="sourceLine" id="cb3-6" title="6"></a>
-<a class="sourceLine" id="cb3-7" title="7">  define_method <span class="st">:name</span> <span class="kw">do</span></a>
-<a class="sourceLine" id="cb3-8" title="8">    _name.bind(<span class="dv">self</span>).() <span class="kw">do</span></a>
-<a class="sourceLine" id="cb3-9" title="9">      puts <span class="st">'cat_name'</span></a>
-<a class="sourceLine" id="cb3-10" title="10">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb3-11" title="11">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="kw">end</span></a>
-<a class="sourceLine" id="cb3-13" title="13"></a>
-<a class="sourceLine" id="cb3-14" title="14"><span class="dt">Cat</span>.new.name</a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="co"># =&gt; animal_name</span></a>
-<a class="sourceLine" id="cb3-16" title="16"><span class="co">#    cat_name</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Cat</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extend</span> <span class="dt">Animal</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  define_animal_methods</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  _name <span class="kw">=</span> instance_method(<span class="wa">:name</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  define_method <span class="wa">:name</span> <span class="cf">do</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    _name<span class="at">.bind</span>(<span class="dv">self</span>)<span class="kw">.</span>() <span class="cf">do</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">puts</span> <span class="vs">'cat_name'</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="dt">Cat</span><span class="at">.new.name</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; animal_name</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#    cat_name</span></span></code></pre></div>
 <p>もっと簡単な方法があるような気もするが、どうだろうか。<br />
 また、関係ないが、 <code>method_missing</code> を使った<a href="http://qiita.com/pink_bangbi/items/274c8227a92826a269cb">こういうアプローチ</a>は面白いと思う。自分でも何か考えてみたい。</p>
 <h3 id="part4-標準添付ライブラリ">Part4 標準添付ライブラリ</h3>

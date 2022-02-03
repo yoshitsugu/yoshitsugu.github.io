@@ -45,366 +45,366 @@
     <span class="date">Posted on June 24, 2019</span>
     
     
-    <span class="tags">, Tags: <a href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a href="../tags/OS.html">OS</a>, <a href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
     
 </div>
 
 <p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。10日目。 <!--more--></p>
 <h2 id="kbごとのメモリ管理">4KBごとのメモリ管理</h2>
 <p>前回、バイト単位でのメモリ管理を実装したが、このままではメモリの断片化など取り回しが悪いため、4KBごとのメモリ管理を実装する</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="co">// memory.rs</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">impl</span> MemMan <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-3" title="3">    <span class="co">// 省略</span></a>
-<a class="sourceLine" id="cb1-4" title="4">    <span class="kw">pub</span> <span class="kw">fn</span> alloc_4k(&amp;<span class="kw">mut</span> <span class="kw">self</span>, size: <span class="dt">u32</span>) -&gt; <span class="dt">Result</span>&lt;<span class="dt">u32</span>, &amp;<span class="ot">'static</span> <span class="dt">str</span>&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-5" title="5">        <span class="kw">let</span> size = (size + <span class="dv">0xfff</span>) &amp; <span class="dv">0xfffff000</span>;</a>
-<a class="sourceLine" id="cb1-6" title="6">        <span class="kw">self</span>.alloc(size)</a>
-<a class="sourceLine" id="cb1-7" title="7">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-8" title="8"></a>
-<a class="sourceLine" id="cb1-9" title="9">    <span class="kw">pub</span> <span class="kw">fn</span> free_4k(&amp;<span class="kw">mut</span> <span class="kw">self</span>, addr: <span class="dt">u32</span>, size: <span class="dt">u32</span>) -&gt; <span class="dt">Result</span>&lt;(), &amp;<span class="ot">'static</span> <span class="dt">str</span>&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-10" title="10">        <span class="kw">let</span> size = (size + <span class="dv">0xfff</span>) &amp; <span class="dv">0xfffff000</span>;</a>
-<a class="sourceLine" id="cb1-11" title="11">        <span class="kw">self</span>.free(addr, size)</a>
-<a class="sourceLine" id="cb1-12" title="12">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-13" title="13"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// memory.rs</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> MemMan <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> alloc_4k(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> size<span class="op">:</span> <span class="dt">u32</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> <span class="op">&amp;</span><span class="ot">'static</span> <span class="dt">str</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> size <span class="op">=</span> (size <span class="op">+</span> <span class="dv">0xfff</span>) <span class="op">&amp;</span> <span class="dv">0xfffff000</span><span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>alloc(size)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> free_4k(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> addr<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span> size<span class="op">:</span> <span class="dt">u32</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">,</span> <span class="op">&amp;</span><span class="ot">'static</span> <span class="dt">str</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> size <span class="op">=</span> (size <span class="op">+</span> <span class="dv">0xfff</span>) <span class="op">&amp;</span> <span class="dv">0xfffff000</span><span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>free(addr<span class="op">,</span> size)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <h2 id="重ね合わせの実装">重ね合わせの実装</h2>
 <p>次に、マウスを動かしたとき、下図のように重複部分の色が消えてしまう問題の解決を行う。</p>
 <p><img src="../images/20190624/invalid_overlay.png" class="blog-img img-responsive" alt="重ね合わせがおかしい例" title="重ね合わせがおかしい例" /></p>
 <p>具体的にはレイヤー構造を導入し、レイヤーの背景となる部分は透過するようにする。透過処理は即ち下のレイヤーから色をひろってくる、ということだ。</p>
 <h3 id="vga.rsの修正">vga.rsの修正</h3>
 <p>このあたりの実装にともない、VRAMのアドレスに直接書き込んでいく形式ではなくなったため、当初のvga.rsを大幅に書き換えている。具体的には当初の <code>Screen</code> structをなくし、画面サイズなどは<code>lazy_static</code>によるstatic値とした。</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="co">// vga.rs</span></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="pp">lazy_static!</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-3" title="3">    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw">ref</span> SCREEN_WIDTH: <span class="dt">i16</span> = <span class="kw">unsafe</span> <span class="op">{</span> *(<span class="dv">0x0ff4</span> <span class="kw">as</span> *<span class="kw">const</span> <span class="dt">i16</span>) <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb2-4" title="4">    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw">ref</span> SCREEN_HEIGHT: <span class="dt">i16</span> = <span class="kw">unsafe</span> <span class="op">{</span> *(<span class="dv">0x0ff6</span> <span class="kw">as</span> *<span class="kw">const</span> <span class="dt">i16</span>) <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb2-5" title="5">    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw">ref</span> VRAM_ADDR: <span class="dt">usize</span> = <span class="kw">unsafe</span> <span class="op">{</span> *(<span class="dv">0xff8</span> <span class="kw">as</span> *<span class="kw">const</span> <span class="dt">usize</span>) <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="op">}</span></a>
-<a class="sourceLine" id="cb2-7" title="7"></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="co">// Screen structのメソッドとして実装していたものをvgaモジュールのトップレベル関数にする。</span></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="kw">pub</span> <span class="kw">fn</span> init_palette() <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-10" title="10">    <span class="kw">let</span> eflags = <span class="pp">asm::</span>load_eflags();</a>
-<a class="sourceLine" id="cb2-11" title="11">    <span class="pp">asm::</span>cli();</a>
-<a class="sourceLine" id="cb2-12" title="12">    <span class="pp">asm::</span>out8(<span class="dv">0x03c8</span>, <span class="dv">0</span>);</a>
-<a class="sourceLine" id="cb2-13" title="13">    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span>..<span class="dv">16</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-14" title="14">        <span class="co">// 書き込むときは上位2ビットを0にしないといけない。See: http://oswiki.osask.jp/?VGA#o2d4bfd3</span></a>
-<a class="sourceLine" id="cb2-15" title="15">        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span>, COLOR_PALETTE<span class="op">[</span>i<span class="op">][</span><span class="dv">0</span><span class="op">]</span> / <span class="dv">4</span>);</a>
-<a class="sourceLine" id="cb2-16" title="16">        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span>, COLOR_PALETTE<span class="op">[</span>i<span class="op">][</span><span class="dv">1</span><span class="op">]</span> / <span class="dv">4</span>);</a>
-<a class="sourceLine" id="cb2-17" title="17">        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span>, COLOR_PALETTE<span class="op">[</span>i<span class="op">][</span><span class="dv">2</span><span class="op">]</span> / <span class="dv">4</span>);</a>
-<a class="sourceLine" id="cb2-18" title="18">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb2-19" title="19">    <span class="pp">asm::</span>store_eflags(eflags);</a>
-<a class="sourceLine" id="cb2-20" title="20"><span class="op">}</span></a>
-<a class="sourceLine" id="cb2-21" title="21"><span class="co">// 以下省略</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// vga.rs</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="pp">lazy_static!</span> <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw">ref</span> SCREEN_WIDTH<span class="op">:</span> <span class="dt">i16</span> <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">*</span>(<span class="dv">0x0ff4</span> <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> <span class="dt">i16</span>) <span class="op">};</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw">ref</span> SCREEN_HEIGHT<span class="op">:</span> <span class="dt">i16</span> <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">*</span>(<span class="dv">0x0ff6</span> <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> <span class="dt">i16</span>) <span class="op">};</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw">ref</span> VRAM_ADDR<span class="op">:</span> <span class="dt">usize</span> <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">*</span>(<span class="dv">0xff8</span> <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> <span class="dt">usize</span>) <span class="op">};</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Screen structのメソッドとして実装していたものをvgaモジュールのトップレベル関数にする。</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> init_palette() <span class="op">{</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> eflags <span class="op">=</span> <span class="pp">asm::</span>load_eflags()<span class="op">;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="pp">asm::</span>cli()<span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="pp">asm::</span>out8(<span class="dv">0x03c8</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">16</span> <span class="op">{</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 書き込むときは上位2ビットを0にしないといけない。See: http://oswiki.osask.jp/?VGA#o2d4bfd3</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span><span class="op">,</span> COLOR_PALETTE[i][<span class="dv">0</span>] <span class="op">/</span> <span class="dv">4</span>)<span class="op">;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span><span class="op">,</span> COLOR_PALETTE[i][<span class="dv">1</span>] <span class="op">/</span> <span class="dv">4</span>)<span class="op">;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span><span class="op">,</span> COLOR_PALETTE[i][<span class="dv">2</span>] <span class="op">/</span> <span class="dv">4</span>)<span class="op">;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="pp">asm::</span>store_eflags(eflags)<span class="op">;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">// 以下省略</span></span></code></pre></div>
 <h3 id="sheetの導入">Sheetの導入</h3>
 <p>レイヤーに相当するものとして、本と同様に <code>Sheet</code> というstructを定義して管理するようにした。<br />
 本では <code>SHTCTL</code> に相当する <code>Sheet</code> の配列をもつstructを <code>SheetManager</code> とした。本の <code>SHTCTL</code> はSheetの配列と高さで並びかえた参照の配列の2種類をもっている。 <code>SheetManager</code> でもこれにならい、Sheetの順番保持用の配列とデータの実体保持用の配列を作った。参照で持たせるのはRustではとりまわしが面倒なため、実体の配列のインデックスをもたせるようにした。</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="co">// sheet.rs</span></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw">use</span> <span class="pp">core::cmp::</span>min;</a>
-<a class="sourceLine" id="cb3-3" title="3"></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="kw">use</span> <span class="kw">crate</span>::<span class="pp">vga::</span><span class="op">{</span>Color, VRAM_ADDR, SCREEN_HEIGHT, SCREEN_WIDTH<span class="op">}</span>;</a>
-<a class="sourceLine" id="cb3-5" title="5"></a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="at">,</span> <span class="bu">Clone</span><span class="at">,</span> <span class="bu">Copy</span><span class="at">,</span> <span class="bu">PartialEq</span><span class="at">,</span> <span class="bu">Eq</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="kw">pub</span> <span class="kw">enum</span> SheetFlag <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-8" title="8">    AVAILABLE,</a>
-<a class="sourceLine" id="cb3-9" title="9">    USED,</a>
-<a class="sourceLine" id="cb3-10" title="10"><span class="op">}</span></a>
-<a class="sourceLine" id="cb3-11" title="11"></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="at">,</span> <span class="bu">Clone</span><span class="at">,</span> <span class="bu">Copy</span><span class="at">,</span> <span class="bu">PartialEq</span><span class="at">,</span> <span class="bu">Eq</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb3-13" title="13"><span class="kw">pub</span> <span class="kw">struct</span> Sheet <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-14" title="14">    <span class="kw">pub</span> buf_addr: <span class="dt">usize</span>,</a>
-<a class="sourceLine" id="cb3-15" title="15">    <span class="kw">pub</span> width: <span class="dt">u32</span>,</a>
-<a class="sourceLine" id="cb3-16" title="16">    <span class="kw">pub</span> height: <span class="dt">u32</span>,</a>
-<a class="sourceLine" id="cb3-17" title="17">    <span class="kw">pub</span> x: <span class="dt">u32</span>,</a>
-<a class="sourceLine" id="cb3-18" title="18">    <span class="kw">pub</span> y: <span class="dt">u32</span>,</a>
-<a class="sourceLine" id="cb3-19" title="19">    <span class="kw">pub</span> transparent: <span class="dt">Option</span>&lt;Color&gt;,</a>
-<a class="sourceLine" id="cb3-20" title="20">    <span class="kw">pub</span> z: <span class="dt">Option</span>&lt;<span class="dt">usize</span>&gt;, <span class="co">// 重ねあわせたときの高さ</span></a>
-<a class="sourceLine" id="cb3-21" title="21">    <span class="kw">pub</span> flag: SheetFlag,</a>
-<a class="sourceLine" id="cb3-22" title="22"><span class="op">}</span></a>
-<a class="sourceLine" id="cb3-23" title="23"></a>
-<a class="sourceLine" id="cb3-24" title="24"><span class="kw">impl</span> Sheet <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-25" title="25">    <span class="kw">pub</span> <span class="kw">fn</span> new() -&gt; Sheet <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-26" title="26">        Sheet <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-27" title="27">            buf_addr: <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb3-28" title="28">            width: <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb3-29" title="29">            height: <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb3-30" title="30">            x: <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb3-31" title="31">            y: <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb3-32" title="32">            transparent: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-33" title="33">            z: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-34" title="34">            flag: <span class="pp">SheetFlag::</span>AVAILABLE,</a>
-<a class="sourceLine" id="cb3-35" title="35">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-36" title="36">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-37" title="37"></a>
-<a class="sourceLine" id="cb3-38" title="38">    <span class="kw">pub</span> <span class="kw">fn</span> set(&amp;<span class="kw">mut</span> <span class="kw">self</span>, buf_addr: <span class="dt">usize</span>, width: <span class="dt">u32</span>, height: <span class="dt">u32</span>, transparent: <span class="dt">Option</span>&lt;Color&gt;) <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-39" title="39">        <span class="kw">self</span>.buf_addr = buf_addr;</a>
-<a class="sourceLine" id="cb3-40" title="40">        <span class="kw">self</span>.width = width;</a>
-<a class="sourceLine" id="cb3-41" title="41">        <span class="kw">self</span>.height = height;</a>
-<a class="sourceLine" id="cb3-42" title="42">        <span class="kw">self</span>.transparent = transparent;</a>
-<a class="sourceLine" id="cb3-43" title="43">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-44" title="44"><span class="op">}</span></a>
-<a class="sourceLine" id="cb3-45" title="45"></a>
-<a class="sourceLine" id="cb3-46" title="46"><span class="kw">const</span> MAX_SHEETS: <span class="dt">usize</span> = <span class="dv">256</span>;</a>
-<a class="sourceLine" id="cb3-47" title="47"></a>
-<a class="sourceLine" id="cb3-48" title="48"><span class="kw">pub</span> <span class="kw">struct</span> SheetManager <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-49" title="49">    <span class="kw">pub</span> z_max: <span class="dt">Option</span>&lt;<span class="dt">usize</span>&gt;,             <span class="co">// 一番上のSheetのz</span></a>
-<a class="sourceLine" id="cb3-50" title="50">    <span class="kw">pub</span> sheets: <span class="op">[</span><span class="dt">usize</span>; MAX_SHEETS<span class="op">]</span>,      <span class="co">// sheets_data上のindexを保持する</span></a>
-<a class="sourceLine" id="cb3-51" title="51">    <span class="kw">pub</span> sheets_data: <span class="op">[</span>Sheet; MAX_SHEETS<span class="op">]</span>, <span class="co">// sheetデータの実体</span></a>
-<a class="sourceLine" id="cb3-52" title="52"><span class="op">}</span></a>
-<a class="sourceLine" id="cb3-53" title="53"></a>
-<a class="sourceLine" id="cb3-54" title="54"><span class="kw">impl</span> SheetManager <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-55" title="55">    <span class="kw">pub</span> <span class="kw">fn</span> new() -&gt; SheetManager <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-56" title="56">        SheetManager <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-57" title="57">            z_max: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-58" title="58">            sheets: <span class="op">[</span><span class="dv">0</span>; MAX_SHEETS<span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-59" title="59">            sheets_data: <span class="op">[</span><span class="pp">Sheet::</span>new(); MAX_SHEETS<span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-60" title="60">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-61" title="61">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-62" title="62"></a>
-<a class="sourceLine" id="cb3-63" title="63">    <span class="co">// Sheetの情報をセットする</span></a>
-<a class="sourceLine" id="cb3-64" title="64">    <span class="kw">pub</span> <span class="kw">fn</span> set_buf(</a>
-<a class="sourceLine" id="cb3-65" title="65">        &amp;<span class="kw">mut</span> <span class="kw">self</span>,</a>
-<a class="sourceLine" id="cb3-66" title="66">        sheet_index: <span class="dt">usize</span>,</a>
-<a class="sourceLine" id="cb3-67" title="67">        buf_addr: <span class="dt">usize</span>,</a>
-<a class="sourceLine" id="cb3-68" title="68">        width: <span class="dt">u32</span>,</a>
-<a class="sourceLine" id="cb3-69" title="69">        height: <span class="dt">u32</span>,</a>
-<a class="sourceLine" id="cb3-70" title="70">        transparent: <span class="dt">Option</span>&lt;Color&gt;,</a>
-<a class="sourceLine" id="cb3-71" title="71">    ) <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-72" title="72">        <span class="kw">let</span> sheet = &amp;<span class="kw">mut</span> <span class="kw">self</span>.sheets_data<span class="op">[</span>sheet_index<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb3-73" title="73">        sheet.set(buf_addr, width, height, transparent);</a>
-<a class="sourceLine" id="cb3-74" title="74">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-75" title="75"></a>
-<a class="sourceLine" id="cb3-76" title="76">    <span class="co">// 実体データから使用可能なものを払出す</span></a>
-<a class="sourceLine" id="cb3-77" title="77">    <span class="kw">pub</span> <span class="kw">fn</span> alloc(&amp;<span class="kw">mut</span> <span class="kw">self</span>) -&gt; <span class="dt">Option</span>&lt;<span class="dt">usize</span>&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-78" title="78">        <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span>..MAX_SHEETS <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-79" title="79">            <span class="kw">if</span> <span class="kw">self</span>.sheets_data<span class="op">[</span>i<span class="op">]</span>.flag == <span class="pp">SheetFlag::</span>AVAILABLE <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-80" title="80">                <span class="kw">let</span> <span class="kw">mut</span> sheet = &amp;<span class="kw">mut</span> <span class="kw">self</span>.sheets_data<span class="op">[</span>i<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb3-81" title="81">                sheet.flag = <span class="pp">SheetFlag::</span>USED;</a>
-<a class="sourceLine" id="cb3-82" title="82">                sheet.z = <span class="cn">None</span>;</a>
-<a class="sourceLine" id="cb3-83" title="83">                <span class="kw">return</span> <span class="cn">Some</span>(i);</a>
-<a class="sourceLine" id="cb3-84" title="84">            <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-85" title="85">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-86" title="86">        <span class="cn">None</span></a>
-<a class="sourceLine" id="cb3-87" title="87">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-88" title="88"></a>
-<a class="sourceLine" id="cb3-89" title="89">    <span class="co">// 指定された領域内の重ね合わせの計算を行う</span></a>
-<a class="sourceLine" id="cb3-90" title="90">    <span class="kw">pub</span> <span class="kw">fn</span> refresh_part(&amp;<span class="kw">self</span>, x0: <span class="dt">u32</span>, y0: <span class="dt">u32</span>, x1: <span class="dt">u32</span>, y1: <span class="dt">u32</span>) <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-91" title="91">        <span class="kw">if</span> <span class="kw">self</span>.z_max.is_none() <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-92" title="92">            <span class="kw">return</span>;</a>
-<a class="sourceLine" id="cb3-93" title="93">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-94" title="94">        <span class="kw">for</span> h <span class="kw">in</span> <span class="dv">0</span>..=<span class="kw">self</span>.z_max.unwrap() <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-95" title="95">            <span class="kw">let</span> sheet = &amp;<span class="kw">self</span>.sheets_data<span class="op">[</span><span class="kw">self</span>.sheets<span class="op">[</span>h <span class="kw">as</span> <span class="dt">usize</span><span class="op">]]</span>;</a>
-<a class="sourceLine" id="cb3-96" title="96">            <span class="kw">let</span> bx0 = <span class="kw">if</span> x0 &gt; sheet.x <span class="op">{</span> x0 - sheet.x <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">}</span> <span class="kw">as</span> <span class="dt">usize</span>;</a>
-<a class="sourceLine" id="cb3-97" title="97">            <span class="kw">let</span> by0 = <span class="kw">if</span> y0 &gt; sheet.y <span class="op">{</span> y0 - sheet.y <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">}</span> <span class="kw">as</span> <span class="dt">usize</span>;</a>
-<a class="sourceLine" id="cb3-98" title="98">            <span class="kw">let</span> bx1 = <span class="kw">if</span> x1 &gt; sheet.x <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-99" title="99">                min(x1 - sheet.x, sheet.width)</a>
-<a class="sourceLine" id="cb3-100" title="100">            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-101" title="101">                <span class="dv">0</span></a>
-<a class="sourceLine" id="cb3-102" title="102">            <span class="op">}</span> <span class="kw">as</span> <span class="dt">usize</span>;</a>
-<a class="sourceLine" id="cb3-103" title="103">            <span class="kw">let</span> by1 = <span class="kw">if</span> y1 &gt; sheet.y <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-104" title="104">                min(y1 - sheet.y, sheet.height)</a>
-<a class="sourceLine" id="cb3-105" title="105">            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-106" title="106">                <span class="dv">0</span></a>
-<a class="sourceLine" id="cb3-107" title="107">            <span class="op">}</span> <span class="kw">as</span> <span class="dt">usize</span>;</a>
-<a class="sourceLine" id="cb3-108" title="108">            <span class="kw">for</span> by <span class="kw">in</span> by0..by1 <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-109" title="109">                <span class="kw">let</span> vy = sheet.y <span class="kw">as</span> <span class="dt">usize</span> + by;</a>
-<a class="sourceLine" id="cb3-110" title="110">                <span class="kw">for</span> bx <span class="kw">in</span> bx0..bx1 <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-111" title="111">                    <span class="kw">let</span> vx = sheet.x <span class="kw">as</span> <span class="dt">usize</span> + bx;</a>
-<a class="sourceLine" id="cb3-112" title="112">                    <span class="kw">let</span> width = sheet.width <span class="kw">as</span> <span class="dt">usize</span>;</a>
-<a class="sourceLine" id="cb3-113" title="113">                    <span class="kw">let</span> c = <span class="kw">unsafe</span> <span class="op">{</span> *((sheet.buf_addr + by * width + bx) <span class="kw">as</span> *<span class="kw">const</span> Color) <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb3-114" title="114">                    <span class="kw">if</span> <span class="cn">Some</span>(c) != sheet.transparent <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-115" title="115">                        <span class="kw">let</span> ptr = <span class="kw">unsafe</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-116" title="116">                            &amp;<span class="kw">mut</span> *((*VRAM_ADDR <span class="kw">as</span> *<span class="kw">mut</span> <span class="dt">u8</span>)</a>
-<a class="sourceLine" id="cb3-117" title="117">                                .offset(vy <span class="kw">as</span> <span class="dt">isize</span> * *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">isize</span> + vx <span class="kw">as</span> <span class="dt">isize</span>))</a>
-<a class="sourceLine" id="cb3-118" title="118">                        <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb3-119" title="119">                        *ptr = c <span class="kw">as</span> <span class="dt">u8</span>;</a>
-<a class="sourceLine" id="cb3-120" title="120">                    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-121" title="121">                <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-122" title="122">            <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-123" title="123">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-124" title="124">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-125" title="125"></a>
-<a class="sourceLine" id="cb3-126" title="126">    <span class="co">// レイヤーの高さを指定する</span></a>
-<a class="sourceLine" id="cb3-127" title="127">    <span class="kw">pub</span> <span class="kw">fn</span> updown(&amp;<span class="kw">mut</span> <span class="kw">self</span>, sheet_index: <span class="dt">usize</span>, oz: <span class="dt">Option</span>&lt;<span class="dt">usize</span>&gt;) <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-128" title="128">        <span class="co">// 長い &amp; 実装の詳細はあまりあげてもしょうがないところなので、GitHub参考ということでここでは省く</span></a>
-<a class="sourceLine" id="cb3-129" title="129">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-130" title="130"></a>
-<a class="sourceLine" id="cb3-131" title="131">    <span class="co">// レイヤーの再描画を行う</span></a>
-<a class="sourceLine" id="cb3-132" title="132">    <span class="kw">pub</span> <span class="kw">fn</span> refresh(&amp;<span class="kw">self</span>, sheet_index: <span class="dt">usize</span>, x0: <span class="dt">u32</span>, y0: <span class="dt">u32</span>, x1: <span class="dt">u32</span>, y1: <span class="dt">u32</span>) <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-133" title="133">        <span class="kw">let</span> sheet = <span class="kw">self</span>.sheets_data<span class="op">[</span>sheet_index<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb3-134" title="134">        <span class="kw">if</span> sheet.z.is_some() <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-135" title="135">            <span class="kw">self</span>.refresh_part(sheet.x + x0, sheet.y + y0, sheet.x + x1, sheet.y + y1);</a>
-<a class="sourceLine" id="cb3-136" title="136">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-137" title="137">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-138" title="138"></a>
-<a class="sourceLine" id="cb3-139" title="139">    <span class="co">// レイヤーの相対値での移動の計算をする</span></a>
-<a class="sourceLine" id="cb3-140" title="140">    <span class="kw">pub</span> <span class="kw">fn</span> slide_by_diff(&amp;<span class="kw">mut</span> <span class="kw">self</span>, sheet_index: <span class="dt">usize</span>, dx: <span class="dt">i32</span>, dy: <span class="dt">i32</span>, width: <span class="dt">i32</span>, height: <span class="dt">i32</span>) <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-141" title="141">        <span class="kw">let</span> scrnx = *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">i32</span>;</a>
-<a class="sourceLine" id="cb3-142" title="142">        <span class="kw">let</span> scrny = *SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">i32</span>;</a>
-<a class="sourceLine" id="cb3-143" title="143">        <span class="kw">let</span> sheet = <span class="kw">self</span>.sheets_data<span class="op">[</span>sheet_index<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb3-144" title="144">        <span class="kw">let</span> <span class="kw">mut</span> new_x = sheet.x <span class="kw">as</span> <span class="dt">i32</span> + dx;</a>
-<a class="sourceLine" id="cb3-145" title="145">        <span class="kw">let</span> <span class="kw">mut</span> new_y = sheet.y <span class="kw">as</span> <span class="dt">i32</span> + dy;</a>
-<a class="sourceLine" id="cb3-146" title="146">        <span class="kw">let</span> xmax = scrnx - width;</a>
-<a class="sourceLine" id="cb3-147" title="147">        <span class="kw">let</span> ymax = scrny - height;</a>
-<a class="sourceLine" id="cb3-148" title="148">        <span class="kw">if</span> new_x &lt; <span class="dv">0</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-149" title="149">            new_x = <span class="dv">0</span>;</a>
-<a class="sourceLine" id="cb3-150" title="150">        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> new_x &gt; xmax <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-151" title="151">            new_x = xmax;</a>
-<a class="sourceLine" id="cb3-152" title="152">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-153" title="153">        <span class="kw">if</span> new_y &lt; <span class="dv">0</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-154" title="154">            new_y = <span class="dv">0</span>;</a>
-<a class="sourceLine" id="cb3-155" title="155">        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> new_y &gt; ymax <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-156" title="156">            new_y = ymax;</a>
-<a class="sourceLine" id="cb3-157" title="157">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-158" title="158">        <span class="kw">self</span>.slide(sheet_index, new_x <span class="kw">as</span> <span class="dt">u32</span>, new_y <span class="kw">as</span> <span class="dt">u32</span>);</a>
-<a class="sourceLine" id="cb3-159" title="159">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-160" title="160"></a>
-<a class="sourceLine" id="cb3-161" title="161">    <span class="co">// レイヤーの絶対値での移動の計算を行う</span></a>
-<a class="sourceLine" id="cb3-162" title="162">    <span class="kw">pub</span> <span class="kw">fn</span> slide(&amp;<span class="kw">mut</span> <span class="kw">self</span>, sheet_index: <span class="dt">usize</span>, x: <span class="dt">u32</span>, y: <span class="dt">u32</span>) <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-163" title="163">        <span class="kw">let</span> sheet = <span class="kw">self</span>.sheets_data<span class="op">[</span>sheet_index<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb3-164" title="164">        <span class="kw">let</span> old_x = sheet.x;</a>
-<a class="sourceLine" id="cb3-165" title="165">        <span class="kw">let</span> old_y = sheet.y;</a>
-<a class="sourceLine" id="cb3-166" title="166">        <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-167" title="167">            <span class="kw">let</span> sh = &amp;<span class="kw">mut</span> <span class="kw">self</span>.sheets_data<span class="op">[</span>sheet_index<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb3-168" title="168">            sh.x = x;</a>
-<a class="sourceLine" id="cb3-169" title="169">            sh.y = y;</a>
-<a class="sourceLine" id="cb3-170" title="170">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-171" title="171">        <span class="kw">if</span> sheet.z.is_some() <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-172" title="172">            <span class="kw">self</span>.refresh_part(old_x, old_y, old_x + sheet.width, old_y + sheet.height);</a>
-<a class="sourceLine" id="cb3-173" title="173">            <span class="kw">self</span>.refresh_part(x, y, x + sheet.width, y + sheet.height);</a>
-<a class="sourceLine" id="cb3-174" title="174">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-175" title="175">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-176" title="176"></a>
-<a class="sourceLine" id="cb3-177" title="177">    <span class="co">// 払出されていたレイヤーを払い出し可能な状態にもどす</span></a>
-<a class="sourceLine" id="cb3-178" title="178">    <span class="kw">pub</span> <span class="kw">fn</span> free(&amp;<span class="kw">mut</span> <span class="kw">self</span>, sheet_index: <span class="dt">usize</span>) <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-179" title="179">        <span class="kw">let</span> sheet = <span class="kw">self</span>.sheets_data<span class="op">[</span>sheet_index<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb3-180" title="180">        <span class="kw">if</span> sheet.z.is_some() <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-181" title="181">            <span class="kw">self</span>.updown(sheet_index, <span class="cn">None</span>);</a>
-<a class="sourceLine" id="cb3-182" title="182">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-183" title="183">        <span class="kw">let</span> <span class="kw">mut</span> sheet = &amp;<span class="kw">mut</span> <span class="kw">self</span>.sheets_data<span class="op">[</span>sheet_index<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb3-184" title="184">        sheet.flag = <span class="pp">SheetFlag::</span>AVAILABLE;</a>
-<a class="sourceLine" id="cb3-185" title="185">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-186" title="186"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// sheet.rs</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">core::cmp::</span>min<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">crate</span><span class="pp">::vga::</span><span class="op">{</span>Color<span class="op">,</span> VRAM_ADDR<span class="op">,</span> SCREEN_HEIGHT<span class="op">,</span> SCREEN_WIDTH<span class="op">};</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">Copy</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="at">)]</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> SheetFlag <span class="op">{</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    AVAILABLE<span class="op">,</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    USED<span class="op">,</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">Copy</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="at">)]</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Sheet <span class="op">{</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> buf_addr<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> width<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> height<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> x<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> y<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> transparent<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>Color<span class="op">&gt;,</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> z<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;,</span> <span class="co">// 重ねあわせたときの高さ</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> flag<span class="op">:</span> SheetFlag<span class="op">,</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Sheet <span class="op">{</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> new() <span class="op">-&gt;</span> Sheet <span class="op">{</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        Sheet <span class="op">{</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>            buf_addr<span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>            width<span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>            height<span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>            x<span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>            y<span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>            transparent<span class="op">:</span> <span class="cn">None</span><span class="op">,</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>            z<span class="op">:</span> <span class="cn">None</span><span class="op">,</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>            flag<span class="op">:</span> <span class="pp">SheetFlag::</span>AVAILABLE<span class="op">,</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> set(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> buf_addr<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> width<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span> height<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span> transparent<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>Color<span class="op">&gt;</span>) <span class="op">{</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>buf_addr <span class="op">=</span> buf_addr<span class="op">;</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>width <span class="op">=</span> width<span class="op">;</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>height <span class="op">=</span> height<span class="op">;</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>transparent <span class="op">=</span> transparent<span class="op">;</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> MAX_SHEETS<span class="op">:</span> <span class="dt">usize</span> <span class="op">=</span> <span class="dv">256</span><span class="op">;</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> SheetManager <span class="op">{</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> z_max<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;,</span>             <span class="co">// 一番上のSheetのz</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> sheets<span class="op">:</span> [<span class="dt">usize</span><span class="op">;</span> MAX_SHEETS]<span class="op">,</span>      <span class="co">// sheets_data上のindexを保持する</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> sheets_data<span class="op">:</span> [Sheet<span class="op">;</span> MAX_SHEETS]<span class="op">,</span> <span class="co">// sheetデータの実体</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> SheetManager <span class="op">{</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> new() <span class="op">-&gt;</span> SheetManager <span class="op">{</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>        SheetManager <span class="op">{</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>            z_max<span class="op">:</span> <span class="cn">None</span><span class="op">,</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>            sheets<span class="op">:</span> [<span class="dv">0</span><span class="op">;</span> MAX_SHEETS]<span class="op">,</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>            sheets_data<span class="op">:</span> [<span class="pp">Sheet::</span>new()<span class="op">;</span> MAX_SHEETS]<span class="op">,</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Sheetの情報をセットする</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> set_buf(</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>        <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>        sheet_index<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>        buf_addr<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>        width<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>        height<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>        transparent<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>Color<span class="op">&gt;,</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">{</span></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> sheet <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">.</span>sheets_data[sheet_index]<span class="op">;</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>        sheet<span class="op">.</span>set(buf_addr<span class="op">,</span> width<span class="op">,</span> height<span class="op">,</span> transparent)<span class="op">;</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 実体データから使用可能なものを払出す</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> alloc(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span>) <span class="op">-&gt;</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MAX_SHEETS <span class="op">{</span></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>sheets_data[i]<span class="op">.</span>flag <span class="op">==</span> <span class="pp">SheetFlag::</span>AVAILABLE <span class="op">{</span></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> <span class="kw">mut</span> sheet <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">.</span>sheets_data[i]<span class="op">;</span></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>                sheet<span class="op">.</span>flag <span class="op">=</span> <span class="pp">SheetFlag::</span>USED<span class="op">;</span></span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>                sheet<span class="op">.</span>z <span class="op">=</span> <span class="cn">None</span><span class="op">;</span></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>                <span class="kw">return</span> <span class="cn">Some</span>(i)<span class="op">;</span></span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>        <span class="cn">None</span></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 指定された領域内の重ね合わせの計算を行う</span></span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> refresh_part(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> x0<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span> y0<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span> x1<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span> y1<span class="op">:</span> <span class="dt">u32</span>) <span class="op">{</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>z_max<span class="op">.</span>is_none() <span class="op">{</span></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> h <span class="kw">in</span> <span class="dv">0</span><span class="op">..=</span><span class="kw">self</span><span class="op">.</span>z_max<span class="op">.</span>unwrap() <span class="op">{</span></span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> sheet <span class="op">=</span> <span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>sheets_data[<span class="kw">self</span><span class="op">.</span>sheets[h <span class="kw">as</span> <span class="dt">usize</span>]]<span class="op">;</span></span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> bx0 <span class="op">=</span> <span class="kw">if</span> x0 <span class="op">&gt;</span> sheet<span class="op">.</span>x <span class="op">{</span> x0 <span class="op">-</span> sheet<span class="op">.</span>x <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">}</span> <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> by0 <span class="op">=</span> <span class="kw">if</span> y0 <span class="op">&gt;</span> sheet<span class="op">.</span>y <span class="op">{</span> y0 <span class="op">-</span> sheet<span class="op">.</span>y <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">}</span> <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> bx1 <span class="op">=</span> <span class="kw">if</span> x1 <span class="op">&gt;</span> sheet<span class="op">.</span>x <span class="op">{</span></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>                min(x1 <span class="op">-</span> sheet<span class="op">.</span>x<span class="op">,</span> sheet<span class="op">.</span>width)</span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>                <span class="dv">0</span></span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> by1 <span class="op">=</span> <span class="kw">if</span> y1 <span class="op">&gt;</span> sheet<span class="op">.</span>y <span class="op">{</span></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>                min(y1 <span class="op">-</span> sheet<span class="op">.</span>y<span class="op">,</span> sheet<span class="op">.</span>height)</span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>                <span class="dv">0</span></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> by <span class="kw">in</span> by0<span class="op">..</span>by1 <span class="op">{</span></span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> vy <span class="op">=</span> sheet<span class="op">.</span>y <span class="kw">as</span> <span class="dt">usize</span> <span class="op">+</span> by<span class="op">;</span></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> bx <span class="kw">in</span> bx0<span class="op">..</span>bx1 <span class="op">{</span></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">let</span> vx <span class="op">=</span> sheet<span class="op">.</span>x <span class="kw">as</span> <span class="dt">usize</span> <span class="op">+</span> bx<span class="op">;</span></span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">let</span> width <span class="op">=</span> sheet<span class="op">.</span>width <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">let</span> c <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">*</span>((sheet<span class="op">.</span>buf_addr <span class="op">+</span> by <span class="op">*</span> width <span class="op">+</span> bx) <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> Color) <span class="op">};</span></span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> <span class="cn">Some</span>(c) <span class="op">!=</span> sheet<span class="op">.</span>transparent <span class="op">{</span></span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">let</span> ptr <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span></span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>                            <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((<span class="op">*</span>VRAM_ADDR <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span>)</span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a>                                <span class="op">.</span>offset(vy <span class="kw">as</span> <span class="dt">isize</span> <span class="op">*</span> <span class="op">*</span>SCREEN_WIDTH <span class="kw">as</span> <span class="dt">isize</span> <span class="op">+</span> vx <span class="kw">as</span> <span class="dt">isize</span>))</span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a>                        <span class="op">};</span></span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>                        <span class="op">*</span>ptr <span class="op">=</span> c <span class="kw">as</span> <span class="dt">u8</span><span class="op">;</span></span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a>    <span class="co">// レイヤーの高さを指定する</span></span>
+<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> updown(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> sheet_index<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> oz<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;</span>) <span class="op">{</span></span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 長い &amp; 実装の詳細はあまりあげてもしょうがないところなので、GitHub参考ということでここでは省く</span></span>
+<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a>    <span class="co">// レイヤーの再描画を行う</span></span>
+<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> refresh(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> sheet_index<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> x0<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span> y0<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span> x1<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span> y1<span class="op">:</span> <span class="dt">u32</span>) <span class="op">{</span></span>
+<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> sheet <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>sheets_data[sheet_index]<span class="op">;</span></span>
+<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> sheet<span class="op">.</span>z<span class="op">.</span>is_some() <span class="op">{</span></span>
+<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>refresh_part(sheet<span class="op">.</span>x <span class="op">+</span> x0<span class="op">,</span> sheet<span class="op">.</span>y <span class="op">+</span> y0<span class="op">,</span> sheet<span class="op">.</span>x <span class="op">+</span> x1<span class="op">,</span> sheet<span class="op">.</span>y <span class="op">+</span> y1)<span class="op">;</span></span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a>    <span class="co">// レイヤーの相対値での移動の計算をする</span></span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> slide_by_diff(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> sheet_index<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> dx<span class="op">:</span> <span class="dt">i32</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">i32</span><span class="op">,</span> width<span class="op">:</span> <span class="dt">i32</span><span class="op">,</span> height<span class="op">:</span> <span class="dt">i32</span>) <span class="op">{</span></span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> scrnx <span class="op">=</span> <span class="op">*</span>SCREEN_WIDTH <span class="kw">as</span> <span class="dt">i32</span><span class="op">;</span></span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> scrny <span class="op">=</span> <span class="op">*</span>SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">i32</span><span class="op">;</span></span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> sheet <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>sheets_data[sheet_index]<span class="op">;</span></span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> new_x <span class="op">=</span> sheet<span class="op">.</span>x <span class="kw">as</span> <span class="dt">i32</span> <span class="op">+</span> dx<span class="op">;</span></span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> new_y <span class="op">=</span> sheet<span class="op">.</span>y <span class="kw">as</span> <span class="dt">i32</span> <span class="op">+</span> dy<span class="op">;</span></span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> xmax <span class="op">=</span> scrnx <span class="op">-</span> width<span class="op">;</span></span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> ymax <span class="op">=</span> scrny <span class="op">-</span> height<span class="op">;</span></span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> new_x <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a>            new_x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> new_x <span class="op">&gt;</span> xmax <span class="op">{</span></span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>            new_x <span class="op">=</span> xmax<span class="op">;</span></span>
+<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> new_y <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a>            new_y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> new_y <span class="op">&gt;</span> ymax <span class="op">{</span></span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a>            new_y <span class="op">=</span> ymax<span class="op">;</span></span>
+<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>slide(sheet_index<span class="op">,</span> new_x <span class="kw">as</span> <span class="dt">u32</span><span class="op">,</span> new_y <span class="kw">as</span> <span class="dt">u32</span>)<span class="op">;</span></span>
+<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a>    <span class="co">// レイヤーの絶対値での移動の計算を行う</span></span>
+<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> slide(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> sheet_index<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> x<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">u32</span>) <span class="op">{</span></span>
+<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> sheet <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>sheets_data[sheet_index]<span class="op">;</span></span>
+<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> old_x <span class="op">=</span> sheet<span class="op">.</span>x<span class="op">;</span></span>
+<span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> old_y <span class="op">=</span> sheet<span class="op">.</span>y<span class="op">;</span></span>
+<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span></span>
+<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> sh <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">.</span>sheets_data[sheet_index]<span class="op">;</span></span>
+<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a>            sh<span class="op">.</span>x <span class="op">=</span> x<span class="op">;</span></span>
+<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a>            sh<span class="op">.</span>y <span class="op">=</span> y<span class="op">;</span></span>
+<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> sheet<span class="op">.</span>z<span class="op">.</span>is_some() <span class="op">{</span></span>
+<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>refresh_part(old_x<span class="op">,</span> old_y<span class="op">,</span> old_x <span class="op">+</span> sheet<span class="op">.</span>width<span class="op">,</span> old_y <span class="op">+</span> sheet<span class="op">.</span>height)<span class="op">;</span></span>
+<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>refresh_part(x<span class="op">,</span> y<span class="op">,</span> x <span class="op">+</span> sheet<span class="op">.</span>width<span class="op">,</span> y <span class="op">+</span> sheet<span class="op">.</span>height)<span class="op">;</span></span>
+<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 払出されていたレイヤーを払い出し可能な状態にもどす</span></span>
+<span id="cb3-178"><a href="#cb3-178" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> free(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> sheet_index<span class="op">:</span> <span class="dt">usize</span>) <span class="op">{</span></span>
+<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> sheet <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>sheets_data[sheet_index]<span class="op">;</span></span>
+<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> sheet<span class="op">.</span>z<span class="op">.</span>is_some() <span class="op">{</span></span>
+<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>updown(sheet_index<span class="op">,</span> <span class="cn">None</span>)<span class="op">;</span></span>
+<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> sheet <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">.</span>sheets_data[sheet_index]<span class="op">;</span></span>
+<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a>        sheet<span class="op">.</span>flag <span class="op">=</span> <span class="pp">SheetFlag::</span>AVAILABLE<span class="op">;</span></span>
+<span id="cb3-185"><a href="#cb3-185" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-186"><a href="#cb3-186" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <h3 id="呼び出し側の修正">呼び出し側の修正</h3>
 <p>上記レイヤーを使って描画するように変更する</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="co">// lib.rs</span></a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="at">#[</span>no_mangle<span class="at">]</span></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="at">#[</span>start<span class="at">]</span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-5" title="5">    <span class="kw">use</span> <span class="pp">asm::</span><span class="op">{</span>cli, sti, stihlt<span class="op">}</span>;</a>
-<a class="sourceLine" id="cb4-6" title="6">    <span class="kw">use</span> <span class="pp">core::fmt::</span>Write;</a>
-<a class="sourceLine" id="cb4-7" title="7">    <span class="kw">use</span> <span class="pp">interrupt::</span><span class="op">{</span>enable_mouse, KEYBUF, MOUSEBUF<span class="op">}</span>;</a>
-<a class="sourceLine" id="cb4-8" title="8">    <span class="kw">use</span> <span class="pp">memory::</span><span class="op">{</span>MemMan, MEMMAN_ADDR<span class="op">}</span>;</a>
-<a class="sourceLine" id="cb4-9" title="9">    <span class="kw">use</span> <span class="pp">mouse::</span><span class="op">{</span>Mouse, MouseDec, MOUSE_CURSOR_HEIGHT, MOUSE_CURSOR_WIDTH<span class="op">}</span>;</a>
-<a class="sourceLine" id="cb4-10" title="10">    <span class="kw">use</span> <span class="pp">sheet::</span>SheetManager;</a>
-<a class="sourceLine" id="cb4-11" title="11">    <span class="kw">use</span> <span class="pp">vga::</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb4-12" title="12">        boxfill, init_palette, init_screen, Color, ScreenWriter, SCREEN_HEIGHT, SCREEN_WIDTH,</a>
-<a class="sourceLine" id="cb4-13" title="13">    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb4-14" title="14"></a>
-<a class="sourceLine" id="cb4-15" title="15">    <span class="pp">descriptor_table::</span>init();</a>
-<a class="sourceLine" id="cb4-16" title="16">    <span class="pp">interrupt::</span>init();</a>
-<a class="sourceLine" id="cb4-17" title="17">    sti();</a>
-<a class="sourceLine" id="cb4-18" title="18">    <span class="pp">interrupt::</span>allow_input();</a>
-<a class="sourceLine" id="cb4-19" title="19">    init_palette();</a>
-<a class="sourceLine" id="cb4-20" title="20">    enable_mouse();</a>
-<a class="sourceLine" id="cb4-21" title="21">    <span class="kw">let</span> memtotal = <span class="pp">memory::</span>memtest(<span class="dv">0x00400000</span>, <span class="dv">0xbfffffff</span>);</a>
-<a class="sourceLine" id="cb4-22" title="22">    <span class="kw">let</span> memman = <span class="kw">unsafe</span> <span class="op">{</span> &amp;<span class="kw">mut</span> *(MEMMAN_ADDR <span class="kw">as</span> *<span class="kw">mut</span> MemMan) <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb4-23" title="23">    *memman = <span class="pp">MemMan::</span>new();</a>
-<a class="sourceLine" id="cb4-24" title="24">    memman.free(<span class="dv">0x00001000</span>, <span class="dv">0x0009e000</span>).unwrap();</a>
-<a class="sourceLine" id="cb4-25" title="25">    memman.free(<span class="dv">0x00400000</span>, <span class="dv">2</span>).unwrap();</a>
-<a class="sourceLine" id="cb4-26" title="26">    memman.free(<span class="dv">0x00400000</span>, memtotal - <span class="dv">0x00400000</span>).unwrap();</a>
-<a class="sourceLine" id="cb4-27" title="27"></a>
-<a class="sourceLine" id="cb4-28" title="28">    <span class="kw">let</span> sheet_manager = <span class="kw">unsafe</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-29" title="29">        &amp;<span class="kw">mut</span> *(memman</a>
-<a class="sourceLine" id="cb4-30" title="30">            .alloc_4k(<span class="pp">core::mem::size_of::</span>&lt;SheetManager&gt;() <span class="kw">as</span> <span class="dt">u32</span>)</a>
-<a class="sourceLine" id="cb4-31" title="31">            .unwrap() <span class="kw">as</span> *<span class="kw">mut</span> SheetManager)</a>
-<a class="sourceLine" id="cb4-32" title="32">    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb4-33" title="33">    *sheet_manager = <span class="pp">SheetManager::</span>new();</a>
-<a class="sourceLine" id="cb4-34" title="34">    <span class="kw">let</span> shi_bg = sheet_manager.alloc().unwrap();</a>
-<a class="sourceLine" id="cb4-35" title="35">    <span class="kw">let</span> shi_mouse = sheet_manager.alloc().unwrap();</a>
-<a class="sourceLine" id="cb4-36" title="36">    <span class="kw">let</span> scrnx = *SCREEN_WIDTH <span class="kw">as</span> <span class="dt">u32</span>;</a>
-<a class="sourceLine" id="cb4-37" title="37">    <span class="kw">let</span> scrny = *SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">u32</span>;</a>
-<a class="sourceLine" id="cb4-38" title="38">    <span class="kw">let</span> buf_bg_addr = memman.alloc_4k(scrnx * scrny).unwrap() <span class="kw">as</span> <span class="dt">usize</span>;</a>
-<a class="sourceLine" id="cb4-39" title="39">    <span class="kw">let</span> buf_mouse = <span class="op">[</span><span class="dv">0u8</span>; MOUSE_CURSOR_WIDTH * MOUSE_CURSOR_HEIGHT<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb4-40" title="40">    <span class="kw">let</span> buf_mouse_addr =</a>
-<a class="sourceLine" id="cb4-41" title="41">        &amp;buf_mouse <span class="kw">as</span> *<span class="kw">const</span> <span class="op">[</span><span class="dt">u8</span>; MOUSE_CURSOR_HEIGHT * MOUSE_CURSOR_WIDTH<span class="op">]</span> <span class="kw">as</span> <span class="dt">usize</span>;</a>
-<a class="sourceLine" id="cb4-42" title="42">    sheet_manager.set_buf(shi_bg, buf_bg_addr, scrnx, scrny, <span class="cn">None</span>);</a>
-<a class="sourceLine" id="cb4-43" title="43">    sheet_manager.set_buf(</a>
-<a class="sourceLine" id="cb4-44" title="44">        shi_mouse,</a>
-<a class="sourceLine" id="cb4-45" title="45">        buf_mouse_addr,</a>
-<a class="sourceLine" id="cb4-46" title="46">        MOUSE_CURSOR_WIDTH <span class="kw">as</span> <span class="dt">u32</span>,</a>
-<a class="sourceLine" id="cb4-47" title="47">        MOUSE_CURSOR_HEIGHT <span class="kw">as</span> <span class="dt">u32</span>,</a>
-<a class="sourceLine" id="cb4-48" title="48">        <span class="cn">Some</span>(<span class="pp">Color::</span>DarkCyan),</a>
-<a class="sourceLine" id="cb4-49" title="49">    );</a>
-<a class="sourceLine" id="cb4-50" title="50"></a>
-<a class="sourceLine" id="cb4-51" title="51">    init_screen(buf_bg_addr);</a>
-<a class="sourceLine" id="cb4-52" title="52">    <span class="kw">let</span> mouse_dec = <span class="pp">MouseDec::</span>new();</a>
-<a class="sourceLine" id="cb4-53" title="53">    <span class="kw">let</span> mx = (scrnx <span class="kw">as</span> <span class="dt">i32</span> - MOUSE_CURSOR_WIDTH <span class="kw">as</span> <span class="dt">i32</span>) / <span class="dv">2</span>;</a>
-<a class="sourceLine" id="cb4-54" title="54">    <span class="kw">let</span> my = (scrny <span class="kw">as</span> <span class="dt">i32</span> - MOUSE_CURSOR_HEIGHT <span class="kw">as</span> <span class="dt">i32</span> - <span class="dv">28</span>) / <span class="dv">2</span>;</a>
-<a class="sourceLine" id="cb4-55" title="55">    <span class="kw">let</span> mouse = <span class="pp">Mouse::</span>new(buf_mouse_addr);</a>
-<a class="sourceLine" id="cb4-56" title="56">    mouse.render();</a>
-<a class="sourceLine" id="cb4-57" title="57"></a>
-<a class="sourceLine" id="cb4-58" title="58">    sheet_manager.slide(shi_mouse, mx <span class="kw">as</span> <span class="dt">u32</span>, my <span class="kw">as</span> <span class="dt">u32</span>);</a>
-<a class="sourceLine" id="cb4-59" title="59">    sheet_manager.updown(shi_bg, <span class="cn">Some</span>(<span class="dv">0</span>));</a>
-<a class="sourceLine" id="cb4-60" title="60">    sheet_manager.updown(shi_mouse, <span class="cn">Some</span>(<span class="dv">1</span>));</a>
-<a class="sourceLine" id="cb4-61" title="61"></a>
-<a class="sourceLine" id="cb4-62" title="62">    boxfill(buf_bg_addr, <span class="pp">Color::</span>DarkCyan, <span class="dv">0</span>, <span class="dv">32</span>, <span class="dv">100</span>, <span class="dv">48</span>);</a>
-<a class="sourceLine" id="cb4-63" title="63">    <span class="kw">let</span> <span class="kw">mut</span> writer = <span class="pp">ScreenWriter::</span>new(<span class="cn">Some</span>(buf_bg_addr), <span class="pp">vga::Color::</span>White, <span class="dv">0</span>, <span class="dv">32</span>);</a>
-<a class="sourceLine" id="cb4-64" title="64">    <span class="pp">write!</span>(</a>
-<a class="sourceLine" id="cb4-65" title="65">        writer,</a>
-<a class="sourceLine" id="cb4-66" title="66">        <span class="st">&quot;total: {}MB  free: {}KB&quot;</span>,</a>
-<a class="sourceLine" id="cb4-67" title="67">        memtotal / (<span class="dv">1024</span> * <span class="dv">1024</span>),</a>
-<a class="sourceLine" id="cb4-68" title="68">        memman.total() / <span class="dv">1024</span></a>
-<a class="sourceLine" id="cb4-69" title="69">    )</a>
-<a class="sourceLine" id="cb4-70" title="70">    .unwrap();</a>
-<a class="sourceLine" id="cb4-71" title="71">    sheet_manager.refresh(shi_bg, <span class="dv">0</span>, <span class="dv">0</span>, scrnx, <span class="dv">48</span>);</a>
-<a class="sourceLine" id="cb4-72" title="72">    <span class="kw">loop</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-73" title="73">        cli();</a>
-<a class="sourceLine" id="cb4-74" title="74">        <span class="kw">if</span> KEYBUF.lock().status() != <span class="dv">0</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-75" title="75">            <span class="kw">let</span> key = KEYBUF.lock().get().unwrap();</a>
-<a class="sourceLine" id="cb4-76" title="76">            sti();</a>
-<a class="sourceLine" id="cb4-77" title="77">            boxfill(buf_bg_addr, <span class="pp">Color::</span>DarkCyan, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">16</span>, <span class="dv">16</span>);</a>
-<a class="sourceLine" id="cb4-78" title="78">            <span class="kw">let</span> <span class="kw">mut</span> writer = <span class="pp">ScreenWriter::</span>new(<span class="cn">Some</span>(buf_bg_addr), <span class="pp">vga::Color::</span>White, <span class="dv">0</span>, <span class="dv">0</span>);</a>
-<a class="sourceLine" id="cb4-79" title="79">            <span class="pp">write!</span>(writer, <span class="st">&quot;{:x}&quot;</span>, key).unwrap();</a>
-<a class="sourceLine" id="cb4-80" title="80">            sheet_manager.refresh(shi_bg, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">16</span>, <span class="dv">16</span>);</a>
-<a class="sourceLine" id="cb4-81" title="81">        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> MOUSEBUF.lock().status() != <span class="dv">0</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-82" title="82">            <span class="kw">let</span> i = MOUSEBUF.lock().get().unwrap();</a>
-<a class="sourceLine" id="cb4-83" title="83">            sti();</a>
-<a class="sourceLine" id="cb4-84" title="84">            <span class="kw">if</span> mouse_dec.decode(i).is_some() <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-85" title="85">                boxfill(buf_bg_addr, <span class="pp">Color::</span>DarkCyan, <span class="dv">32</span>, <span class="dv">0</span>, <span class="dv">32</span> + <span class="dv">15</span> * <span class="dv">8</span>, <span class="dv">16</span>);</a>
-<a class="sourceLine" id="cb4-86" title="86">                <span class="kw">let</span> <span class="kw">mut</span> writer = <span class="pp">ScreenWriter::</span>new(<span class="cn">Some</span>(buf_bg_addr), <span class="pp">vga::Color::</span>White, <span class="dv">32</span>, <span class="dv">0</span>);</a>
-<a class="sourceLine" id="cb4-87" title="87">                <span class="pp">write!</span>(</a>
-<a class="sourceLine" id="cb4-88" title="88">                    writer,</a>
-<a class="sourceLine" id="cb4-89" title="89">                    <span class="st">&quot;[{}{}{} {:&gt;4},{:&gt;4}]&quot;</span>,</a>
-<a class="sourceLine" id="cb4-90" title="90">                    <span class="kw">if</span> (mouse_dec.btn.get() &amp; <span class="dv">0x01</span>) != <span class="dv">0</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-91" title="91">                        <span class="ch">'L'</span></a>
-<a class="sourceLine" id="cb4-92" title="92">                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-93" title="93">                        <span class="ch">'l'</span></a>
-<a class="sourceLine" id="cb4-94" title="94">                    <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb4-95" title="95">                    <span class="kw">if</span> (mouse_dec.btn.get() &amp; <span class="dv">0x04</span>) != <span class="dv">0</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-96" title="96">                        <span class="ch">'C'</span></a>
-<a class="sourceLine" id="cb4-97" title="97">                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-98" title="98">                        <span class="ch">'c'</span></a>
-<a class="sourceLine" id="cb4-99" title="99">                    <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb4-100" title="100">                    <span class="kw">if</span> (mouse_dec.btn.get() &amp; <span class="dv">0x02</span>) != <span class="dv">0</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-101" title="101">                        <span class="ch">'R'</span></a>
-<a class="sourceLine" id="cb4-102" title="102">                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-103" title="103">                        <span class="ch">'r'</span></a>
-<a class="sourceLine" id="cb4-104" title="104">                    <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb4-105" title="105">                    mouse_dec.x.get(),</a>
-<a class="sourceLine" id="cb4-106" title="106">                    mouse_dec.y.get(),</a>
-<a class="sourceLine" id="cb4-107" title="107">                )</a>
-<a class="sourceLine" id="cb4-108" title="108">                .unwrap();</a>
-<a class="sourceLine" id="cb4-109" title="109">                sheet_manager.refresh(shi_bg, <span class="dv">32</span>, <span class="dv">0</span>, <span class="dv">32</span> + <span class="dv">15</span> * <span class="dv">8</span>, <span class="dv">16</span>);</a>
-<a class="sourceLine" id="cb4-110" title="110">                sheet_manager.slide_by_diff(</a>
-<a class="sourceLine" id="cb4-111" title="111">                    shi_mouse,</a>
-<a class="sourceLine" id="cb4-112" title="112">                    mouse_dec.x.get(),</a>
-<a class="sourceLine" id="cb4-113" title="113">                    mouse_dec.y.get(),</a>
-<a class="sourceLine" id="cb4-114" title="114">                    MOUSE_CURSOR_WIDTH <span class="kw">as</span> <span class="dt">i32</span>,</a>
-<a class="sourceLine" id="cb4-115" title="115">                    MOUSE_CURSOR_HEIGHT <span class="kw">as</span> <span class="dt">i32</span>,</a>
-<a class="sourceLine" id="cb4-116" title="116">                );</a>
-<a class="sourceLine" id="cb4-117" title="117">            <span class="op">}</span></a>
-<a class="sourceLine" id="cb4-118" title="118">        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-119" title="119">            stihlt();</a>
-<a class="sourceLine" id="cb4-120" title="120">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb4-121" title="121">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb4-122" title="122"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// lib.rs</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>no_mangle<span class="at">]</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>start<span class="at">]</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">asm::</span><span class="op">{</span>cli<span class="op">,</span> sti<span class="op">,</span> stihlt<span class="op">};</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">core::fmt::</span><span class="bu">Write</span><span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">interrupt::</span><span class="op">{</span>enable_mouse<span class="op">,</span> KEYBUF<span class="op">,</span> MOUSEBUF<span class="op">};</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">memory::</span><span class="op">{</span>MemMan<span class="op">,</span> MEMMAN_ADDR<span class="op">};</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">mouse::</span><span class="op">{</span>Mouse<span class="op">,</span> MouseDec<span class="op">,</span> MOUSE_CURSOR_HEIGHT<span class="op">,</span> MOUSE_CURSOR_WIDTH<span class="op">};</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">sheet::</span>SheetManager<span class="op">;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">vga::</span><span class="op">{</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        boxfill<span class="op">,</span> init_palette<span class="op">,</span> init_screen<span class="op">,</span> Color<span class="op">,</span> ScreenWriter<span class="op">,</span> SCREEN_HEIGHT<span class="op">,</span> SCREEN_WIDTH<span class="op">,</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="pp">descriptor_table::</span>init()<span class="op">;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="pp">interrupt::</span>init()<span class="op">;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    sti()<span class="op">;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="pp">interrupt::</span>allow_input()<span class="op">;</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    init_palette()<span class="op">;</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    enable_mouse()<span class="op">;</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> memtotal <span class="op">=</span> <span class="pp">memory::</span>memtest(<span class="dv">0x00400000</span><span class="op">,</span> <span class="dv">0xbfffffff</span>)<span class="op">;</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> memman <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>(MEMMAN_ADDR <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> MemMan) <span class="op">};</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>memman <span class="op">=</span> <span class="pp">MemMan::</span>new()<span class="op">;</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    memman<span class="op">.</span>free(<span class="dv">0x00001000</span><span class="op">,</span> <span class="dv">0x0009e000</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    memman<span class="op">.</span>free(<span class="dv">0x00400000</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    memman<span class="op">.</span>free(<span class="dv">0x00400000</span><span class="op">,</span> memtotal <span class="op">-</span> <span class="dv">0x00400000</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> sheet_manager <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>        <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>(memman</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>alloc_4k(<span class="pp">core::mem::size_of::</span><span class="op">&lt;</span>SheetManager<span class="op">&gt;</span>() <span class="kw">as</span> <span class="dt">u32</span>)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>unwrap() <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> SheetManager)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>sheet_manager <span class="op">=</span> <span class="pp">SheetManager::</span>new()<span class="op">;</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> shi_bg <span class="op">=</span> sheet_manager<span class="op">.</span>alloc()<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> shi_mouse <span class="op">=</span> sheet_manager<span class="op">.</span>alloc()<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> scrnx <span class="op">=</span> <span class="op">*</span>SCREEN_WIDTH <span class="kw">as</span> <span class="dt">u32</span><span class="op">;</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> scrny <span class="op">=</span> <span class="op">*</span>SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">u32</span><span class="op">;</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> buf_bg_addr <span class="op">=</span> memman<span class="op">.</span>alloc_4k(scrnx <span class="op">*</span> scrny)<span class="op">.</span>unwrap() <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> buf_mouse <span class="op">=</span> [<span class="dv">0u8</span><span class="op">;</span> MOUSE_CURSOR_WIDTH <span class="op">*</span> MOUSE_CURSOR_HEIGHT]<span class="op">;</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> buf_mouse_addr <span class="op">=</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>        <span class="op">&amp;</span>buf_mouse <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> [<span class="dt">u8</span><span class="op">;</span> MOUSE_CURSOR_HEIGHT <span class="op">*</span> MOUSE_CURSOR_WIDTH] <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    sheet_manager<span class="op">.</span>set_buf(shi_bg<span class="op">,</span> buf_bg_addr<span class="op">,</span> scrnx<span class="op">,</span> scrny<span class="op">,</span> <span class="cn">None</span>)<span class="op">;</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    sheet_manager<span class="op">.</span>set_buf(</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>        shi_mouse<span class="op">,</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>        buf_mouse_addr<span class="op">,</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>        MOUSE_CURSOR_WIDTH <span class="kw">as</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>        MOUSE_CURSOR_HEIGHT <span class="kw">as</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>        <span class="cn">Some</span>(<span class="pp">Color::</span>DarkCyan)<span class="op">,</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>    init_screen(buf_bg_addr)<span class="op">;</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> mouse_dec <span class="op">=</span> <span class="pp">MouseDec::</span>new()<span class="op">;</span></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> mx <span class="op">=</span> (scrnx <span class="kw">as</span> <span class="dt">i32</span> <span class="op">-</span> MOUSE_CURSOR_WIDTH <span class="kw">as</span> <span class="dt">i32</span>) <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> my <span class="op">=</span> (scrny <span class="kw">as</span> <span class="dt">i32</span> <span class="op">-</span> MOUSE_CURSOR_HEIGHT <span class="kw">as</span> <span class="dt">i32</span> <span class="op">-</span> <span class="dv">28</span>) <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> mouse <span class="op">=</span> <span class="pp">Mouse::</span>new(buf_mouse_addr)<span class="op">;</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>    mouse<span class="op">.</span>render()<span class="op">;</span></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>    sheet_manager<span class="op">.</span>slide(shi_mouse<span class="op">,</span> mx <span class="kw">as</span> <span class="dt">u32</span><span class="op">,</span> my <span class="kw">as</span> <span class="dt">u32</span>)<span class="op">;</span></span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>    sheet_manager<span class="op">.</span>updown(shi_bg<span class="op">,</span> <span class="cn">Some</span>(<span class="dv">0</span>))<span class="op">;</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>    sheet_manager<span class="op">.</span>updown(shi_mouse<span class="op">,</span> <span class="cn">Some</span>(<span class="dv">1</span>))<span class="op">;</span></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>    boxfill(buf_bg_addr<span class="op">,</span> <span class="pp">Color::</span>DarkCyan<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">32</span><span class="op">,</span> <span class="dv">100</span><span class="op">,</span> <span class="dv">48</span>)<span class="op">;</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span> <span class="pp">ScreenWriter::</span>new(<span class="cn">Some</span>(buf_bg_addr)<span class="op">,</span> <span class="pp">vga::Color::</span>White<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">32</span>)<span class="op">;</span></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>    <span class="pp">write!</span>(</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>        writer<span class="op">,</span></span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;total: {}MB  free: {}KB&quot;</span><span class="op">,</span></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>        memtotal <span class="op">/</span> (<span class="dv">1024</span> <span class="op">*</span> <span class="dv">1024</span>)<span class="op">,</span></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>        memman<span class="op">.</span>total() <span class="op">/</span> <span class="dv">1024</span></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>    sheet_manager<span class="op">.</span>refresh(shi_bg<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> scrnx<span class="op">,</span> <span class="dv">48</span>)<span class="op">;</span></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>        cli()<span class="op">;</span></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> KEYBUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> key <span class="op">=</span> KEYBUF<span class="op">.</span>lock()<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>            boxfill(buf_bg_addr<span class="op">,</span> <span class="pp">Color::</span>DarkCyan<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">16</span><span class="op">,</span> <span class="dv">16</span>)<span class="op">;</span></span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span> <span class="pp">ScreenWriter::</span>new(<span class="cn">Some</span>(buf_bg_addr)<span class="op">,</span> <span class="pp">vga::Color::</span>White<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>            <span class="pp">write!</span>(writer<span class="op">,</span> <span class="st">&quot;{:x}&quot;</span><span class="op">,</span> key)<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>            sheet_manager<span class="op">.</span>refresh(shi_bg<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">16</span><span class="op">,</span> <span class="dv">16</span>)<span class="op">;</span></span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> MOUSEBUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> i <span class="op">=</span> MOUSEBUF<span class="op">.</span>lock()<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> mouse_dec<span class="op">.</span>decode(i)<span class="op">.</span>is_some() <span class="op">{</span></span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>                boxfill(buf_bg_addr<span class="op">,</span> <span class="pp">Color::</span>DarkCyan<span class="op">,</span> <span class="dv">32</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">32</span> <span class="op">+</span> <span class="dv">15</span> <span class="op">*</span> <span class="dv">8</span><span class="op">,</span> <span class="dv">16</span>)<span class="op">;</span></span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span> <span class="pp">ScreenWriter::</span>new(<span class="cn">Some</span>(buf_bg_addr)<span class="op">,</span> <span class="pp">vga::Color::</span>White<span class="op">,</span> <span class="dv">32</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>                <span class="pp">write!</span>(</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>                    writer<span class="op">,</span></span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;[{}{}{} {:&gt;4},{:&gt;4}]&quot;</span><span class="op">,</span></span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> (mouse_dec<span class="op">.</span>btn<span class="op">.</span>get() <span class="op">&amp;</span> <span class="dv">0x01</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>                        <span class="ch">'L'</span></span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>                        <span class="ch">'l'</span></span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>                    <span class="op">},</span></span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> (mouse_dec<span class="op">.</span>btn<span class="op">.</span>get() <span class="op">&amp;</span> <span class="dv">0x04</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>                        <span class="ch">'C'</span></span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>                        <span class="ch">'c'</span></span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>                    <span class="op">},</span></span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> (mouse_dec<span class="op">.</span>btn<span class="op">.</span>get() <span class="op">&amp;</span> <span class="dv">0x02</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>                        <span class="ch">'R'</span></span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>                        <span class="ch">'r'</span></span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>                    <span class="op">},</span></span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>                    mouse_dec<span class="op">.</span>x<span class="op">.</span>get()<span class="op">,</span></span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>                    mouse_dec<span class="op">.</span>y<span class="op">.</span>get()<span class="op">,</span></span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>                sheet_manager<span class="op">.</span>refresh(shi_bg<span class="op">,</span> <span class="dv">32</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">32</span> <span class="op">+</span> <span class="dv">15</span> <span class="op">*</span> <span class="dv">8</span><span class="op">,</span> <span class="dv">16</span>)<span class="op">;</span></span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>                sheet_manager<span class="op">.</span>slide_by_diff(</span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>                    shi_mouse<span class="op">,</span></span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a>                    mouse_dec<span class="op">.</span>x<span class="op">.</span>get()<span class="op">,</span></span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a>                    mouse_dec<span class="op">.</span>y<span class="op">.</span>get()<span class="op">,</span></span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a>                    MOUSE_CURSOR_WIDTH <span class="kw">as</span> <span class="dt">i32</span><span class="op">,</span></span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>                    MOUSE_CURSOR_HEIGHT <span class="kw">as</span> <span class="dt">i32</span><span class="op">,</span></span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>                )<span class="op">;</span></span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>            stihlt()<span class="op">;</span></span>
+<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>かなり長くなってきたが、基本は一旦レイヤー上に図形や文字をレンダリング、レイヤーを必要に応じて移動して、差分が更新されるようにしている。<br />
 マウスは <code>slide</code> や <code>slide_by_diff</code> をつかってレンダリング結果の更新を行っている。<br />
 文字や、最初の矩形表示は <code>refresh</code> を使っている。</p>

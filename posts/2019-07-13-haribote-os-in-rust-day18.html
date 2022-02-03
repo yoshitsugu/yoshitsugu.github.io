@@ -45,155 +45,155 @@
     <span class="date">Posted on July 13, 2019</span>
     
     
-    <span class="tags">, Tags: <a href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a href="../tags/OS.html">OS</a>, <a href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
     
 </div>
 
 <p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は18日目の内容。 <!--more--></p>
 <h2 id="ウィンドウの非アクティブ時にはカーソルの点滅を止める">ウィンドウの非アクティブ時にはカーソルの点滅を止める</h2>
 <p>現在は両方のウィンドウのカーソルが常に点滅している状態なので、ウィンドウがアクティブかどうかで制御する。</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="co">// lib.rs</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">const</span> CONSOLE_CURSOR_ON: <span class="dt">u32</span> = <span class="dv">2</span>;</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">const</span> CONSOLE_CURSOR_OFF: <span class="dt">u32</span> = <span class="dv">3</span>;</a>
-<a class="sourceLine" id="cb1-4" title="4"></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="at">#[</span>no_mangle<span class="at">]</span></a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="at">#[</span>start<span class="at">]</span></a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-8" title="8">    <span class="co">// 省略</span></a>
-<a class="sourceLine" id="cb1-9" title="9">    <span class="kw">let</span> <span class="kw">mut</span> cursor_on = <span class="cn">true</span>; <span class="co">// カーソル点滅をONにするかどうか</span></a>
-<a class="sourceLine" id="cb1-10" title="10">    <span class="co">// 省略</span></a>
-<a class="sourceLine" id="cb1-11" title="11">    <span class="kw">loop</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-12" title="12">        <span class="co">// 省略</span></a>
-<a class="sourceLine" id="cb1-13" title="13">                <span class="co">// タブ</span></a>
-<a class="sourceLine" id="cb1-14" title="14">                <span class="kw">if</span> key == <span class="dv">0x0f</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-15" title="15">                    <span class="co">// ...</span></a>
-<a class="sourceLine" id="cb1-16" title="16">                        <span class="co">// カーソルを消す</span></a>
-<a class="sourceLine" id="cb1-17" title="17">                        cursor_on = <span class="cn">false</span>;</a>
-<a class="sourceLine" id="cb1-18" title="18">                        <span class="co">// コンソールのカーソルを表示</span></a>
-<a class="sourceLine" id="cb1-19" title="19">                        <span class="kw">let</span> ctask = task_manager.tasks_data<span class="op">[</span>console_task_index<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb1-20" title="20">                        <span class="kw">let</span> fifo = <span class="kw">unsafe</span> <span class="op">{</span> &amp;*(ctask.fifo_addr <span class="kw">as</span> *<span class="kw">const</span> Fifo) <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb1-21" title="21">                        fifo.put(CONSOLE_CURSOR_ON).unwrap();</a>
-<a class="sourceLine" id="cb1-22" title="22">                <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-23" title="23">                    <span class="co">// ...</span></a>
-<a class="sourceLine" id="cb1-24" title="24">                        <span class="co">// カーソルを表示</span></a>
-<a class="sourceLine" id="cb1-25" title="25">                        cursor_on = <span class="cn">true</span>;</a>
-<a class="sourceLine" id="cb1-26" title="26">                        <span class="co">// コンソールのカーソルを消す</span></a>
-<a class="sourceLine" id="cb1-27" title="27">                        <span class="kw">let</span> ctask = task_manager.tasks_data<span class="op">[</span>console_task_index<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb1-28" title="28">                        <span class="kw">let</span> fifo = <span class="kw">unsafe</span> <span class="op">{</span> &amp;*(ctask.fifo_addr <span class="kw">as</span> *<span class="kw">const</span> Fifo) <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb1-29" title="29">                        fifo.put(CONSOLE_CURSOR_OFF).unwrap();</a>
-<a class="sourceLine" id="cb1-30" title="30">                <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-31" title="31">        <span class="co">// 省略</span></a>
-<a class="sourceLine" id="cb1-32" title="32">                <span class="kw">if</span> i != <span class="dv">0</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-33" title="33">                    TIMER_MANAGER.lock().init_timer(timer_index3, fifo_addr, <span class="dv">0</span>);</a>
-<a class="sourceLine" id="cb1-34" title="34">                    cursor_c = <span class="kw">if</span> cursor_on <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-35" title="35">                        <span class="pp">Color::</span>Black</a>
-<a class="sourceLine" id="cb1-36" title="36">                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-37" title="37">                        <span class="pp">Color::</span>White</a>
-<a class="sourceLine" id="cb1-38" title="38">                    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb1-39" title="39">                <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-40" title="40">                    TIMER_MANAGER.lock().init_timer(timer_index3, fifo_addr, <span class="dv">1</span>);</a>
-<a class="sourceLine" id="cb1-41" title="41">                    cursor_c = <span class="pp">Color::</span>White;</a>
-<a class="sourceLine" id="cb1-42" title="42">                <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-43" title="43">                TIMER_MANAGER.lock().set_time(timer_index3, <span class="dv">50</span>);</a>
-<a class="sourceLine" id="cb1-44" title="44">                <span class="co">// cursor_on = trueのときのみ点滅</span></a>
-<a class="sourceLine" id="cb1-45" title="45">                <span class="kw">if</span> cursor_on <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-46" title="46">                    boxfill(buf_win_addr, <span class="dv">144</span>, cursor_c, cursor_x, <span class="dv">28</span>, cursor_x + <span class="dv">8</span>, <span class="dv">43</span>);</a>
-<a class="sourceLine" id="cb1-47" title="47">                    sheet_manager.refresh(shi_win, cursor_x <span class="kw">as</span> <span class="dt">i32</span>, <span class="dv">28</span>, cursor_x <span class="kw">as</span> <span class="dt">i32</span> + <span class="dv">8</span>, <span class="dv">44</span>)</a>
-<a class="sourceLine" id="cb1-48" title="48">                <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-49" title="49"><span class="co">// 以下省略              </span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// lib.rs</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> CONSOLE_CURSOR_ON<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> CONSOLE_CURSOR_OFF<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>no_mangle<span class="at">]</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>start<span class="at">]</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> cursor_on <span class="op">=</span> <span class="cn">true</span><span class="op">;</span> <span class="co">// カーソル点滅をONにするかどうか</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 省略</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                <span class="co">// タブ</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> key <span class="op">==</span> <span class="dv">0x0f</span> <span class="op">{</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// ...</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                        <span class="co">// カーソルを消す</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                        cursor_on <span class="op">=</span> <span class="cn">false</span><span class="op">;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                        <span class="co">// コンソールのカーソルを表示</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">let</span> ctask <span class="op">=</span> task_manager<span class="op">.</span>tasks_data[console_task_index]<span class="op">;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">let</span> fifo <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;*</span>(ctask<span class="op">.</span>fifo_addr <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> Fifo) <span class="op">};</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>                        fifo<span class="op">.</span>put(CONSOLE_CURSOR_ON)<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// ...</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                        <span class="co">// カーソルを表示</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                        cursor_on <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                        <span class="co">// コンソールのカーソルを消す</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">let</span> ctask <span class="op">=</span> task_manager<span class="op">.</span>tasks_data[console_task_index]<span class="op">;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">let</span> fifo <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;*</span>(ctask<span class="op">.</span>fifo_addr <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> Fifo) <span class="op">};</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>                        fifo<span class="op">.</span>put(CONSOLE_CURSOR_OFF)<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 省略</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> i <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>                    TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>init_timer(timer_index3<span class="op">,</span> fifo_addr<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>                    cursor_c <span class="op">=</span> <span class="kw">if</span> cursor_on <span class="op">{</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>                        <span class="pp">Color::</span>Black</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                        <span class="pp">Color::</span>White</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>                    <span class="op">};</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>                    TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>init_timer(timer_index3<span class="op">,</span> fifo_addr<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>                    cursor_c <span class="op">=</span> <span class="pp">Color::</span>White<span class="op">;</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>                TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>set_time(timer_index3<span class="op">,</span> <span class="dv">50</span>)<span class="op">;</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>                <span class="co">// cursor_on = trueのときのみ点滅</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> cursor_on <span class="op">{</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>                    boxfill(buf_win_addr<span class="op">,</span> <span class="dv">144</span><span class="op">,</span> cursor_c<span class="op">,</span> cursor_x<span class="op">,</span> <span class="dv">28</span><span class="op">,</span> cursor_x <span class="op">+</span> <span class="dv">8</span><span class="op">,</span> <span class="dv">43</span>)<span class="op">;</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>                    sheet_manager<span class="op">.</span>refresh(shi_win<span class="op">,</span> cursor_x <span class="kw">as</span> <span class="dt">i32</span><span class="op">,</span> <span class="dv">28</span><span class="op">,</span> cursor_x <span class="kw">as</span> <span class="dt">i32</span> <span class="op">+</span> <span class="dv">8</span><span class="op">,</span> <span class="dv">44</span>)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="co">// 以下省略              </span></span></code></pre></div>
 <p>コンソールタスクの方にはfifo経由で渡すようにしている。 コンソールタスク側にも点滅制御ロジックがはいるが、同じなので省略する。</p>
 <h3 id="実行結果">実行結果</h3>
 <p><img src="../images/20190713/cursor.gif" class="blog-img img-responsive" alt="カーソル点滅の抑止" title="カーソル点滅の抑止" /></p>
 <h2 id="enterキーのハンドリング">Enterキーのハンドリング</h2>
 <p>Enterキーを入力されたときの処理を追加する。<br />
 コンソールウィンドウでのみ扱いたいため、コンソールウィンドウのタスク側にfifo経由で送る。</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="co">// lib.rs</span></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw">const</span> CONSOLE_ENTER: <span class="dt">u32</span> = <span class="dv">10</span>;</a>
-<a class="sourceLine" id="cb2-3" title="3"></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="at">#[</span>no_mangle<span class="at">]</span></a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="at">#[</span>start<span class="at">]</span></a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-7" title="7">    <span class="co">// 省略</span></a>
-<a class="sourceLine" id="cb2-8" title="8">                <span class="co">// Enterキー</span></a>
-<a class="sourceLine" id="cb2-9" title="9">                <span class="kw">if</span> key == <span class="dv">0x1c</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-10" title="10">                    <span class="kw">if</span> active_window != <span class="dv">0</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-11" title="11">                        <span class="kw">let</span> ctask = task_manager.tasks_data<span class="op">[</span>console_task_index<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb2-12" title="12">                        <span class="kw">let</span> fifo = <span class="kw">unsafe</span> <span class="op">{</span> &amp;*(ctask.fifo_addr <span class="kw">as</span> *<span class="kw">const</span> Fifo) <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb2-13" title="13">                        fifo.put(CONSOLE_ENTER + KEYBOARD_OFFSET).unwrap();</a>
-<a class="sourceLine" id="cb2-14" title="14">                    <span class="op">}</span></a>
-<a class="sourceLine" id="cb2-15" title="15">                <span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// lib.rs</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> CONSOLE_ENTER<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>no_mangle<span class="at">]</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>start<span class="at">]</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                <span class="co">// Enterキー</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> key <span class="op">==</span> <span class="dv">0x1c</span> <span class="op">{</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> active_window <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">let</span> ctask <span class="op">=</span> task_manager<span class="op">.</span>tasks_data[console_task_index]<span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">let</span> fifo <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;*</span>(ctask<span class="op">.</span>fifo_addr <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> Fifo) <span class="op">};</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                        fifo<span class="op">.</span>put(CONSOLE_ENTER <span class="op">+</span> KEYBOARD_OFFSET)<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span></code></pre></div>
 <p>コンソールタスク側では<code>CONSOLE_ENTER</code>をうけとったら、Y座標を一文字分変えるようにする。 ウィンドウの最後までいった場合はスクロール処理をする。</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="co">//lib.rs</span></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> console_task(sheet_index: <span class="dt">usize</span>) <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-3" title="3">    <span class="co">// 省略</span></a>
-<a class="sourceLine" id="cb3-4" title="4">                    <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> key == CONSOLE_ENTER <span class="kw">as</span> <span class="dt">u8</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-5" title="5">                        <span class="pp">write_with_bg!</span>(</a>
-<a class="sourceLine" id="cb3-6" title="6">                            sheet_manager,</a>
-<a class="sourceLine" id="cb3-7" title="7">                            sheet_index,</a>
-<a class="sourceLine" id="cb3-8" title="8">                            sheet.width,</a>
-<a class="sourceLine" id="cb3-9" title="9">                            sheet.height,</a>
-<a class="sourceLine" id="cb3-10" title="10">                            cursor_x,</a>
-<a class="sourceLine" id="cb3-11" title="11">                            cursor_y,</a>
-<a class="sourceLine" id="cb3-12" title="12">                            <span class="pp">Color::</span>White,</a>
-<a class="sourceLine" id="cb3-13" title="13">                            <span class="pp">Color::</span>Black,</a>
-<a class="sourceLine" id="cb3-14" title="14">                            <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb3-15" title="15">                            <span class="st">&quot; &quot;</span></a>
-<a class="sourceLine" id="cb3-16" title="16">                        );</a>
-<a class="sourceLine" id="cb3-17" title="17">                        <span class="kw">if</span> cursor_y &lt; max_cursor_y <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-18" title="18">                            cursor_y += <span class="dv">16</span>;</a>
-<a class="sourceLine" id="cb3-19" title="19">                        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-20" title="20">                            <span class="co">// スクロール処理</span></a>
-<a class="sourceLine" id="cb3-21" title="21">                            <span class="kw">for</span> y <span class="kw">in</span> min_cursor_y..max_cursor_y <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-22" title="22">                                <span class="kw">for</span> x <span class="kw">in</span> min_cursor_x..max_cursor_x <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-23" title="23">                                    <span class="kw">let</span> x = x <span class="kw">as</span> <span class="dt">usize</span>;</a>
-<a class="sourceLine" id="cb3-24" title="24">                                    <span class="kw">let</span> y = y <span class="kw">as</span> <span class="dt">usize</span>;</a>
-<a class="sourceLine" id="cb3-25" title="25">                                    <span class="co">// 下の画素をコピーする</span></a>
-<a class="sourceLine" id="cb3-26" title="26">                                    <span class="kw">let</span> <span class="kw">mut</span> ptr = <span class="kw">unsafe</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-27" title="27">                                        &amp;<span class="kw">mut</span> *((sheet.buf_addr + x + y * sheet.width <span class="kw">as</span> <span class="dt">usize</span>)</a>
-<a class="sourceLine" id="cb3-28" title="28">                                            <span class="kw">as</span> *<span class="kw">mut</span> <span class="dt">u8</span>)</a>
-<a class="sourceLine" id="cb3-29" title="29">                                    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb3-30" title="30">                                    *ptr = <span class="kw">unsafe</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-31" title="31">                                        *((sheet.buf_addr + x + (y + <span class="dv">16</span>) * sheet.width <span class="kw">as</span> <span class="dt">usize</span>)</a>
-<a class="sourceLine" id="cb3-32" title="32">                                            <span class="kw">as</span> *<span class="kw">const</span> <span class="dt">u8</span>)</a>
-<a class="sourceLine" id="cb3-33" title="33">                                    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-34" title="34">                                <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-35" title="35">                            <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-36" title="36">                            <span class="kw">for</span> y <span class="kw">in</span> max_cursor_y..(max_cursor_y + <span class="dv">16</span>) <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-37" title="37">                                <span class="kw">for</span> x <span class="kw">in</span> min_cursor_x..max_cursor_x <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-38" title="38">                                    <span class="kw">let</span> x = x <span class="kw">as</span> <span class="dt">usize</span>;</a>
-<a class="sourceLine" id="cb3-39" title="39">                                    <span class="kw">let</span> y = y <span class="kw">as</span> <span class="dt">usize</span>;</a>
-<a class="sourceLine" id="cb3-40" title="40">                                    <span class="co">// 最後の行は黒で埋める</span></a>
-<a class="sourceLine" id="cb3-41" title="41">                                    <span class="kw">let</span> <span class="kw">mut</span> ptr = <span class="kw">unsafe</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-42" title="42">                                        &amp;<span class="kw">mut</span> *((sheet.buf_addr + x + y * sheet.width <span class="kw">as</span> <span class="dt">usize</span>)</a>
-<a class="sourceLine" id="cb3-43" title="43">                                            <span class="kw">as</span> *<span class="kw">mut</span> <span class="dt">u8</span>)</a>
-<a class="sourceLine" id="cb3-44" title="44">                                    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb3-45" title="45">                                    *ptr = <span class="pp">Color::</span>Black <span class="kw">as</span> <span class="dt">u8</span>;</a>
-<a class="sourceLine" id="cb3-46" title="46">                                <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-47" title="47">                            <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-48" title="48">                            sheet_manager.refresh(</a>
-<a class="sourceLine" id="cb3-49" title="49">                                sheet_index,</a>
-<a class="sourceLine" id="cb3-50" title="50">                                min_cursor_x <span class="kw">as</span> <span class="dt">i32</span>,</a>
-<a class="sourceLine" id="cb3-51" title="51">                                min_cursor_y <span class="kw">as</span> <span class="dt">i32</span>,</a>
-<a class="sourceLine" id="cb3-52" title="52">                                max_cursor_x <span class="kw">as</span> <span class="dt">i32</span>,</a>
-<a class="sourceLine" id="cb3-53" title="53">                                max_cursor_y <span class="kw">as</span> <span class="dt">i32</span> + <span class="dv">16</span>,</a>
-<a class="sourceLine" id="cb3-54" title="54">                            );</a>
-<a class="sourceLine" id="cb3-55" title="55">                        <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-56" title="56">                        <span class="co">// プロンプト表示</span></a>
-<a class="sourceLine" id="cb3-57" title="57">                        <span class="pp">write_with_bg!</span>(</a>
-<a class="sourceLine" id="cb3-58" title="58">                            sheet_manager,</a>
-<a class="sourceLine" id="cb3-59" title="59">                            sheet_index,</a>
-<a class="sourceLine" id="cb3-60" title="60">                            sheet.width,</a>
-<a class="sourceLine" id="cb3-61" title="61">                            sheet.height,</a>
-<a class="sourceLine" id="cb3-62" title="62">                            <span class="dv">8</span>,</a>
-<a class="sourceLine" id="cb3-63" title="63">                            cursor_y,</a>
-<a class="sourceLine" id="cb3-64" title="64">                            <span class="pp">Color::</span>White,</a>
-<a class="sourceLine" id="cb3-65" title="65">                            <span class="pp">Color::</span>Black,</a>
-<a class="sourceLine" id="cb3-66" title="66">                            <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb3-67" title="67">                            <span class="st">&quot;&gt;&quot;</span></a>
-<a class="sourceLine" id="cb3-68" title="68">                        );</a>
-<a class="sourceLine" id="cb3-69" title="69">                        cursor_x = <span class="dv">16</span>;</a>
-<a class="sourceLine" id="cb3-70" title="70">                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> </a>
-<a class="sourceLine" id="cb3-71" title="71">                      <span class="co">// 省略</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">//lib.rs</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> console_task(sheet_index<span class="op">:</span> <span class="dt">usize</span>) <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> key <span class="op">==</span> CONSOLE_ENTER <span class="kw">as</span> <span class="dt">u8</span> <span class="op">{</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                        <span class="pp">write_with_bg!</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                            sheet_manager<span class="op">,</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                            sheet_index<span class="op">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                            sheet<span class="op">.</span>width<span class="op">,</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                            sheet<span class="op">.</span>height<span class="op">,</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                            cursor_x<span class="op">,</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                            cursor_y<span class="op">,</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                            <span class="pp">Color::</span>White<span class="op">,</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                            <span class="pp">Color::</span>Black<span class="op">,</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                            <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot; &quot;</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                        )<span class="op">;</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">if</span> cursor_y <span class="op">&lt;</span> max_cursor_y <span class="op">{</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>                            cursor_y <span class="op">+=</span> <span class="dv">16</span><span class="op">;</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>                            <span class="co">// スクロール処理</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                            <span class="kw">for</span> y <span class="kw">in</span> min_cursor_y<span class="op">..</span>max_cursor_y <span class="op">{</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                                <span class="kw">for</span> x <span class="kw">in</span> min_cursor_x<span class="op">..</span>max_cursor_x <span class="op">{</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                                    <span class="kw">let</span> x <span class="op">=</span> x <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                                    <span class="kw">let</span> y <span class="op">=</span> y <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                                    <span class="co">// 下の画素をコピーする</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>                                    <span class="kw">let</span> <span class="kw">mut</span> ptr <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>                                        <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((sheet<span class="op">.</span>buf_addr <span class="op">+</span> x <span class="op">+</span> y <span class="op">*</span> sheet<span class="op">.</span>width <span class="kw">as</span> <span class="dt">usize</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>                                            <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span>)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>                                    <span class="op">};</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>                                    <span class="op">*</span>ptr <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>                                        <span class="op">*</span>((sheet<span class="op">.</span>buf_addr <span class="op">+</span> x <span class="op">+</span> (y <span class="op">+</span> <span class="dv">16</span>) <span class="op">*</span> sheet<span class="op">.</span>width <span class="kw">as</span> <span class="dt">usize</span>)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>                                            <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> <span class="dt">u8</span>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>                                    <span class="op">}</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>                                <span class="op">}</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>                            <span class="op">}</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>                            <span class="kw">for</span> y <span class="kw">in</span> max_cursor_y<span class="op">..</span>(max_cursor_y <span class="op">+</span> <span class="dv">16</span>) <span class="op">{</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>                                <span class="kw">for</span> x <span class="kw">in</span> min_cursor_x<span class="op">..</span>max_cursor_x <span class="op">{</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>                                    <span class="kw">let</span> x <span class="op">=</span> x <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>                                    <span class="kw">let</span> y <span class="op">=</span> y <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>                                    <span class="co">// 最後の行は黒で埋める</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>                                    <span class="kw">let</span> <span class="kw">mut</span> ptr <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>                                        <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((sheet<span class="op">.</span>buf_addr <span class="op">+</span> x <span class="op">+</span> y <span class="op">*</span> sheet<span class="op">.</span>width <span class="kw">as</span> <span class="dt">usize</span>)</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>                                            <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span>)</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>                                    <span class="op">};</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>                                    <span class="op">*</span>ptr <span class="op">=</span> <span class="pp">Color::</span>Black <span class="kw">as</span> <span class="dt">u8</span><span class="op">;</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>                                <span class="op">}</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>                            <span class="op">}</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>                            sheet_manager<span class="op">.</span>refresh(</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>                                sheet_index<span class="op">,</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>                                min_cursor_x <span class="kw">as</span> <span class="dt">i32</span><span class="op">,</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>                                min_cursor_y <span class="kw">as</span> <span class="dt">i32</span><span class="op">,</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>                                max_cursor_x <span class="kw">as</span> <span class="dt">i32</span><span class="op">,</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>                                max_cursor_y <span class="kw">as</span> <span class="dt">i32</span> <span class="op">+</span> <span class="dv">16</span><span class="op">,</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>                            )<span class="op">;</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>                        <span class="co">// プロンプト表示</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>                        <span class="pp">write_with_bg!</span>(</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>                            sheet_manager<span class="op">,</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>                            sheet_index<span class="op">,</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>                            sheet<span class="op">.</span>width<span class="op">,</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>                            sheet<span class="op">.</span>height<span class="op">,</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>                            <span class="dv">8</span><span class="op">,</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>                            cursor_y<span class="op">,</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>                            <span class="pp">Color::</span>White<span class="op">,</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>                            <span class="pp">Color::</span>Black<span class="op">,</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>                            <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot;&gt;&quot;</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>                        )<span class="op">;</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>                        cursor_x <span class="op">=</span> <span class="dv">16</span><span class="op">;</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> </span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>                      <span class="co">// 省略</span></span></code></pre></div>
 <h3 id="実行結果-1">実行結果</h3>
 <p>以下の通り改行とスクロールができた。</p>
 <p><img src="../images/20190713/scroll.gif" class="blog-img img-responsive" alt="改行とスクロール" title="改行とスクロール" /></p>
@@ -201,152 +201,152 @@
 <p>コンソール上で<code>mem</code>と入力することで、メモリの使用量を表示するようなコマンドを実装する。<br />
 実装にあたり、改行されるまでに入力された文字を格納していく配列をつくる。<br />
 尚、今後もコンソールにコマンドを追加していくようなので、<code>console.rs</code>という新しいファイルを作り、そちらにコンソールまわりはまとめることにした。</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="co">// console.rs</span></a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> console_task(sheet_index: <span class="dt">usize</span>, memtotal: <span class="dt">usize</span>) <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-3" title="3">    <span class="co">// 省略</span></a>
-<a class="sourceLine" id="cb4-4" title="4"></a>
-<a class="sourceLine" id="cb4-5" title="5">    <span class="co">// コマンドを保持するための配列</span></a>
-<a class="sourceLine" id="cb4-6" title="6">    <span class="kw">let</span> <span class="kw">mut</span> cmdline: <span class="op">[</span><span class="dt">u8</span>; <span class="dv">30</span><span class="op">]</span> = <span class="op">[</span><span class="dv">0</span>; <span class="dv">30</span><span class="op">]</span>;</a>
-<a class="sourceLine" id="cb4-7" title="7"></a>
-<a class="sourceLine" id="cb4-8" title="8">    <span class="kw">loop</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-9" title="9">    <span class="co">// 省略</span></a>
-<a class="sourceLine" id="cb4-10" title="10"><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> key == CONSOLE_ENTER <span class="kw">as</span> <span class="dt">u8</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-11" title="11">                        <span class="pp">write_with_bg!</span>(</a>
-<a class="sourceLine" id="cb4-12" title="12">                            sheet_manager,</a>
-<a class="sourceLine" id="cb4-13" title="13">                            sheet_index,</a>
-<a class="sourceLine" id="cb4-14" title="14">                            sheet.width,</a>
-<a class="sourceLine" id="cb4-15" title="15">                            sheet.height,</a>
-<a class="sourceLine" id="cb4-16" title="16">                            cursor_x,</a>
-<a class="sourceLine" id="cb4-17" title="17">                            cursor_y,</a>
-<a class="sourceLine" id="cb4-18" title="18">                            <span class="pp">Color::</span>White,</a>
-<a class="sourceLine" id="cb4-19" title="19">                            <span class="pp">Color::</span>Black,</a>
-<a class="sourceLine" id="cb4-20" title="20">                            <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb4-21" title="21">                            <span class="st">&quot; &quot;</span></a>
-<a class="sourceLine" id="cb4-22" title="22">                        );</a>
-<a class="sourceLine" id="cb4-23" title="23">                        cursor_y = newline(cursor_y, sheet_manager, sheet_index);</a>
-<a class="sourceLine" id="cb4-24" title="24">                        cursor_y =</a>
-<a class="sourceLine" id="cb4-25" title="25">                            exec_cmd(cmdline, cursor_y, sheet_manager, sheet_index, memtotal);</a>
-<a class="sourceLine" id="cb4-26" title="26">                        cmdline = <span class="op">[</span><span class="dv">0</span>; <span class="dv">30</span><span class="op">]</span>;</a>
-<a class="sourceLine" id="cb4-27" title="27">                        <span class="co">// プロンプト表示</span></a>
-<a class="sourceLine" id="cb4-28" title="28">                        <span class="pp">write_with_bg!</span>(</a>
-<a class="sourceLine" id="cb4-29" title="29">                            sheet_manager,</a>
-<a class="sourceLine" id="cb4-30" title="30">                            sheet_index,</a>
-<a class="sourceLine" id="cb4-31" title="31">                            sheet.width,</a>
-<a class="sourceLine" id="cb4-32" title="32">                            sheet.height,</a>
-<a class="sourceLine" id="cb4-33" title="33">                            <span class="dv">8</span>,</a>
-<a class="sourceLine" id="cb4-34" title="34">                            cursor_y,</a>
-<a class="sourceLine" id="cb4-35" title="35">                            <span class="pp">Color::</span>White,</a>
-<a class="sourceLine" id="cb4-36" title="36">                            <span class="pp">Color::</span>Black,</a>
-<a class="sourceLine" id="cb4-37" title="37">                            <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb4-38" title="38">                            <span class="st">&quot;&gt;&quot;</span></a>
-<a class="sourceLine" id="cb4-39" title="39">                        );</a>
-<a class="sourceLine" id="cb4-40" title="40">                        cursor_x = <span class="dv">16</span>;</a>
-<a class="sourceLine" id="cb4-41" title="41">                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-42" title="42">                        <span class="kw">if</span> cursor_x &lt; MAX_CURSOR_X <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-43" title="43">                            cmdline<span class="op">[</span>cursor_x <span class="kw">as</span> <span class="dt">usize</span> / <span class="dv">8</span> - <span class="dv">2</span><span class="op">]</span> = key;</a>
-<a class="sourceLine" id="cb4-44" title="44">                            <span class="pp">write_with_bg!</span>(</a>
-<a class="sourceLine" id="cb4-45" title="45">                                sheet_manager,</a>
-<a class="sourceLine" id="cb4-46" title="46">                                sheet_index,</a>
-<a class="sourceLine" id="cb4-47" title="47">                                sheet.width,</a>
-<a class="sourceLine" id="cb4-48" title="48">                                sheet.height,</a>
-<a class="sourceLine" id="cb4-49" title="49">                                cursor_x,</a>
-<a class="sourceLine" id="cb4-50" title="50">                                cursor_y,</a>
-<a class="sourceLine" id="cb4-51" title="51">                                <span class="pp">Color::</span>White,</a>
-<a class="sourceLine" id="cb4-52" title="52">                                <span class="pp">Color::</span>Black,</a>
-<a class="sourceLine" id="cb4-53" title="53">                                <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb4-54" title="54">                                <span class="st">&quot;{}&quot;</span>,</a>
-<a class="sourceLine" id="cb4-55" title="55">                                key <span class="kw">as</span> <span class="dt">char</span>,</a>
-<a class="sourceLine" id="cb4-56" title="56">                            );</a>
-<a class="sourceLine" id="cb4-57" title="57">                            cursor_x += <span class="dv">8</span>;</a>
-<a class="sourceLine" id="cb4-58" title="58">                        <span class="op">}</span></a>
-<a class="sourceLine" id="cb4-59" title="59">                    <span class="op">}</span>      </a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// console.rs</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> console_task(sheet_index<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> memtotal<span class="op">:</span> <span class="dt">usize</span>) <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// コマンドを保持するための配列</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> cmdline<span class="op">:</span> [<span class="dt">u8</span><span class="op">;</span> <span class="dv">30</span>] <span class="op">=</span> [<span class="dv">0</span><span class="op">;</span> <span class="dv">30</span>]<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> key <span class="op">==</span> CONSOLE_ENTER <span class="kw">as</span> <span class="dt">u8</span> <span class="op">{</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                        <span class="pp">write_with_bg!</span>(</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                            sheet_manager<span class="op">,</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                            sheet_index<span class="op">,</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                            sheet<span class="op">.</span>width<span class="op">,</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                            sheet<span class="op">.</span>height<span class="op">,</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>                            cursor_x<span class="op">,</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>                            cursor_y<span class="op">,</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>                            <span class="pp">Color::</span>White<span class="op">,</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>                            <span class="pp">Color::</span>Black<span class="op">,</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>                            <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot; &quot;</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>                        )<span class="op">;</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>                        cursor_y <span class="op">=</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>                        cursor_y <span class="op">=</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>                            exec_cmd(cmdline<span class="op">,</span> cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index<span class="op">,</span> memtotal)<span class="op">;</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>                        cmdline <span class="op">=</span> [<span class="dv">0</span><span class="op">;</span> <span class="dv">30</span>]<span class="op">;</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>                        <span class="co">// プロンプト表示</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>                        <span class="pp">write_with_bg!</span>(</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>                            sheet_manager<span class="op">,</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>                            sheet_index<span class="op">,</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>                            sheet<span class="op">.</span>width<span class="op">,</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>                            sheet<span class="op">.</span>height<span class="op">,</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>                            <span class="dv">8</span><span class="op">,</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>                            cursor_y<span class="op">,</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>                            <span class="pp">Color::</span>White<span class="op">,</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>                            <span class="pp">Color::</span>Black<span class="op">,</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>                            <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot;&gt;&quot;</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>                        )<span class="op">;</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>                        cursor_x <span class="op">=</span> <span class="dv">16</span><span class="op">;</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">if</span> cursor_x <span class="op">&lt;</span> MAX_CURSOR_X <span class="op">{</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>                            cmdline[cursor_x <span class="kw">as</span> <span class="dt">usize</span> <span class="op">/</span> <span class="dv">8</span> <span class="op">-</span> <span class="dv">2</span>] <span class="op">=</span> key<span class="op">;</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>                            <span class="pp">write_with_bg!</span>(</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>                                sheet_manager<span class="op">,</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>                                sheet_index<span class="op">,</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>                                sheet<span class="op">.</span>width<span class="op">,</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>                                sheet<span class="op">.</span>height<span class="op">,</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>                                cursor_x<span class="op">,</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>                                cursor_y<span class="op">,</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>                                <span class="pp">Color::</span>White<span class="op">,</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>                                <span class="pp">Color::</span>Black<span class="op">,</span></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>                                <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;{}&quot;</span><span class="op">,</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>                                key <span class="kw">as</span> <span class="dt">char</span><span class="op">,</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>                            )<span class="op">;</span></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>                            cursor_x <span class="op">+=</span> <span class="dv">8</span><span class="op">;</span></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span></span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span>      </span></code></pre></div>
 <p>改行処理をまとめた<code>newline</code>、コマンド実行をまとめた<code>exec_cmd</code>という関数を追加する。<br />
 <code>newline</code>は前述の処理をまとめただけなので、記載は省く。</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="co">// console.rs</span></a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="kw">fn</span> exec_cmd(</a>
-<a class="sourceLine" id="cb5-3" title="3">    cmdline: <span class="op">[</span><span class="dt">u8</span>; <span class="dv">30</span><span class="op">]</span>,</a>
-<a class="sourceLine" id="cb5-4" title="4">    cursor_y: <span class="dt">isize</span>,</a>
-<a class="sourceLine" id="cb5-5" title="5">    sheet_manager: &amp;<span class="kw">mut</span> SheetManager,</a>
-<a class="sourceLine" id="cb5-6" title="6">    sheet_index: <span class="dt">usize</span>,</a>
-<a class="sourceLine" id="cb5-7" title="7">    memtotal: <span class="dt">usize</span>,</a>
-<a class="sourceLine" id="cb5-8" title="8">) -&gt; <span class="dt">isize</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-9" title="9">    <span class="kw">let</span> sheet = sheet_manager.sheets_data<span class="op">[</span>sheet_index<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb5-10" title="10">    <span class="kw">let</span> <span class="kw">mut</span> cursor_y = cursor_y;</a>
-<a class="sourceLine" id="cb5-11" title="11">    <span class="kw">let</span> cmd_ind = extract_cmd_index(cmdline);</a>
-<a class="sourceLine" id="cb5-12" title="12">    <span class="kw">let</span> cmd = <span class="pp">core::</span><span class="dt">str</span>::from_utf8(&amp;cmdline<span class="op">[</span>cmd_ind.<span class="dv">0</span>..cmd_ind.<span class="dv">1</span><span class="op">]</span>).unwrap();</a>
-<a class="sourceLine" id="cb5-13" title="13">    <span class="kw">if</span> cmd == <span class="st">&quot;mem&quot;</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-14" title="14">        <span class="kw">let</span> memman = <span class="kw">unsafe</span> <span class="op">{</span> &amp;<span class="kw">mut</span> *(MEMMAN_ADDR <span class="kw">as</span> *<span class="kw">mut</span> MemMan) <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb5-15" title="15"></a>
-<a class="sourceLine" id="cb5-16" title="16">        <span class="pp">write_with_bg!</span>(</a>
-<a class="sourceLine" id="cb5-17" title="17">            sheet_manager,</a>
-<a class="sourceLine" id="cb5-18" title="18">            sheet_index,</a>
-<a class="sourceLine" id="cb5-19" title="19">            sheet.width,</a>
-<a class="sourceLine" id="cb5-20" title="20">            sheet.height,</a>
-<a class="sourceLine" id="cb5-21" title="21">            <span class="dv">8</span>,</a>
-<a class="sourceLine" id="cb5-22" title="22">            cursor_y,</a>
-<a class="sourceLine" id="cb5-23" title="23">            <span class="pp">Color::</span>White,</a>
-<a class="sourceLine" id="cb5-24" title="24">            <span class="pp">Color::</span>Black,</a>
-<a class="sourceLine" id="cb5-25" title="25">            <span class="dv">30</span>,</a>
-<a class="sourceLine" id="cb5-26" title="26">            <span class="st">&quot;total   {}MB&quot;</span>,</a>
-<a class="sourceLine" id="cb5-27" title="27">            memtotal / (<span class="dv">1024</span> * <span class="dv">1024</span>)</a>
-<a class="sourceLine" id="cb5-28" title="28">        );</a>
-<a class="sourceLine" id="cb5-29" title="29">        cursor_y = newline(cursor_y, sheet_manager, sheet_index);</a>
-<a class="sourceLine" id="cb5-30" title="30">        <span class="pp">write_with_bg!</span>(</a>
-<a class="sourceLine" id="cb5-31" title="31">            sheet_manager,</a>
-<a class="sourceLine" id="cb5-32" title="32">            sheet_index,</a>
-<a class="sourceLine" id="cb5-33" title="33">            sheet.width,</a>
-<a class="sourceLine" id="cb5-34" title="34">            sheet.height,</a>
-<a class="sourceLine" id="cb5-35" title="35">            <span class="dv">8</span>,</a>
-<a class="sourceLine" id="cb5-36" title="36">            cursor_y,</a>
-<a class="sourceLine" id="cb5-37" title="37">            <span class="pp">Color::</span>White,</a>
-<a class="sourceLine" id="cb5-38" title="38">            <span class="pp">Color::</span>Black,</a>
-<a class="sourceLine" id="cb5-39" title="39">            <span class="dv">30</span>,</a>
-<a class="sourceLine" id="cb5-40" title="40">            <span class="st">&quot;free {}KB&quot;</span>,</a>
-<a class="sourceLine" id="cb5-41" title="41">            memman.total() / <span class="dv">1024</span></a>
-<a class="sourceLine" id="cb5-42" title="42">        );</a>
-<a class="sourceLine" id="cb5-43" title="43">        cursor_y = newline(cursor_y, sheet_manager, sheet_index);</a>
-<a class="sourceLine" id="cb5-44" title="44">        cursor_y = newline(cursor_y, sheet_manager, sheet_index);</a>
-<a class="sourceLine" id="cb5-45" title="45">    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-46" title="46">        <span class="pp">write_with_bg!</span>(</a>
-<a class="sourceLine" id="cb5-47" title="47">            sheet_manager,</a>
-<a class="sourceLine" id="cb5-48" title="48">            sheet_index,</a>
-<a class="sourceLine" id="cb5-49" title="49">            sheet.width,</a>
-<a class="sourceLine" id="cb5-50" title="50">            sheet.height,</a>
-<a class="sourceLine" id="cb5-51" title="51">            <span class="dv">8</span>,</a>
-<a class="sourceLine" id="cb5-52" title="52">            cursor_y,</a>
-<a class="sourceLine" id="cb5-53" title="53">            <span class="pp">Color::</span>White,</a>
-<a class="sourceLine" id="cb5-54" title="54">            <span class="pp">Color::</span>Black,</a>
-<a class="sourceLine" id="cb5-55" title="55">            <span class="dv">12</span>,</a>
-<a class="sourceLine" id="cb5-56" title="56">            <span class="st">&quot;Bad Command&quot;</span></a>
-<a class="sourceLine" id="cb5-57" title="57">        );</a>
-<a class="sourceLine" id="cb5-58" title="58">        cursor_y = newline(cursor_y, sheet_manager, sheet_index);</a>
-<a class="sourceLine" id="cb5-59" title="59">        cursor_y = newline(cursor_y, sheet_manager, sheet_index);</a>
-<a class="sourceLine" id="cb5-60" title="60">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb5-61" title="61">    cursor_y</a>
-<a class="sourceLine" id="cb5-62" title="62"><span class="op">}</span></a>
-<a class="sourceLine" id="cb5-63" title="63"></a>
-<a class="sourceLine" id="cb5-64" title="64"><span class="kw">fn</span> extract_cmd_index(cmdline: <span class="op">[</span><span class="dt">u8</span>; <span class="dv">30</span><span class="op">]</span>) -&gt; (<span class="dt">usize</span>, <span class="dt">usize</span>) <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-65" title="65">    <span class="co">// 空白(32)、0はとばす</span></a>
-<a class="sourceLine" id="cb5-66" title="66">    <span class="kw">let</span> <span class="kw">mut</span> start: <span class="dt">isize</span> = -<span class="dv">1</span>;</a>
-<a class="sourceLine" id="cb5-67" title="67">    <span class="kw">let</span> <span class="kw">mut</span> end: <span class="dt">isize</span> = -<span class="dv">1</span>;</a>
-<a class="sourceLine" id="cb5-68" title="68">    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span>..cmdline.len() <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-69" title="69">        <span class="kw">if</span> start &lt; <span class="dv">0</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-70" title="70">            <span class="kw">if</span> cmdline<span class="op">[</span>i<span class="op">]</span> != <span class="dv">0</span> &amp;&amp; cmdline<span class="op">[</span>i<span class="op">]</span> != <span class="dv">32</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-71" title="71">                start = i <span class="kw">as</span> <span class="dt">isize</span>;</a>
-<a class="sourceLine" id="cb5-72" title="72">                end = i <span class="kw">as</span> <span class="dt">isize</span>;</a>
-<a class="sourceLine" id="cb5-73" title="73">            <span class="op">}</span></a>
-<a class="sourceLine" id="cb5-74" title="74">        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-75" title="75">            end = i <span class="kw">as</span> <span class="dt">isize</span>;</a>
-<a class="sourceLine" id="cb5-76" title="76">            <span class="kw">if</span> cmdline<span class="op">[</span>i<span class="op">]</span> == <span class="dv">0</span> || cmdline<span class="op">[</span>i<span class="op">]</span> == <span class="dv">32</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-77" title="77">                <span class="kw">break</span>;</a>
-<a class="sourceLine" id="cb5-78" title="78">            <span class="op">}</span></a>
-<a class="sourceLine" id="cb5-79" title="79">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb5-80" title="80">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb5-81" title="81">    (</a>
-<a class="sourceLine" id="cb5-82" title="82">        (<span class="kw">if</span> start &lt; <span class="dv">0</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> start <span class="op">}</span>) <span class="kw">as</span> <span class="dt">usize</span>,</a>
-<a class="sourceLine" id="cb5-83" title="83">        (<span class="kw">if</span> end &lt; <span class="dv">0</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> end <span class="op">}</span>) <span class="kw">as</span> <span class="dt">usize</span>,</a>
-<a class="sourceLine" id="cb5-84" title="84">    )</a>
-<a class="sourceLine" id="cb5-85" title="85"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// console.rs</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> exec_cmd(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    cmdline<span class="op">:</span> [<span class="dt">u8</span><span class="op">;</span> <span class="dv">30</span>]<span class="op">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    cursor_y<span class="op">:</span> <span class="dt">isize</span><span class="op">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    sheet_manager<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> SheetManager<span class="op">,</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    sheet_index<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    memtotal<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">isize</span> <span class="op">{</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> sheet <span class="op">=</span> sheet_manager<span class="op">.</span>sheets_data[sheet_index]<span class="op">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> cursor_y <span class="op">=</span> cursor_y<span class="op">;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> cmd_ind <span class="op">=</span> extract_cmd_index(cmdline)<span class="op">;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> cmd <span class="op">=</span> <span class="pp">core::</span><span class="dt">str</span><span class="pp">::</span>from_utf8(<span class="op">&amp;</span>cmdline[cmd_ind<span class="op">.</span><span class="dv">0</span><span class="op">..</span>cmd_ind<span class="op">.</span><span class="dv">1</span>])<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> cmd <span class="op">==</span> <span class="st">&quot;mem&quot;</span> <span class="op">{</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> memman <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>(MEMMAN_ADDR <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> MemMan) <span class="op">};</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="pp">write_with_bg!</span>(</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>            sheet_manager<span class="op">,</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>            sheet_index<span class="op">,</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>            sheet<span class="op">.</span>width<span class="op">,</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>            sheet<span class="op">.</span>height<span class="op">,</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>            <span class="dv">8</span><span class="op">,</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>            cursor_y<span class="op">,</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Color::</span>White<span class="op">,</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Color::</span>Black<span class="op">,</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>            <span class="dv">30</span><span class="op">,</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;total   {}MB&quot;</span><span class="op">,</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>            memtotal <span class="op">/</span> (<span class="dv">1024</span> <span class="op">*</span> <span class="dv">1024</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        )<span class="op">;</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>        cursor_y <span class="op">=</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        <span class="pp">write_with_bg!</span>(</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>            sheet_manager<span class="op">,</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>            sheet_index<span class="op">,</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>            sheet<span class="op">.</span>width<span class="op">,</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>            sheet<span class="op">.</span>height<span class="op">,</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>            <span class="dv">8</span><span class="op">,</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>            cursor_y<span class="op">,</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Color::</span>White<span class="op">,</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Color::</span>Black<span class="op">,</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>            <span class="dv">30</span><span class="op">,</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;free {}KB&quot;</span><span class="op">,</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>            memman<span class="op">.</span>total() <span class="op">/</span> <span class="dv">1024</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>        )<span class="op">;</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>        cursor_y <span class="op">=</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>        cursor_y <span class="op">=</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>        <span class="pp">write_with_bg!</span>(</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>            sheet_manager<span class="op">,</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>            sheet_index<span class="op">,</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>            sheet<span class="op">.</span>width<span class="op">,</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>            sheet<span class="op">.</span>height<span class="op">,</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>            <span class="dv">8</span><span class="op">,</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>            cursor_y<span class="op">,</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Color::</span>White<span class="op">,</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Color::</span>Black<span class="op">,</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>            <span class="dv">12</span><span class="op">,</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;Bad Command&quot;</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>        )<span class="op">;</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>        cursor_y <span class="op">=</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>        cursor_y <span class="op">=</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>    cursor_y</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> extract_cmd_index(cmdline<span class="op">:</span> [<span class="dt">u8</span><span class="op">;</span> <span class="dv">30</span>]) <span class="op">-&gt;</span> (<span class="dt">usize</span><span class="op">,</span> <span class="dt">usize</span>) <span class="op">{</span></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 空白(32)、0はとばす</span></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> start<span class="op">:</span> <span class="dt">isize</span> <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> end<span class="op">:</span> <span class="dt">isize</span> <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>cmdline<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> start <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> cmdline[i] <span class="op">!=</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> cmdline[i] <span class="op">!=</span> <span class="dv">32</span> <span class="op">{</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>                start <span class="op">=</span> i <span class="kw">as</span> <span class="dt">isize</span><span class="op">;</span></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>                end <span class="op">=</span> i <span class="kw">as</span> <span class="dt">isize</span><span class="op">;</span></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>            end <span class="op">=</span> i <span class="kw">as</span> <span class="dt">isize</span><span class="op">;</span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> cmdline[i] <span class="op">==</span> <span class="dv">0</span> <span class="op">||</span> cmdline[i] <span class="op">==</span> <span class="dv">32</span> <span class="op">{</span></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>                <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>    (</span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>        (<span class="kw">if</span> start <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> start <span class="op">}</span>) <span class="kw">as</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>        (<span class="kw">if</span> end <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> end <span class="op">}</span>) <span class="kw">as</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>コマンド文字列を認識するために、空白や未入力の部分を省いた配列のインデックスを抽出するための<code>extract_cmd_index</code>という関数も追加している。(この処理は独自に追加した。)</p>
 <h3 id="実行結果-2">実行結果</h3>
 <p>コンソール上にメモリ容量が表示できるようになった。</p>
@@ -354,28 +354,28 @@
 <h2 id="clearcls-コマンドの追加">clear(cls) コマンドの追加</h2>
 <p>コンソールの表示をクリアするための<code>clear</code>コマンドを追加する。<br />
 本中では<code>cls</code>になっているが、自分はLinuxで実行しているため、せっかくなので<code>clear</code>とする。</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="co">// console.rs</span></a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="kw">fn</span> exec_cmd(</a>
-<a class="sourceLine" id="cb6-3" title="3">    <span class="co">// 省略</span></a>
-<a class="sourceLine" id="cb6-4" title="4">    <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> cmd == <span class="st">&quot;clear&quot;</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb6-5" title="5">        <span class="kw">for</span> y <span class="kw">in</span> MIN_CURSOR_Y..(MAX_CURSOR_Y + <span class="dv">16</span>) <span class="op">{</span></a>
-<a class="sourceLine" id="cb6-6" title="6">            <span class="kw">for</span> x <span class="kw">in</span> (MIN_CURSOR_X - <span class="dv">8</span>)..MAX_CURSOR_X <span class="op">{</span></a>
-<a class="sourceLine" id="cb6-7" title="7">                <span class="kw">let</span> x = x <span class="kw">as</span> <span class="dt">usize</span>;</a>
-<a class="sourceLine" id="cb6-8" title="8">                <span class="kw">let</span> y = y <span class="kw">as</span> <span class="dt">usize</span>;</a>
-<a class="sourceLine" id="cb6-9" title="9">                <span class="kw">let</span> ptr =</a>
-<a class="sourceLine" id="cb6-10" title="10">                    <span class="kw">unsafe</span> <span class="op">{</span> &amp;<span class="kw">mut</span> *((sheet.buf_addr + x + y * sheet.width <span class="kw">as</span> <span class="dt">usize</span>) <span class="kw">as</span> *<span class="kw">mut</span> <span class="dt">u8</span>) <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb6-11" title="11">                *ptr = <span class="pp">Color::</span>Black <span class="kw">as</span> <span class="dt">u8</span>;</a>
-<a class="sourceLine" id="cb6-12" title="12">            <span class="op">}</span></a>
-<a class="sourceLine" id="cb6-13" title="13">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb6-14" title="14">        sheet_manager.refresh(</a>
-<a class="sourceLine" id="cb6-15" title="15">            sheet_index,</a>
-<a class="sourceLine" id="cb6-16" title="16">            (MIN_CURSOR_X - <span class="dv">8</span>) <span class="kw">as</span> <span class="dt">i32</span>,</a>
-<a class="sourceLine" id="cb6-17" title="17">            MIN_CURSOR_Y <span class="kw">as</span> <span class="dt">i32</span>,</a>
-<a class="sourceLine" id="cb6-18" title="18">            MAX_CURSOR_X <span class="kw">as</span> <span class="dt">i32</span>,</a>
-<a class="sourceLine" id="cb6-19" title="19">            (MAX_CURSOR_Y + <span class="dv">16</span>) <span class="kw">as</span> <span class="dt">i32</span>,</a>
-<a class="sourceLine" id="cb6-20" title="20">        );</a>
-<a class="sourceLine" id="cb6-21" title="21">        cursor_y = MIN_CURSOR_Y;</a>
-<a class="sourceLine" id="cb6-22" title="22">    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// console.rs</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> exec_cmd(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> cmd <span class="op">==</span> <span class="st">&quot;clear&quot;</span> <span class="op">{</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> y <span class="kw">in</span> MIN_CURSOR_Y<span class="op">..</span>(MAX_CURSOR_Y <span class="op">+</span> <span class="dv">16</span>) <span class="op">{</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> x <span class="kw">in</span> (MIN_CURSOR_X <span class="op">-</span> <span class="dv">8</span>)<span class="op">..</span>MAX_CURSOR_X <span class="op">{</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> x <span class="op">=</span> x <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> y <span class="op">=</span> y <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> ptr <span class="op">=</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((sheet<span class="op">.</span>buf_addr <span class="op">+</span> x <span class="op">+</span> y <span class="op">*</span> sheet<span class="op">.</span>width <span class="kw">as</span> <span class="dt">usize</span>) <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span>) <span class="op">};</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>ptr <span class="op">=</span> <span class="pp">Color::</span>Black <span class="kw">as</span> <span class="dt">u8</span><span class="op">;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        sheet_manager<span class="op">.</span>refresh(</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>            sheet_index<span class="op">,</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>            (MIN_CURSOR_X <span class="op">-</span> <span class="dv">8</span>) <span class="kw">as</span> <span class="dt">i32</span><span class="op">,</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>            MIN_CURSOR_Y <span class="kw">as</span> <span class="dt">i32</span><span class="op">,</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>            MAX_CURSOR_X <span class="kw">as</span> <span class="dt">i32</span><span class="op">,</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>            (MAX_CURSOR_Y <span class="op">+</span> <span class="dv">16</span>) <span class="kw">as</span> <span class="dt">i32</span><span class="op">,</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        )<span class="op">;</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        cursor_y <span class="op">=</span> MIN_CURSOR_Y<span class="op">;</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span></code></pre></div>
 <h3 id="実行結果-3">実行結果</h3>
 <p>画面がクリアできるようになったことがわかる。</p>
 <p><img src="../images/20190713/clear.gif" class="blog-img img-responsive" alt="clearコマンド" title="clearコマンド" /></p>
@@ -383,71 +383,71 @@
 <p>ファイル情報の表示を行うコマンドを追加する。<br />
 ここでも本は<code>dir</code>となっているが、<code>ls</code>として実装する。<br />
 まずはファイル情報を読み込むためのstructと定数を<code>file.rs</code>に定義しておく。</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="co">// file.rs</span></a>
-<a class="sourceLine" id="cb7-2" title="2"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">,</span> <span class="bu">Copy</span><span class="at">,</span> <span class="bu">PartialEq</span><span class="at">,</span> <span class="bu">Eq</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="at">#[</span>repr<span class="at">(</span>C<span class="at">,</span> packed<span class="at">)]</span></a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="kw">pub</span> <span class="kw">struct</span> FileInfo <span class="op">{</span></a>
-<a class="sourceLine" id="cb7-5" title="5">    <span class="kw">pub</span> name: <span class="op">[</span><span class="dt">u8</span>; <span class="dv">8</span><span class="op">]</span>,</a>
-<a class="sourceLine" id="cb7-6" title="6">    <span class="kw">pub</span> ext: <span class="op">[</span><span class="dt">u8</span>; <span class="dv">3</span><span class="op">]</span>,</a>
-<a class="sourceLine" id="cb7-7" title="7">    <span class="kw">pub</span> ftype: <span class="dt">u8</span>,</a>
-<a class="sourceLine" id="cb7-8" title="8">    <span class="kw">pub</span> reserve: <span class="op">[</span><span class="dt">i8</span>; <span class="dv">10</span><span class="op">]</span>,</a>
-<a class="sourceLine" id="cb7-9" title="9">    <span class="kw">pub</span> time: <span class="dt">u16</span>,</a>
-<a class="sourceLine" id="cb7-10" title="10">    <span class="kw">pub</span> date: <span class="dt">u16</span>,</a>
-<a class="sourceLine" id="cb7-11" title="11">    <span class="kw">pub</span> clustno: <span class="dt">u16</span>,</a>
-<a class="sourceLine" id="cb7-12" title="12">    <span class="kw">pub</span> size: <span class="dt">u32</span>,</a>
-<a class="sourceLine" id="cb7-13" title="13"><span class="op">}</span></a>
-<a class="sourceLine" id="cb7-14" title="14"></a>
-<a class="sourceLine" id="cb7-15" title="15"><span class="kw">pub</span> <span class="kw">const</span> ADR_DISKIMG: <span class="dt">usize</span> = <span class="dv">0x00100000</span>;</a>
-<a class="sourceLine" id="cb7-16" title="16"><span class="kw">pub</span> <span class="kw">const</span> ADR_FILE_OFFSET: <span class="dt">usize</span> = <span class="dv">0x002600</span>;</a>
-<a class="sourceLine" id="cb7-17" title="17"><span class="kw">pub</span> <span class="kw">const</span> MAX_FILE_INFO: <span class="dt">usize</span> = <span class="dv">224</span>;</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">// file.rs</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Copy</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="at">)]</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>repr<span class="at">(</span>C<span class="op">,</span> packed<span class="at">)]</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> FileInfo <span class="op">{</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> name<span class="op">:</span> [<span class="dt">u8</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">,</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> ext<span class="op">:</span> [<span class="dt">u8</span><span class="op">;</span> <span class="dv">3</span>]<span class="op">,</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> ftype<span class="op">:</span> <span class="dt">u8</span><span class="op">,</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> reserve<span class="op">:</span> [<span class="dt">i8</span><span class="op">;</span> <span class="dv">10</span>]<span class="op">,</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> time<span class="op">:</span> <span class="dt">u16</span><span class="op">,</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> date<span class="op">:</span> <span class="dt">u16</span><span class="op">,</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> clustno<span class="op">:</span> <span class="dt">u16</span><span class="op">,</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> size<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">const</span> ADR_DISKIMG<span class="op">:</span> <span class="dt">usize</span> <span class="op">=</span> <span class="dv">0x00100000</span><span class="op">;</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">const</span> ADR_FILE_OFFSET<span class="op">:</span> <span class="dt">usize</span> <span class="op">=</span> <span class="dv">0x002600</span><span class="op">;</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">const</span> MAX_FILE_INFO<span class="op">:</span> <span class="dt">usize</span> <span class="op">=</span> <span class="dv">224</span><span class="op">;</span></span></code></pre></div>
 <p>これを使って、ファイル情報を読み込み、表示する。</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb8-1" title="1"><span class="co">// console.rs</span></a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="kw">fn</span> exec_cmd(</a>
-<a class="sourceLine" id="cb8-3" title="3">    cmdline: <span class="op">[</span><span class="dt">u8</span>; <span class="dv">30</span><span class="op">]</span>,</a>
-<a class="sourceLine" id="cb8-4" title="4">    cursor_y: <span class="dt">isize</span>,</a>
-<a class="sourceLine" id="cb8-5" title="5">    sheet_manager: &amp;<span class="kw">mut</span> SheetManager,</a>
-<a class="sourceLine" id="cb8-6" title="6">    sheet_index: <span class="dt">usize</span>,</a>
-<a class="sourceLine" id="cb8-7" title="7">    memtotal: <span class="dt">usize</span>,</a>
-<a class="sourceLine" id="cb8-8" title="8">) -&gt; <span class="dt">isize</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb8-9" title="9">    <span class="co">// 省略</span></a>
-<a class="sourceLine" id="cb8-10" title="10">    <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> cmd == <span class="st">&quot;ls&quot;</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb8-11" title="11">        <span class="kw">for</span> findex <span class="kw">in</span> <span class="dv">0</span>..MAX_FILE_INFO <span class="op">{</span></a>
-<a class="sourceLine" id="cb8-12" title="12">            <span class="kw">let</span> finfo = <span class="kw">unsafe</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb8-13" title="13">                *((ADR_DISKIMG + ADR_FILE_OFFSET + findex * <span class="pp">core::mem::size_of::</span>&lt;FileInfo&gt;())</a>
-<a class="sourceLine" id="cb8-14" title="14">                    <span class="kw">as</span> *<span class="kw">const</span> FileInfo)</a>
-<a class="sourceLine" id="cb8-15" title="15">            <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb8-16" title="16">            <span class="kw">if</span> finfo.name<span class="op">[</span><span class="dv">0</span><span class="op">]</span> == <span class="dv">0x00</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb8-17" title="17">                <span class="kw">break</span>;</a>
-<a class="sourceLine" id="cb8-18" title="18">            <span class="op">}</span></a>
-<a class="sourceLine" id="cb8-19" title="19">            <span class="kw">if</span> finfo.name<span class="op">[</span><span class="dv">0</span><span class="op">]</span> != <span class="dv">0xe5</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb8-20" title="20">                <span class="kw">if</span> (finfo.ftype &amp; <span class="dv">0x18</span>) == <span class="dv">0</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb8-21" title="21">                    <span class="pp">write_with_bg!</span>(</a>
-<a class="sourceLine" id="cb8-22" title="22">                        sheet_manager,</a>
-<a class="sourceLine" id="cb8-23" title="23">                        sheet_index,</a>
-<a class="sourceLine" id="cb8-24" title="24">                        sheet.width,</a>
-<a class="sourceLine" id="cb8-25" title="25">                        sheet.height,</a>
-<a class="sourceLine" id="cb8-26" title="26">                        <span class="dv">8</span>,</a>
-<a class="sourceLine" id="cb8-27" title="27">                        cursor_y,</a>
-<a class="sourceLine" id="cb8-28" title="28">                        <span class="pp">Color::</span>White,</a>
-<a class="sourceLine" id="cb8-29" title="29">                        <span class="pp">Color::</span>Black,</a>
-<a class="sourceLine" id="cb8-30" title="30">                        <span class="dv">30</span>,</a>
-<a class="sourceLine" id="cb8-31" title="31">                        <span class="st">&quot;{:&gt;8}.{:&gt;3}   {:&gt;7}&quot;</span>,</a>
-<a class="sourceLine" id="cb8-32" title="32">                        from_utf8(&amp;finfo.name).unwrap(),</a>
-<a class="sourceLine" id="cb8-33" title="33">                        from_utf8(&amp;finfo.ext).unwrap(),</a>
-<a class="sourceLine" id="cb8-34" title="34">                        finfo.size</a>
-<a class="sourceLine" id="cb8-35" title="35">                    );</a>
-<a class="sourceLine" id="cb8-36" title="36">                    cursor_y = newline(cursor_y, sheet_manager, sheet_index);</a>
-<a class="sourceLine" id="cb8-37" title="37">                <span class="op">}</span></a>
-<a class="sourceLine" id="cb8-38" title="38">            <span class="op">}</span></a>
-<a class="sourceLine" id="cb8-39" title="39">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb8-40" title="40">        cursor_y = newline(cursor_y, sheet_manager, sheet_index);</a>
-<a class="sourceLine" id="cb8-41" title="41">    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// console.rs</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> exec_cmd(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    cmdline<span class="op">:</span> [<span class="dt">u8</span><span class="op">;</span> <span class="dv">30</span>]<span class="op">,</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    cursor_y<span class="op">:</span> <span class="dt">isize</span><span class="op">,</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    sheet_manager<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> SheetManager<span class="op">,</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    sheet_index<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    memtotal<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">isize</span> <span class="op">{</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> cmd <span class="op">==</span> <span class="st">&quot;ls&quot;</span> <span class="op">{</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> findex <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MAX_FILE_INFO <span class="op">{</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> finfo <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>((ADR_DISKIMG <span class="op">+</span> ADR_FILE_OFFSET <span class="op">+</span> findex <span class="op">*</span> <span class="pp">core::mem::size_of::</span><span class="op">&lt;</span>FileInfo<span class="op">&gt;</span>())</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> FileInfo)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>            <span class="op">};</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> finfo<span class="op">.</span>name[<span class="dv">0</span>] <span class="op">==</span> <span class="dv">0x00</span> <span class="op">{</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>                <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> finfo<span class="op">.</span>name[<span class="dv">0</span>] <span class="op">!=</span> <span class="dv">0xe5</span> <span class="op">{</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> (finfo<span class="op">.</span>ftype <span class="op">&amp;</span> <span class="dv">0x18</span>) <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>                    <span class="pp">write_with_bg!</span>(</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>                        sheet_manager<span class="op">,</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>                        sheet_index<span class="op">,</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>                        sheet<span class="op">.</span>width<span class="op">,</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>                        sheet<span class="op">.</span>height<span class="op">,</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">8</span><span class="op">,</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>                        cursor_y<span class="op">,</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>                        <span class="pp">Color::</span>White<span class="op">,</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>                        <span class="pp">Color::</span>Black<span class="op">,</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">30</span><span class="op">,</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;{:&gt;8}.{:&gt;3}   {:&gt;7}&quot;</span><span class="op">,</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>                        from_utf8(<span class="op">&amp;</span>finfo<span class="op">.</span>name)<span class="op">.</span>unwrap()<span class="op">,</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>                        from_utf8(<span class="op">&amp;</span>finfo<span class="op">.</span>ext)<span class="op">.</span>unwrap()<span class="op">,</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>                        finfo<span class="op">.</span>size</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>                    )<span class="op">;</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>                    cursor_y <span class="op">=</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>        cursor_y <span class="op">=</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span></code></pre></div>
 <p>表示確認のため、Makefileで適当なファイルをイメージに追加しておく。</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode default"><code class="sourceCode default"><a class="sourceLine" id="cb9-1" title="1">$(IMG) : $(OUTPUT_DIR)/ipl.bin $(OUTPUT_DIR)/haribote.sys Makefile</a>
-<a class="sourceLine" id="cb9-2" title="2">	mformat -f 1440 -C -B $&lt; -i $@ ::</a>
-<a class="sourceLine" id="cb9-3" title="3">	mcopy $(OUTPUT_DIR)/haribote.sys -i $@ ::</a>
-<a class="sourceLine" id="cb9-4" title="4">	mcopy src/lib.rs -i $@ ::   # &lt;- 追加</a>
-<a class="sourceLine" id="cb9-5" title="5">	mcopy asm/ipl.asm -i $@ ::  # &lt;- 追加</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>$(IMG) : $(OUTPUT_DIR)/ipl.bin $(OUTPUT_DIR)/haribote.sys Makefile</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>	mformat -f 1440 -C -B $&lt; -i $@ ::</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>	mcopy $(OUTPUT_DIR)/haribote.sys -i $@ ::</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>	mcopy src/lib.rs -i $@ ::   # &lt;- 追加</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>	mcopy asm/ipl.asm -i $@ ::  # &lt;- 追加</span></code></pre></div>
 <h3 id="実行結果-4">実行結果</h3>
 <p>以下の通り、ファイル情報が表示された。</p>
 <p><img src="../images/20190713/ls.png" class="blog-img img-responsive" alt="lsコマンド" title="lsコマンド" /></p>

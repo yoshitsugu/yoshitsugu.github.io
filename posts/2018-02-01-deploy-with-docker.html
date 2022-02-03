@@ -45,7 +45,7 @@
     <span class="date">Posted on February  1, 2018</span>
     
     
-    <span class="tags">, Tags: <a href="../tags/Haskell.html">Haskell</a>, <a href="../tags/TravisCI.html">TravisCI</a>, <a href="../tags/Hakyll.html">Hakyll</a>, <a href="../tags/Docker.html">Docker</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Haskell'." href="../tags/Haskell.html">Haskell</a>, <a title="All pages tagged 'TravisCI'." href="../tags/TravisCI.html">TravisCI</a>, <a title="All pages tagged 'Hakyll'." href="../tags/Hakyll.html">Hakyll</a>, <a title="All pages tagged 'Docker'." href="../tags/Docker.html">Docker</a></span>
     
 </div>
 
@@ -79,26 +79,26 @@ TravisCIで行っているデプロイ手順としては以下のようになっ
 <ul>
 <li>旧バージョン</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb1-1" title="1"><span class="fu">install:</span></a>
-<a class="sourceLine" id="cb1-2" title="2">  <span class="kw">-</span> stack --no-terminal setup</a>
-<a class="sourceLine" id="cb1-3" title="3">  <span class="kw">-</span> stack exec -- ghc --version</a>
-<a class="sourceLine" id="cb1-4" title="4">  <span class="kw">-</span> stack --no-terminal build</a>
-<a class="sourceLine" id="cb1-5" title="5">  <span class="kw">-</span> stack exec -- blog build</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install</span><span class="kw">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> stack --no-terminal setup</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> stack exec -- ghc --version</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> stack --no-terminal build</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> stack exec -- blog build</span></span></code></pre></div>
 <ul>
 <li>新バージョン</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb2-1" title="1"><span class="fu">install:</span></a>
-<a class="sourceLine" id="cb2-2" title="2">  <span class="kw">-</span> docker pull $<span class="kw">{</span>DEPLOYER_NAME<span class="kw">}</span></a>
-<a class="sourceLine" id="cb2-3" title="3">  <span class="kw">-</span> docker run -v $(pwd)/_site:/yoshitsugu.github.io/_site -v $(pwd)/js:/yoshitsugu.github.io/js -v $(pwd)/css:/yoshitsugu.github.io/css -v $(pwd)/posts:/yoshitsugu.github.io/posts -v $(pwd)/images:/yoshitsugu.github.io/images --rm $<span class="kw">{</span>DEPLOYER_NAME<span class="kw">}</span> bash -c <span class="st">&quot;cd /yoshitsugu.github.io &amp;&amp; LC_ALL=C.UTF-8 stack exec -- blog build&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install</span><span class="kw">:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> docker pull ${DEPLOYER_NAME}</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> docker run -v $(pwd)/_site:/yoshitsugu.github.io/_site -v $(pwd)/js:/yoshitsugu.github.io/js -v $(pwd)/css:/yoshitsugu.github.io/css -v $(pwd)/posts:/yoshitsugu.github.io/posts -v $(pwd)/images:/yoshitsugu.github.io/images --rm ${DEPLOYER_NAME} bash -c &quot;cd /yoshitsugu.github.io &amp;&amp; LC_ALL=C.UTF-8 stack exec -- blog build&quot;</span></span></code></pre></div>
 <h2 id="結果">結果</h2>
 <ul>
 <li>以前
 <div>
-<img src="../images/20180201/old.png" alt="以前" />
+<img src="../images/20180201/old.png" title="fig:" alt="以前" />
 </div></li>
 <li>現在
 <div>
-<img src="../images/20180201/new.png" alt="現在" />
+<img src="../images/20180201/new.png" title="fig:" alt="現在" />
 </div>
 速くなった</li>
 </ul>

@@ -45,7 +45,7 @@
     <span class="date">Posted on March  5, 2016</span>
     
     
-    <span class="tags">, Tags: <a href="../tags/Haskell.html">Haskell</a>, <a href="../tags/Travis.html">Travis</a>, <a href="../tags/Hakyll.html">Hakyll</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Haskell'." href="../tags/Haskell.html">Haskell</a>, <a title="All pages tagged 'Travis'." href="../tags/Travis.html">Travis</a>, <a title="All pages tagged 'Hakyll'." href="../tags/Hakyll.html">Hakyll</a></span>
     
 </div>
 
@@ -53,18 +53,18 @@
 あまりアウトプットは得意ではないが、これからがんばってやっていきたい。 主に技術的なことをぼちぼちと書いていくことができればと考えている。 考えていたが、技術的なこと縛りにするとネタがなくなりそうなので、なんでも書くことにする。 なんでも書くことにするとなんにも書かなくなりそうな気もする。 世の中のブログを書く人はどういうモチベーションで書いているのだろうか。</p>
 <h2 id="やったこと">やったこと</h2>
 <h3 id="template作成">1. template作成</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1">$ <span class="ex">stack</span> new blog hakyll-template</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack new blog hakyll-template</span></code></pre></div>
 <h3 id="scssをつかえるように">2. scssをつかえるように</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" title="1"><span class="co">-- site.hs</span></a>
-<a class="sourceLine" id="cb2-2" title="2">match <span class="st">&quot;css/*.scss&quot;</span> <span class="op">$</span> <span class="kw">do</span></a>
-<a class="sourceLine" id="cb2-3" title="3">  route <span class="op">$</span> setExtension <span class="st">&quot;css&quot;</span></a>
-<a class="sourceLine" id="cb2-4" title="4">  compile <span class="op">$</span> getResourceString</a>
-<a class="sourceLine" id="cb2-5" title="5">    <span class="op">&gt;&gt;=</span> withItemBody (unixFilter <span class="st">&quot;sass&quot;</span> [<span class="st">&quot;-s&quot;</span>, <span class="st">&quot;--scss&quot;</span>])</a>
-<a class="sourceLine" id="cb2-6" title="6">    <span class="op">&gt;&gt;=</span> <span class="fu">return</span> <span class="op">.</span> <span class="fu">fmap</span> compressCss</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- site.hs</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>match <span class="st">&quot;css/*.scss&quot;</span> <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  route <span class="op">$</span> setExtension <span class="st">&quot;css&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  compile <span class="op">$</span> getResourceString</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">&gt;&gt;=</span> withItemBody (unixFilter <span class="st">&quot;sass&quot;</span> [<span class="st">&quot;-s&quot;</span>, <span class="st">&quot;--scss&quot;</span>])</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">&gt;&gt;=</span> <span class="fu">return</span> <span class="op">.</span> <span class="fu">fmap</span> compressCss</span></code></pre></div>
 <h3 id="各ページ修正">3. 各ページ修正</h3>
 <p>デフォルトからいくつか修正した。</p>
 <ul>
-<li><a href="../">HOME</a>の“More”のやつはteaserというらしい。<br />
+<li><a href="../">HOME</a>の”More”のやつはteaserというらしい。<br />
 <a href="https://jaspervdj.be/hakyll/tutorials/using-teasers-in-hakyll.html" target="_blank">https://jaspervdj.be/hakyll/tutorials/using-teasers-in-hakyll.html</a></li>
 <li>見た目は<a href="http://purecss.io" target="_blank">Pure.css</a>を元にカスタマイズした。</li>
 <li>シンタックスハイライトは<a href="https://hackage.haskell.org/package/highlighting-kate" target="_blank">highlighting-kate</a>を使った。</li>

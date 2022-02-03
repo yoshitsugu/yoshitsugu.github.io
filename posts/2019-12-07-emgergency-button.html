@@ -45,7 +45,7 @@
     <span class="date">Posted on December  7, 2019</span>
     
     
-    <span class="tags">, Tags: <a href="../tags/AWS%20IoT%20Button.html">AWS IoT Button</a>, <a href="../tags/Raspberry%20Pi.html">Raspberry Pi</a>, <a href="../tags/Rust.html">Rust</a>, <a href="../tags/IoT.html">IoT</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'AWS IoT Button'." href="../tags/AWS%20IoT%20Button.html">AWS IoT Button</a>, <a title="All pages tagged 'Raspberry Pi'." href="../tags/Raspberry%20Pi.html">Raspberry Pi</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a>, <a title="All pages tagged 'IoT'." href="../tags/IoT.html">IoT</a></span>
     
 </div>
 
@@ -76,105 +76,105 @@
 <li>Raspberry PiがMQTTのpublishを検知し、Slackへの投稿、および音を鳴らす処理を行う</li>
 </ol>
 <h3 id="aws-iot-buttonを接続する">AWS IoT Buttonを接続する</h3>
-<p><a href="https://aws.amazon.com/jp/iot-1-click/">AWS IoT 1Click</a> を使えるようにする。セットアップ方法は調べればすぐでてくる<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>ので、ここには詳しく書かない。</p>
+<p><a href="https://aws.amazon.com/jp/iot-1-click/">AWS IoT 1Click</a> を使えるようにする。セットアップ方法は調べればすぐでてくる<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>ので、ここには詳しく書かない。</p>
 <h3 id="raspberry-piをaws-iot-coreで接続する">Raspberry PiをAWS IoT Coreで接続する</h3>
-<p><a href="https://aws.amazon.com/jp/iot-core/">AWS IoT Core</a> を使って、Raspberry Piを管理する。セットアップ方法はこちらも調べればすぐでてくる<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>ので、ここには詳しく書かない。<br />
+<p><a href="https://aws.amazon.com/jp/iot-core/">AWS IoT Core</a> を使って、Raspberry Piを管理する。セットアップ方法はこちらも調べればすぐでてくる<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>ので、ここには詳しく書かない。<br />
 ポリシーの設定の理解に少し時間がかかった。</p>
 <h3 id="aws-iot-buttonで連動するaws-lambda関数を作る">AWS IoT Buttonで連動するAWS Lambda関数を作る</h3>
 <p>Raspberry PiがAWS IoT Coreで接続できるようになったので、MQTTのトピックをpublishするような関数を作る。今回は趣味でRustで作った。</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">use</span> <span class="pp">lambda_runtime::</span><span class="op">{</span><span class="pp">error::</span>HandlerError, lambda, Context<span class="op">}</span>;</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">use</span> <span class="pp">serde_json::</span>Value;</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">use</span> <span class="pp">rusoto_core::region::Region::</span>ApNortheast1;</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw">use</span> <span class="pp">rusoto_iot_data::</span><span class="op">{</span>IotDataClient, PublishRequest<span class="op">}</span>;</a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw">use</span> <span class="pp">rusoto_iot_data::</span>IotData;</a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="kw">use</span> <span class="pp">bytes::</span>Bytes;</a>
-<a class="sourceLine" id="cb1-7" title="7"></a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="kw">fn</span> main() <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-9" title="9">    <span class="pp">lambda!</span>(handler)</a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="op">}</span></a>
-<a class="sourceLine" id="cb1-11" title="11"></a>
-<a class="sourceLine" id="cb1-12" title="12"><span class="kw">fn</span> handler(</a>
-<a class="sourceLine" id="cb1-13" title="13">    event: Value,</a>
-<a class="sourceLine" id="cb1-14" title="14">    _: Context,</a>
-<a class="sourceLine" id="cb1-15" title="15">) -&gt; <span class="dt">Result</span>&lt;Value, HandlerError&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-16" title="16">    <span class="kw">let</span> client = <span class="pp">IotDataClient::</span>new(ApNortheast1);</a>
-<a class="sourceLine" id="cb1-17" title="17">    <span class="kw">let</span> payload = PublishRequest <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-18" title="18">        payload: <span class="cn">Some</span>(<span class="pp">Bytes::</span>from(&amp;<span class="st">b&quot;{ </span><span class="sc">\&quot;</span><span class="st">message</span><span class="sc">\&quot;</span><span class="st">: </span><span class="sc">\&quot;</span><span class="st">panic button is pushed</span><span class="sc">\&quot;</span><span class="st"> }&quot;</span><span class="op">[</span>..<span class="op">]</span>)),</a>
-<a class="sourceLine" id="cb1-19" title="19">        qos: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb1-20" title="20">        topic: <span class="st">&quot;panic_button&quot;</span>.to_string()</a>
-<a class="sourceLine" id="cb1-21" title="21">    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb1-22" title="22">    client.publish(payload).sync().unwrap();</a>
-<a class="sourceLine" id="cb1-23" title="23">    <span class="cn">Ok</span>(event)</a>
-<a class="sourceLine" id="cb1-24" title="24"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">lambda_runtime::</span><span class="op">{</span><span class="pp">error::</span>HandlerError<span class="op">,</span> lambda<span class="op">,</span> Context<span class="op">};</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">serde_json::</span>Value<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">rusoto_core::region::Region::</span>ApNortheast1<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">rusoto_iot_data::</span><span class="op">{</span>IotDataClient<span class="op">,</span> PublishRequest<span class="op">};</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">rusoto_iot_data::</span>IotData<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">bytes::</span>Bytes<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="pp">lambda!</span>(handler)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> handler(</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    event<span class="op">:</span> Value<span class="op">,</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    _<span class="op">:</span> Context<span class="op">,</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Value<span class="op">,</span> HandlerError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> client <span class="op">=</span> <span class="pp">IotDataClient::</span>new(ApNortheast1)<span class="op">;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> payload <span class="op">=</span> PublishRequest <span class="op">{</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        payload<span class="op">:</span> <span class="cn">Some</span>(<span class="pp">Bytes::</span>from(<span class="op">&amp;</span><span class="st">b&quot;{ </span><span class="sc">\&quot;</span><span class="st">message</span><span class="sc">\&quot;</span><span class="st">: </span><span class="sc">\&quot;</span><span class="st">panic button is pushed</span><span class="sc">\&quot;</span><span class="st"> }&quot;</span>[<span class="op">..</span>]))<span class="op">,</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        qos<span class="op">:</span> <span class="cn">None</span><span class="op">,</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        topic<span class="op">:</span> <span class="st">&quot;panic_button&quot;</span><span class="op">.</span>to_string()</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    client<span class="op">.</span>publish(payload)<span class="op">.</span>sync()<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(event)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>これをserverless frameworkのrustプラグインを使ってデプロイできるようにした。</p>
 <h3 id="raspberry-piでmqttのサブスクライブをする">Raspberry PiでMQTTのサブスクライブをする</h3>
 <p>上記の通知をRaspberry Piで受けとり、Slack通知と音の再生をする。こちらも趣味でRustのコードで動かした。Slack通知には<a href="https://github.com/frostly/rust-slack">slack-hook</a>、音の再生は<code>aplay</code>コマンドをそのまま実行する形にした。また、MQTTのサブスクライブは<a href="https://github.com/AtherEnergy/rumqtt">rumqtt</a>を利用した。</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">use</span> <span class="pp">rumqtt::</span><span class="op">{</span><span class="pp">client::Notification::</span>Publish, MqttClient, MqttOptions, QoS<span class="op">}</span>;</a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw">use</span> <span class="pp">slack_hook::SlackTextContent::</span><span class="op">{</span>Text, User<span class="op">}</span>;</a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="kw">use</span> <span class="pp">slack_hook::</span><span class="op">{</span>PayloadBuilder, Slack, SlackUserLink<span class="op">}</span>;</a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="kw">use</span> <span class="pp">std::</span>env;</a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="kw">use</span> <span class="pp">std::process::</span>Command;</a>
-<a class="sourceLine" id="cb2-6" title="6"></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="kw">fn</span> main() <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-8" title="8">    <span class="co">// MQTTまわりの設定</span></a>
-<a class="sourceLine" id="cb2-9" title="9">    <span class="kw">let</span> client_id = <span class="pp">env::</span>var(<span class="st">&quot;CLIENT_ID&quot;</span>).expect(<span class="st">&quot;CLIENT_ID is invalid&quot;</span>);</a>
-<a class="sourceLine" id="cb2-10" title="10">    <span class="kw">let</span> ca = <span class="pp">include_bytes!</span>(<span class="st">&quot;../tlsfiles/ca.crt&quot;</span>).to_vec();</a>
-<a class="sourceLine" id="cb2-11" title="11">    <span class="kw">let</span> client_cert = <span class="pp">include_bytes!</span>(<span class="st">&quot;../tlsfiles/cert.pem&quot;</span>).to_vec();</a>
-<a class="sourceLine" id="cb2-12" title="12">    <span class="kw">let</span> client_key = <span class="pp">include_bytes!</span>(<span class="st">&quot;../tlsfiles/private.key&quot;</span>).to_vec();</a>
-<a class="sourceLine" id="cb2-13" title="13"></a>
-<a class="sourceLine" id="cb2-14" title="14">    <span class="kw">let</span> mqtt_host = <span class="pp">env::</span>var(<span class="st">&quot;MQTT_HOST&quot;</span>).expect(<span class="st">&quot;MQTT_HOST is invalid&quot;</span>);</a>
-<a class="sourceLine" id="cb2-15" title="15"></a>
-<a class="sourceLine" id="cb2-16" title="16">    <span class="co">// SlackのWebhook URL</span></a>
-<a class="sourceLine" id="cb2-17" title="17">    <span class="kw">let</span> slack_hook_url = <span class="pp">env::</span>var(<span class="st">&quot;SLACK_HOOK_URL&quot;</span>).expect(<span class="st">&quot;SLACK_HOOK_URL is invalid&quot;</span>);</a>
-<a class="sourceLine" id="cb2-18" title="18"></a>
-<a class="sourceLine" id="cb2-19" title="19">    <span class="co">// 音楽ファイルの場所</span></a>
-<a class="sourceLine" id="cb2-20" title="20">    <span class="kw">let</span> music_file = <span class="pp">env::</span>var(<span class="st">&quot;MUSIC_FILE_PATH&quot;</span>).expect(<span class="st">&quot;MUSIC_FILE_PATH is invalid&quot;</span>);</a>
-<a class="sourceLine" id="cb2-21" title="21"></a>
-<a class="sourceLine" id="cb2-22" title="22">    <span class="kw">let</span> mqtt_options = <span class="pp">MqttOptions::</span>new(client_id, mqtt_host, <span class="dv">8883</span>)</a>
-<a class="sourceLine" id="cb2-23" title="23">        .set_ca(ca)</a>
-<a class="sourceLine" id="cb2-24" title="24">        .set_client_auth(client_cert, client_key)</a>
-<a class="sourceLine" id="cb2-25" title="25">        .set_keep_alive(<span class="dv">10</span>);</a>
-<a class="sourceLine" id="cb2-26" title="26"></a>
-<a class="sourceLine" id="cb2-27" title="27">    <span class="kw">let</span> (<span class="kw">mut</span> mqtt_client, notifications) = <span class="pp">MqttClient::</span>start(mqtt_options).unwrap();</a>
-<a class="sourceLine" id="cb2-28" title="28">    mqtt_client</a>
-<a class="sourceLine" id="cb2-29" title="29">        .subscribe(<span class="st">&quot;panic_button&quot;</span>, <span class="pp">QoS::</span>AtLeastOnce)</a>
-<a class="sourceLine" id="cb2-30" title="30">        .unwrap();</a>
-<a class="sourceLine" id="cb2-31" title="31"></a>
-<a class="sourceLine" id="cb2-32" title="32">    <span class="kw">for</span> notification <span class="kw">in</span> notifications <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-33" title="33">        <span class="kw">match</span> notification <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-34" title="34">            Publish(_) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-35" title="35">                <span class="co">// publishをうけたとった場合だけ以下を実行</span></a>
-<a class="sourceLine" id="cb2-36" title="36">                <span class="kw">let</span> slack = <span class="pp">Slack::</span>new(&amp;*slack_hook_url).unwrap();</a>
-<a class="sourceLine" id="cb2-37" title="37">                <span class="kw">let</span> p = <span class="pp">PayloadBuilder::</span>new()</a>
-<a class="sourceLine" id="cb2-38" title="38">                        .text(<span class="pp">vec!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb2-39" title="39">                            User(<span class="pp">SlackUserLink::</span>new(<span class="st">&quot;!everyone&quot;</span>)),</a>
-<a class="sourceLine" id="cb2-40" title="40">                            Text(<span class="st">&quot;:rotating_light: *緊急ボタンが押されました！* :rotating_light:</span><span class="sc">\n</span><span class="st">すぐに連絡をとってください&quot;</span>.into())</a>
-<a class="sourceLine" id="cb2-41" title="41">                        <span class="op">]</span>.as_slice())</a>
-<a class="sourceLine" id="cb2-42" title="42">                        .channel(<span class="st">&quot;#general&quot;</span>)</a>
-<a class="sourceLine" id="cb2-43" title="43">                        .username(<span class="st">&quot;自宅&quot;</span>)</a>
-<a class="sourceLine" id="cb2-44" title="44">                        .icon_emoji(<span class="st">&quot;:house:&quot;</span>)</a>
-<a class="sourceLine" id="cb2-45" title="45">                        .build()</a>
-<a class="sourceLine" id="cb2-46" title="46">                        .unwrap();</a>
-<a class="sourceLine" id="cb2-47" title="47">                slack.send(&amp;p).expect(<span class="st">&quot;Cannot send message to slack&quot;</span>);</a>
-<a class="sourceLine" id="cb2-48" title="48">                <span class="co">// 音量の調整</span></a>
-<a class="sourceLine" id="cb2-49" title="49">                <span class="pp">Command::</span>new(<span class="st">&quot;amixer&quot;</span>)</a>
-<a class="sourceLine" id="cb2-50" title="50">                    .arg(<span class="st">&quot;cset&quot;</span>)</a>
-<a class="sourceLine" id="cb2-51" title="51">                    .arg(<span class="st">&quot;numid=1&quot;</span>)</a>
-<a class="sourceLine" id="cb2-52" title="52">                    .arg(<span class="st">&quot;90%&quot;</span>)</a>
-<a class="sourceLine" id="cb2-53" title="53">                    .output()</a>
-<a class="sourceLine" id="cb2-54" title="54">                    .expect(<span class="st">&quot;Cannot change volume&quot;</span>);</a>
-<a class="sourceLine" id="cb2-55" title="55">                <span class="kw">for</span> _ <span class="kw">in</span> <span class="dv">0</span>..<span class="dv">5</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-56" title="56">                    <span class="co">// aplayで音楽を再生</span></a>
-<a class="sourceLine" id="cb2-57" title="57">                    <span class="pp">Command::</span>new(<span class="st">&quot;aplay&quot;</span>)</a>
-<a class="sourceLine" id="cb2-58" title="58">                        .arg(&amp;*music_file)</a>
-<a class="sourceLine" id="cb2-59" title="59">                        .output()</a>
-<a class="sourceLine" id="cb2-60" title="60">                        .expect(<span class="st">&quot;Cannot play music&quot;</span>);</a>
-<a class="sourceLine" id="cb2-61" title="61">                <span class="op">}</span></a>
-<a class="sourceLine" id="cb2-62" title="62">            <span class="op">}</span></a>
-<a class="sourceLine" id="cb2-63" title="63">            _ =&gt; <span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span>, notification),</a>
-<a class="sourceLine" id="cb2-64" title="64">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb2-65" title="65">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb2-66" title="66"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">rumqtt::</span><span class="op">{</span><span class="pp">client::Notification::</span>Publish<span class="op">,</span> MqttClient<span class="op">,</span> MqttOptions<span class="op">,</span> QoS<span class="op">};</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">slack_hook::SlackTextContent::</span><span class="op">{</span>Text<span class="op">,</span> User<span class="op">};</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">slack_hook::</span><span class="op">{</span>PayloadBuilder<span class="op">,</span> Slack<span class="op">,</span> SlackUserLink<span class="op">};</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">std::</span>env<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">std::process::</span>Command<span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// MQTTまわりの設定</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> client_id <span class="op">=</span> <span class="pp">env::</span>var(<span class="st">&quot;CLIENT_ID&quot;</span>)<span class="op">.</span>expect(<span class="st">&quot;CLIENT_ID is invalid&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> ca <span class="op">=</span> <span class="pp">include_bytes!</span>(<span class="st">&quot;../tlsfiles/ca.crt&quot;</span>)<span class="op">.</span>to_vec()<span class="op">;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> client_cert <span class="op">=</span> <span class="pp">include_bytes!</span>(<span class="st">&quot;../tlsfiles/cert.pem&quot;</span>)<span class="op">.</span>to_vec()<span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> client_key <span class="op">=</span> <span class="pp">include_bytes!</span>(<span class="st">&quot;../tlsfiles/private.key&quot;</span>)<span class="op">.</span>to_vec()<span class="op">;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> mqtt_host <span class="op">=</span> <span class="pp">env::</span>var(<span class="st">&quot;MQTT_HOST&quot;</span>)<span class="op">.</span>expect(<span class="st">&quot;MQTT_HOST is invalid&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// SlackのWebhook URL</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> slack_hook_url <span class="op">=</span> <span class="pp">env::</span>var(<span class="st">&quot;SLACK_HOOK_URL&quot;</span>)<span class="op">.</span>expect(<span class="st">&quot;SLACK_HOOK_URL is invalid&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 音楽ファイルの場所</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> music_file <span class="op">=</span> <span class="pp">env::</span>var(<span class="st">&quot;MUSIC_FILE_PATH&quot;</span>)<span class="op">.</span>expect(<span class="st">&quot;MUSIC_FILE_PATH is invalid&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> mqtt_options <span class="op">=</span> <span class="pp">MqttOptions::</span>new(client_id<span class="op">,</span> mqtt_host<span class="op">,</span> <span class="dv">8883</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>set_ca(ca)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>set_client_auth(client_cert<span class="op">,</span> client_key)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>set_keep_alive(<span class="dv">10</span>)<span class="op">;</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> (<span class="kw">mut</span> mqtt_client<span class="op">,</span> notifications) <span class="op">=</span> <span class="pp">MqttClient::</span>start(mqtt_options)<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    mqtt_client</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>subscribe(<span class="st">&quot;panic_button&quot;</span><span class="op">,</span> <span class="pp">QoS::</span>AtLeastOnce)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> notification <span class="kw">in</span> notifications <span class="op">{</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> notification <span class="op">{</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>            Publish(_) <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>                <span class="co">// publishをうけたとった場合だけ以下を実行</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> slack <span class="op">=</span> <span class="pp">Slack::</span>new(<span class="op">&amp;*</span>slack_hook_url)<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> p <span class="op">=</span> <span class="pp">PayloadBuilder::</span>new()</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span>text(<span class="pp">vec!</span>[</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>                            User(<span class="pp">SlackUserLink::</span>new(<span class="st">&quot;!everyone&quot;</span>))<span class="op">,</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>                            Text(<span class="st">&quot;:rotating_light: *緊急ボタンが押されました！* :rotating_light:</span><span class="sc">\n</span><span class="st">すぐに連絡をとってください&quot;</span><span class="op">.</span>into())</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>                        ]<span class="op">.</span>as_slice())</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span>channel(<span class="st">&quot;#general&quot;</span>)</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span>username(<span class="st">&quot;自宅&quot;</span>)</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span>icon_emoji(<span class="st">&quot;:house:&quot;</span>)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span>build()</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>                slack<span class="op">.</span>send(<span class="op">&amp;</span>p)<span class="op">.</span>expect(<span class="st">&quot;Cannot send message to slack&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>                <span class="co">// 音量の調整</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>                <span class="pp">Command::</span>new(<span class="st">&quot;amixer&quot;</span>)</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>arg(<span class="st">&quot;cset&quot;</span>)</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>arg(<span class="st">&quot;numid=1&quot;</span>)</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>arg(<span class="st">&quot;90%&quot;</span>)</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>output()</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>expect(<span class="st">&quot;Cannot change volume&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> _ <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">5</span> <span class="op">{</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// aplayで音楽を再生</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>                    <span class="pp">Command::</span>new(<span class="st">&quot;aplay&quot;</span>)</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span>arg(<span class="op">&amp;*</span>music_file)</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span>output()</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span>expect(<span class="st">&quot;Cannot play music&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>            _ <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> notification)<span class="op">,</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Raspberry Pi向けにコンパイルするのに <a href="https://github.com/rust-embedded/cross">cross</a> を使った。</p>
 <p>コードの全体は <a href="https://github.com/yoshitsugu/panic_button">https://github.com/yoshitsugu/panic_button</a> にて公開している。</p>
 <h2 id="実行結果">実行結果</h2>
@@ -184,11 +184,11 @@
 <h2 id="感想">感想</h2>
 <p>AWS IoT ButtonとRaspberry Piを使うことで比較的簡単に実現できた。 AWS IoT Coreは他にもいろいろと機能がありそうで、そのうち触ってみたい。<br />
 また同じような仕組みで、Slack通知とともにカメラで室内写真を撮っておくったり、できることはまだありそうだ。娘に実際に使ってもらいつつ、改善をすすめていきたい。</p>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p><a href="https://dev.classmethod.jp/cloud/aws/aws-iot-enterprise-button/">【国内販売開始】AWS IoT Enterprise Button試してみたらホンマに簡単にLambda関数を実行できた ｜ Developers.IO</a> など<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p><a href="https://qiita.com/gnk263/items/a7937259746c81a6b052">Raspberry PiでAWS IoT Coreと接続し、GPIO制御をしてみた - Qiita</a> など<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p><a href="https://dev.classmethod.jp/cloud/aws/aws-iot-enterprise-button/">【国内販売開始】AWS IoT Enterprise Button試してみたらホンマに簡単にLambda関数を実行できた ｜ Developers.IO</a> など<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p><a href="https://qiita.com/gnk263/items/a7937259746c81a6b052">Raspberry PiでAWS IoT Coreと接続し、GPIO制御をしてみた - Qiita</a> など<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
