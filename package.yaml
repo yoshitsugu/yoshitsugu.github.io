@@ -17,7 +17,7 @@ ghc-options:
 dependencies:
 - base ==4.*
 - hakyll ==4.*
-- skylighting-core ==0.7.*
+- skylighting-core >= 0.10.0
 - pandoc ==2.*
 executables:
   blog:
