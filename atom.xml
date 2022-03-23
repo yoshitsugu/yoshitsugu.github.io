@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>TSUGULOG</title>
+        <link>htts://yoshitsugu.net</link>
+        <description><![CDATA[yoshitsugu's blog]]></description>
+        <atom:link href="htts://yoshitsugu.net/atom.xml" rel="self"
+                   type="application/rss+xml" />
+        <lastBuildDate>Thu, 20 Jan 2022 00:00:00 UT</lastBuildDate>
+        <item>
+    <title>「A Philosophy of Software Design」を読んだ</title>
+    <link>htts://yoshitsugu.net/posts/2022-01-20-a-philosophy-of-software-design.html</link>
+    <description><![CDATA[
+    Posted on January 20, 2022
+    
+    
+    , Tags: Software Design, Book Review
+    
+
+
+A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout を読んだので感想を書く。
+]]></description>
+    <pubDate>Thu, 20 Jan 2022 00:00:00 UT</pubDate>
+    <guid>htts://yoshitsugu.net/posts/2022-01-20-a-philosophy-of-software-design.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+<item>
+    <title>「プロを目指す人のためのRuby入門 改訂2版」のレビューをした</title>
+    <link>htts://yoshitsugu.net/posts/2021-11-23-review-ruby-cherry-book-2nd-edition.html</link>
+    <description><![CDATA[
+    Posted on November 23, 2021
+    
+    
+    , Tags: Ruby, プロを目指す人のためのRuby入門
+    
+
+
+プロを目指す人のためのRuby入門 改訂2版 / 伊藤 淳一のレビューに参加したので、それについて書く。
+]]></description>
+    <pubDate>Tue, 23 Nov 2021 00:00:00 UT</pubDate>
+    <guid>htts://yoshitsugu.net/posts/2021-11-23-review-ruby-cherry-book-2nd-edition.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+<item>
+    <title>フィヨルドブートキャンプのメンターをはじめた</title>
+    <link>htts://yoshitsugu.net/posts/2021-07-02-start-fjord-bootcamp-mentor.html</link>
+    <description><![CDATA[
+    Posted on July  2, 2021
+    
+    
+    , Tags: フィヨルドブートキャンプ
+    
+
+
+6月からフィヨルドブートキャンプのメンターに参加させてもらえることになったので、現状を書いておく。
+]]></description>
+    <pubDate>Fri, 02 Jul 2021 00:00:00 UT</pubDate>
+    <guid>htts://yoshitsugu.net/posts/2021-07-02-start-fjord-bootcamp-mentor.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+<item>
+    <title>圏論の勉強をはじめた</title>
+    <link>htts://yoshitsugu.net/posts/2021-06-22-start-learning-category-theory.html</link>
+    <description><![CDATA[
+    Posted on June 22, 2021
+    
+    
+    , Tags: 圏論
+    
+
+
+圏論の勉強をはじめたので、現状を記録しておく。
+]]></description>
+    <pubDate>Tue, 22 Jun 2021 00:00:00 UT</pubDate>
+    <guid>htts://yoshitsugu.net/posts/2021-06-22-start-learning-category-theory.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+<item>
+    <title>ふりかえりで気をつけていること</title>
+    <link>htts://yoshitsugu.net/posts/2021-04-20-effective-retrospective.html</link>
+    <description><![CDATA[
+    Posted on April 20, 2021
+    
+    
+    , Tags: ふりかえり, Thinking
+    
+
+
+個人でもチームでも「ふりかえり」をすることは一般的だと思う。今回はその中で個人的に気をつけていることをまとめた。
+]]></description>
+    <pubDate>Tue, 20 Apr 2021 00:00:00 UT</pubDate>
+    <guid>htts://yoshitsugu.net/posts/2021-04-20-effective-retrospective.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+<item>
+    <title>HaskellのLinearTypes言語拡張について少し調べた</title>
+    <link>htts://yoshitsugu.net/posts/2021-02-13-linear-haskell.html</link>
+    <description><![CDATA[
+    Posted on February 13, 2021
+    
+    
+    , Tags: Linear Haskell, Haskell, LinearTypes
+    
+
+
+最近リリースされた GHC 9.0.1 で使えるようになった LinearTypes 言語拡張について気になったので調べた。
+]]></description>
+    <pubDate>Sat, 13 Feb 2021 00:00:00 UT</pubDate>
+    <guid>htts://yoshitsugu.net/posts/2021-02-13-linear-haskell.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+<item>
+    <title>このブログをダークモード対応した</title>
+    <link>htts://yoshitsugu.net/posts/2020-12-29-dark-theme.html</link>
+    <description><![CDATA[
+    Posted on December 29, 2020
+    
+    
+    , Tags: Dark Theme, Dark Mode, Hakyll
+    
+
+
+表題の通り、対応した。
+]]></description>
+    <pubDate>Tue, 29 Dec 2020 00:00:00 UT</pubDate>
+    <guid>htts://yoshitsugu.net/posts/2020-12-29-dark-theme.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+<item>
+    <title>Software Transactional Memoryの論文を読んだ</title>
+    <link>htts://yoshitsugu.net/posts/2020-12-22-stm-paper.html</link>
+    <description><![CDATA[
+    Posted on December 22, 2020
+    
+    
+    , Tags: STM
+    
+
+
+Software Transactional Memory(STM) の論文を読んだので、メモを公開しておく
+]]></description>
+    <pubDate>Tue, 22 Dec 2020 00:00:00 UT</pubDate>
+    <guid>htts://yoshitsugu.net/posts/2020-12-22-stm-paper.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+<item>
+    <title>Ractor::TMVarを作った</title>
+    <link>htts://yoshitsugu.net/posts/2020-11-30-ractor-tmvar.html</link>
+    <description><![CDATA[
+    Posted on November 30, 2020
+    
+    
+    , Tags: Ractor, Ractor::TMVar, Ractor::TVar, STM
+    
+
+
+Ractor::TVar に対応する TMVar がほしくなったので作った
+]]></description>
+    <pubDate>Mon, 30 Nov 2020 00:00:00 UT</pubDate>
+    <guid>htts://yoshitsugu.net/posts/2020-11-30-ractor-tmvar.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+<item>
+    <title>このブログのデプロイをTravis CIからGitHub Actionsにした</title>
+    <link>htts://yoshitsugu.net/posts/2020-11-24-deployment-travis-to-github-actions.html</link>
+    <description><![CDATA[
+    Posted on November 24, 2020
+    
+    
+    , Tags: GitHub Actions
+    
+
+
+表題の通り、このブログのデプロイを Travis CI から GitHub Actions にしたので概要を書く。
+]]></description>
+    <pubDate>Tue, 24 Nov 2020 00:00:00 UT</pubDate>
+    <guid>htts://yoshitsugu.net/posts/2020-11-24-deployment-travis-to-github-actions.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+
+    </channel>
+</rss>
