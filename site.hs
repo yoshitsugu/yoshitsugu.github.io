@@ -122,7 +122,7 @@ main = hakyll $ do
 
   match "templates/*" $ compile templateCompiler
 
-  create ["atom.xml"] $ do
+  create ["rss"] $ do
     route idRoute
     compile $ do
       let feedCtx = postCtx `mappend` bodyField "description"
