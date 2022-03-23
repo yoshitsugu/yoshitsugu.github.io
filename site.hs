@@ -196,5 +196,5 @@ myFeedConfiguration =
       feedDescription = "yoshitsugu's blog",
       feedAuthorName = "Kota Yoshitsugu",
       feedAuthorEmail = "kota@yoshitsugu.net",
-      feedRoot = "htts://yoshitsugu.net"
+      feedRoot = "https://yoshitsugu.net"
     }
