@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-import Data.Monoid ((<>))
+import qualified Data.Functor
 import Hakyll
 import qualified Skylighting.Format.HTML as SF
 import qualified Skylighting.Styles as SS
@@ -27,13 +27,14 @@ main = hakyll $ do
   match "css/*.scss" $ do
     route $ setExtension "css"
     compile $
-      getResourceString
-        >>= withItemBody (unixFilter "sass" ["--stdin"])
-        >>= return . fmap compressCss
+      ( getResourceString
+          >>= withItemBody (unixFilter "sass" ["--stdin"])
+      )
+        Data.Functor.<&> fmap compressCss
 
   create ["css/highlight.css"] $ do
     route idRoute
-    compile $ makeItem $ (compressCss $ SF.styleToCss SS.haddock) ++ "@media (prefers-color-scheme: dark) {" ++ (compressCss $ SF.styleToCss SS.breezeDark) ++ "}"
+    compile $ makeItem $ compressCss (SF.styleToCss SS.haddock) ++ "@media (prefers-color-scheme: dark) {" ++ compressCss (SF.styleToCss SS.breezeDark) ++ "}"
 
   match "css/*.css" $ do
     route idRoute
@@ -70,8 +71,8 @@ main = hakyll $ do
     route $ setExtension "html"
     compile $
       customPandocCompiler
-        >>= saveSnapshot "content"
         >>= loadAndApplyTemplate "templates/post.html" (postCtxWithTags tags)
+        >>= saveSnapshot "content"
         >>= loadAndApplyTemplate "templates/default.html" (postCtxWithTags tags)
         >>= relativizeUrls
 
@@ -108,7 +109,7 @@ main = hakyll $ do
     compile $ do
       posts <- recentFirst =<< loadAll "posts/*"
       pages <- loadAll $ fromList ["index.html", "about.md"]
-      let allPosts = (return (pages ++ posts))
+      let allPosts = return (pages ++ posts)
       let sitemapCtx =
             mconcat
               [ listField "entries" pageCtx allPosts,
@@ -120,6 +121,15 @@ main = hakyll $ do
         >>= cleanIndexHtmls
 
   match "templates/*" $ compile templateCompiler
+
+  create ["atom.xml"] $ do
+    route idRoute
+    compile $ do
+      let feedCtx = postCtx `mappend` bodyField "description"
+      posts <-
+        fmap (take 10) . recentFirst
+          =<< loadAllSnapshots "posts/*" "content"
+      renderRss myFeedConfiguration feedCtx posts
 
 --------------------------------------------------------------------------------
 customPandocCompiler :: Compiler (Item String)
@@ -178,3 +188,13 @@ teaserFieldWithSeparatorStripped separator key snapshot = field key $ \item -> d
         "Hakyll.Web.Template.Context: no teaser defined for "
           ++ show (itemIdentifier item)
     Just t -> return $ stripTags t
+
+myFeedConfiguration :: FeedConfiguration
+myFeedConfiguration =
+  FeedConfiguration
+    { feedTitle = "TSUGULOG",
+      feedDescription = "yoshitsugu's blog",
+      feedAuthorName = "Kota Yoshitsugu",
+      feedAuthorEmail = "kota@yoshitsugu.net",
+      feedRoot = "htts://yoshitsugu.net"
+    }
