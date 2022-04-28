@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import qualified Data.Functor
-import Hakyll
-import qualified Skylighting.Format.HTML as SF
-import qualified Skylighting.Styles as SS
-import Text.Pandoc.Highlighting
-import Text.Pandoc.Options
+import           Hakyll
+import qualified Skylighting.Format.HTML  as SF
+import qualified Skylighting.Styles       as SS
+import           Text.Pandoc.Highlighting
+import           Text.Pandoc.Options
 
 hostName :: String
 hostName = "https://yoshitsugu.net"
@@ -20,7 +20,7 @@ main = hakyll $ do
     route idRoute
     compile copyFileCompiler
 
-  match (fromList ["google9af023e4743ca32a.html", "robots.txt"]) $ do
+  match (fromList ["robots.txt"]) $ do
     route idRoute
     compile copyFileCompiler
 
@@ -40,9 +40,9 @@ main = hakyll $ do
     route idRoute
     compile compressCssCompiler
 
-  match "js/*.js" $ do
-    route idRoute
-    compile copyFileCompiler
+  -- match "js/*.js" $ do
+  --   route idRoute
+  --   compile copyFileCompiler
 
   match (fromList ["about.md"]) $ do
     route $ setExtension "html"
