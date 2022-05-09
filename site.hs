@@ -148,7 +148,7 @@ defaultCtx =
 
 postCtx :: Context String
 postCtx =
-  dateField "date" "%B %e, %Y"
+  dateField "date" "%Y-%m-%d"
     `mappend` descriptionField "description" "content"
     `mappend` defaultCtx
 
@@ -162,7 +162,7 @@ pageCtx =
       modificationTimeField "lastmod" "%Y-%m-%d",
       dateField "updated" "%Y-%m-%dT%H:%M:%SZ",
       constField "host" hostName,
-      dateField "date" "%B %e, %Y",
+      dateField "date" "%Y-%m-%d",
       defaultCtx
     ]
 
