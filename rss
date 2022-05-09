@@ -12,7 +12,7 @@
     <title>「A Philosophy of Software Design」を読んだ</title>
     <link>https://yoshitsugu.net/posts/2022-01-20-a-philosophy-of-software-design.html</link>
     <description><![CDATA[
-    Posted on January 20, 2022
+    Posted on 2022-01-20
     
     
     , Tags: Software Design, Book Review
@@ -29,7 +29,7 @@ A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout
     <title>「プロを目指す人のためのRuby入門 改訂2版」のレビューをした</title>
     <link>https://yoshitsugu.net/posts/2021-11-23-review-ruby-cherry-book-2nd-edition.html</link>
     <description><![CDATA[
-    Posted on November 23, 2021
+    Posted on 2021-11-23
     
     
     , Tags: Ruby, プロを目指す人のためのRuby入門
@@ -46,7 +46,7 @@ A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout
     <title>フィヨルドブートキャンプのメンターをはじめた</title>
     <link>https://yoshitsugu.net/posts/2021-07-02-start-fjord-bootcamp-mentor.html</link>
     <description><![CDATA[
-    Posted on July  2, 2021
+    Posted on 2021-07-02
     
     
     , Tags: フィヨルドブートキャンプ
@@ -63,7 +63,7 @@ A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout
     <title>圏論の勉強をはじめた</title>
     <link>https://yoshitsugu.net/posts/2021-06-22-start-learning-category-theory.html</link>
     <description><![CDATA[
-    Posted on June 22, 2021
+    Posted on 2021-06-22
     
     
     , Tags: 圏論
@@ -80,7 +80,7 @@ A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout
     <title>ふりかえりで気をつけていること</title>
     <link>https://yoshitsugu.net/posts/2021-04-20-effective-retrospective.html</link>
     <description><![CDATA[
-    Posted on April 20, 2021
+    Posted on 2021-04-20
     
     
     , Tags: ふりかえり, Thinking
@@ -97,7 +97,7 @@ A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout
     <title>HaskellのLinearTypes言語拡張について少し調べた</title>
     <link>https://yoshitsugu.net/posts/2021-02-13-linear-haskell.html</link>
     <description><![CDATA[
-    Posted on February 13, 2021
+    Posted on 2021-02-13
     
     
     , Tags: Linear Haskell, Haskell, LinearTypes
@@ -114,7 +114,7 @@ A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout
     <title>このブログをダークモード対応した</title>
     <link>https://yoshitsugu.net/posts/2020-12-29-dark-theme.html</link>
     <description><![CDATA[
-    Posted on December 29, 2020
+    Posted on 2020-12-29
     
     
     , Tags: Dark Theme, Dark Mode, Hakyll
@@ -131,7 +131,7 @@ A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout
     <title>Software Transactional Memoryの論文を読んだ</title>
     <link>https://yoshitsugu.net/posts/2020-12-22-stm-paper.html</link>
     <description><![CDATA[
-    Posted on December 22, 2020
+    Posted on 2020-12-22
     
     
     , Tags: STM
@@ -148,7 +148,7 @@ Software Transactional Memory(STM) の論文を読んだので、メモを公開
     <title>Ractor::TMVarを作った</title>
     <link>https://yoshitsugu.net/posts/2020-11-30-ractor-tmvar.html</link>
     <description><![CDATA[
-    Posted on November 30, 2020
+    Posted on 2020-11-30
     
     
     , Tags: Ractor, Ractor::TMVar, Ractor::TVar, STM
@@ -165,7 +165,7 @@ Ractor::TVar に対応する TMVar がほしくなったので作った
     <title>このブログのデプロイをTravis CIからGitHub Actionsにした</title>
     <link>https://yoshitsugu.net/posts/2020-11-24-deployment-travis-to-github-actions.html</link>
     <description><![CDATA[
-    Posted on November 24, 2020
+    Posted on 2020-11-24
     
     
     , Tags: GitHub Actions
