@@ -7,8 +7,25 @@
         <description><![CDATA[yoshitsugu's blog]]></description>
         <atom:link href="https://yoshitsugu.net/rss" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Thu, 20 Jan 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Fri, 24 Feb 2023 00:00:00 UT</lastBuildDate>
         <item>
+    <title>産廃業界向けSaaSのスタートアップで働きはじめた</title>
+    <link>https://yoshitsugu.net/posts/2023-02-24-change-job-fanfare.html</link>
+    <description><![CDATA[
+    Posted on 2023-02-24
+    
+    
+    , Tags: Changing Job, Fanfare, Industrial Waste
+    
+
+
+転職したので記録がてら書いておく。
+]]></description>
+    <pubDate>Fri, 24 Feb 2023 00:00:00 UT</pubDate>
+    <guid>https://yoshitsugu.net/posts/2023-02-24-change-job-fanfare.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+<item>
     <title>「A Philosophy of Software Design」を読んだ</title>
     <link>https://yoshitsugu.net/posts/2022-01-20-a-philosophy-of-software-design.html</link>
     <description><![CDATA[
@@ -159,23 +176,6 @@ Ractor::TVar に対応する TMVar がほしくなったので作った
 ]]></description>
     <pubDate>Mon, 30 Nov 2020 00:00:00 UT</pubDate>
     <guid>https://yoshitsugu.net/posts/2020-11-30-ractor-tmvar.html</guid>
-    <dc:creator>Kota Yoshitsugu</dc:creator>
-</item>
-<item>
-    <title>このブログのデプロイをTravis CIからGitHub Actionsにした</title>
-    <link>https://yoshitsugu.net/posts/2020-11-24-deployment-travis-to-github-actions.html</link>
-    <description><![CDATA[
-    Posted on 2020-11-24
-    
-    
-    , Tags: GitHub Actions
-    
-
-
-表題の通り、このブログのデプロイを Travis CI から GitHub Actions にしたので概要を書く。
-]]></description>
-    <pubDate>Tue, 24 Nov 2020 00:00:00 UT</pubDate>
-    <guid>https://yoshitsugu.net/posts/2020-11-24-deployment-travis-to-github-actions.html</guid>
     <dc:creator>Kota Yoshitsugu</dc:creator>
 </item>
 
