@@ -21,7 +21,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は12日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は12日目の内容。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。12日目 - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は12日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は12日目の内容。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,11 +63,12 @@
     <span class="date">Posted on 2019-06-28</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html" rel="tag">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html" rel="tag">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a></span>
     
 </div>
 
-<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は12日目の内容。 <!--more--></p>
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は12日目の内容。
+<!--more--></p>
 <h2 id="タイマの導入">タイマの導入</h2>
 <p>今回はまずタイマを導入する。<br />
 PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを受け付けられるようにする。</p>
@@ -96,7 +99,7 @@ PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="kw">crate</span><span class="pp">::interrupt::</span><span class="op">{</span>inthandler21<span class="op">,</span> inthandler2c<span class="op">};</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">asm::</span><span class="op">{</span>load_gdtr<span class="op">,</span> load_idtr<span class="op">};</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// GDTの初期化</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..=</span>(LIMIT_GDT <span class="op">/</span> <span class="dv">8</span>) <span class="op">{</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..=</span>(LIMIT_GDT <span class="op">/</span> <span class="dv">8</span>) <span class="op">{</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> gdt <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((ADR_GDT <span class="op">+</span> i <span class="op">*</span> <span class="dv">8</span>) <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> SegmentDescriptor) <span class="op">};</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>gdt <span class="op">=</span> <span class="pp">SegmentDescriptor::</span>new(<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
@@ -108,7 +111,7 @@ PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    load_gdtr(LIMIT_GDT<span class="op">,</span> ADR_GDT)<span class="op">;</span></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">// IDTの初期化</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..=</span>(LIMIT_IDT <span class="op">/</span> <span class="dv">8</span>) <span class="op">{</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..=</span>(LIMIT_IDT <span class="op">/</span> <span class="dv">8</span>) <span class="op">{</span></span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> idt <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((ADR_IDT <span class="op">+</span> i <span class="op">*</span> <span class="dv">8</span>) <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> GateDescriptor) <span class="op">};</span></span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>idt <span class="op">=</span> <span class="pp">GateDescriptor::</span>new(<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
@@ -142,7 +145,7 @@ PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  init_palette()<span class="op">;</span></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  enable_mouse()<span class="op">;</span></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 省略</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>      <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>      <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        boxfill(buf_win_addr<span class="op">,</span> <span class="dv">160</span><span class="op">,</span> <span class="pp">Color::</span>LightGray<span class="op">,</span> <span class="dv">40</span><span class="op">,</span> <span class="dv">28</span><span class="op">,</span> <span class="dv">119</span><span class="op">,</span> <span class="dv">43</span>)<span class="op">;</span></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span> <span class="pp">ScreenWriter::</span>new(<span class="cn">Some</span>(buf_win_addr)<span class="op">,</span> <span class="pp">vga::Color::</span>Black<span class="op">,</span> <span class="dv">40</span><span class="op">,</span> <span class="dv">28</span><span class="op">,</span> <span class="dv">160</span><span class="op">,</span> <span class="dv">52</span>)<span class="op">;</span></span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="pp">write!</span>(writer<span class="op">,</span> <span class="st">&quot;{:&gt;010}&quot;</span><span class="op">,</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="pp">timer::</span>COUNTER <span class="op">}</span>)<span class="op">.</span>unwrap()<span class="op">;</span> <span class="co">// &lt;- static mutのCOUNTERを使うように</span></span>
@@ -175,16 +178,16 @@ PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    out8(PIC0_OCW2<span class="op">,</span> <span class="dv">0x60</span>)<span class="op">;</span> <span class="co">// IRQ-00受付完了をPICに通知</span></span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> tm <span class="op">=</span> TIMER_MANAGER<span class="op">.</span>lock()<span class="op">;</span></span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    tm<span class="op">.</span>count <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> tm<span class="op">.</span>next <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> tm<span class="op">.</span>next <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> timeout_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>tm<span class="op">.</span>counting <span class="op">{</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>tm<span class="op">.</span>counting <span class="op">{</span></span>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        timeout_count <span class="op">=</span> i<span class="op">;</span></span>
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> timer_index <span class="op">=</span> tm<span class="op">.</span>timers[i <span class="kw">as</span> <span class="dt">usize</span>]<span class="op">;</span></span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> t <span class="op">=</span> tm<span class="op">.</span>timers_data[timer_index]<span class="op">;</span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> t<span class="op">.</span>timeout <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>            <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> t<span class="op">.</span>timeout <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span></span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> t_mut <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> tm<span class="op">.</span>timers_data[timer_index]<span class="op">;</span></span>
@@ -194,12 +197,12 @@ PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを
 <span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        fifo<span class="op">.</span>put(t<span class="op">.</span>data)<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    tm<span class="op">.</span>counting <span class="op">-=</span> timeout_count<span class="op">;</span></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>tm<span class="op">.</span>counting <span class="op">{</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>tm<span class="op">.</span>counting <span class="op">{</span></span>
 <span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>        tm<span class="op">.</span>timers[i <span class="kw">as</span> <span class="dt">usize</span>] <span class="op">=</span> tm<span class="op">.</span>timers[(timeout_count <span class="op">+</span> i) <span class="kw">as</span> <span class="dt">usize</span>]<span class="op">;</span></span>
 <span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> tm<span class="op">.</span>counting <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> tm<span class="op">.</span>counting <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>        tm<span class="op">.</span>next <span class="op">=</span> tm<span class="op">.</span>timers_data[tm<span class="op">.</span>timers[<span class="dv">0</span>]]<span class="op">.</span>timeout<span class="op">;</span></span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>        tm<span class="op">.</span>next <span class="op">=</span> <span class="dv">0xffffffff</span><span class="op">;</span></span>
 <span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
@@ -252,10 +255,10 @@ PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを
 <span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> alloc(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">,</span> <span class="op">&amp;</span><span class="ot">'static</span> <span class="dt">str</span><span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MAX_TIMER <span class="op">{</span></span>
-<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>timers_data[i]<span class="op">.</span>flag <span class="op">==</span> <span class="pp">TimerFlag::</span>AVAILABLE <span class="op">{</span></span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MAX_TIMER <span class="op">{</span></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>timers_data[i]<span class="op">.</span>flag <span class="op">==</span> <span class="pp">TimerFlag::</span>AVAILABLE <span class="op">{</span></span>
 <span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>timers_data[i]<span class="op">.</span>flag <span class="op">=</span> <span class="pp">TimerFlag::</span>USED<span class="op">;</span></span>
-<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>                <span class="kw">return</span> <span class="cn">Ok</span>(i)<span class="op">;</span></span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="cn">Ok</span>(i)<span class="op">;</span></span>
 <span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a>        <span class="cn">Err</span>(<span class="st">&quot;CANNOT ASSIGN TIMER&quot;</span>)</span>
@@ -268,15 +271,15 @@ PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを
 <span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> eflags <span class="op">=</span> load_eflags()<span class="op">;</span></span>
 <span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>        cli()<span class="op">;</span></span>
 <span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> insert_index<span class="op">:</span> <span class="dt">usize</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="kw">self</span><span class="op">.</span>counting <span class="op">{</span></span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="kw">self</span><span class="op">.</span>counting <span class="op">{</span></span>
 <span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>            insert_index <span class="op">=</span> i <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
 <span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> t <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>timers_data[<span class="kw">self</span><span class="op">.</span>timers[i <span class="kw">as</span> <span class="dt">usize</span>]]<span class="op">;</span></span>
-<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> t<span class="op">.</span>timeout <span class="op">&gt;=</span> t<span class="op">.</span>timeout <span class="op">{</span></span>
-<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>                <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> t<span class="op">.</span>timeout <span class="op">&gt;=</span> t<span class="op">.</span>timeout <span class="op">{</span></span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> j <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>counting <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
-<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>        <span class="kw">while</span> j <span class="op">&gt;</span> insert_index <span class="op">{</span></span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> j <span class="op">&gt;</span> insert_index <span class="op">{</span></span>
 <span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>timers[j] <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>timers[j <span class="op">-</span> <span class="dv">1</span>]<span class="op">;</span></span>
 <span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a>            j <span class="op">-=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
@@ -333,9 +336,9 @@ PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを
 <span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>init_timer(timer_index3<span class="op">,</span> <span class="op">&amp;</span>timer_buf3<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>set_time(timer_index3<span class="op">,</span> <span class="dv">50</span>)<span class="op">;</span></span>
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        cli()<span class="op">;</span></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(t) <span class="op">=</span> TIMER_MANAGER<span class="op">.</span>try_lock() <span class="op">{</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(t) <span class="op">=</span> TIMER_MANAGER<span class="op">.</span>try_lock() <span class="op">{</span></span>
 <span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>            boxfill(buf_win_addr<span class="op">,</span> <span class="dv">160</span><span class="op">,</span> <span class="pp">Color::</span>LightGray<span class="op">,</span> <span class="dv">40</span><span class="op">,</span> <span class="dv">28</span><span class="op">,</span> <span class="dv">119</span><span class="op">,</span> <span class="dv">43</span>)<span class="op">;</span></span>
 <span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span></span>
 <span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>                <span class="pp">ScreenWriter::</span>new(<span class="cn">Some</span>(buf_win_addr)<span class="op">,</span> <span class="pp">vga::Color::</span>Black<span class="op">,</span> <span class="dv">40</span><span class="op">,</span> <span class="dv">28</span><span class="op">,</span> <span class="dv">160</span><span class="op">,</span> <span class="dv">52</span>)<span class="op">;</span></span>
@@ -343,7 +346,7 @@ PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを
 <span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>            sheet_manager<span class="op">.</span>refresh(shi_win<span class="op">,</span> <span class="dv">40</span><span class="op">,</span> <span class="dv">28</span><span class="op">,</span> <span class="dv">120</span><span class="op">,</span> <span class="dv">44</span>)<span class="op">;</span></span>
 <span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 省略</span></span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> timer_buf1<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> timer_buf1<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> _ <span class="op">=</span> timer_buf1<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
 <span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span> <span class="pp">ScreenWriter::</span>new(</span>
@@ -356,7 +359,7 @@ PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを
 <span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>            )<span class="op">;</span></span>
 <span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>            <span class="pp">write!</span>(writer<span class="op">,</span> <span class="st">&quot;10[sec]&quot;</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>            sheet_manager<span class="op">.</span>refresh(shi_bg<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">64</span><span class="op">,</span> <span class="dv">56</span><span class="op">,</span> <span class="dv">80</span>)<span class="op">;</span></span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> timer_buf2<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> timer_buf2<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> _ <span class="op">=</span> timer_buf2<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
 <span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span> <span class="pp">ScreenWriter::</span>new(</span>
@@ -369,10 +372,10 @@ PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを
 <span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>            )<span class="op">;</span></span>
 <span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>            <span class="pp">write!</span>(writer<span class="op">,</span> <span class="st">&quot;3[sec]&quot;</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>            sheet_manager<span class="op">.</span>refresh(shi_bg<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">80</span><span class="op">,</span> <span class="dv">56</span><span class="op">,</span> <span class="dv">96</span>)<span class="op">;</span></span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> timer_buf3<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> timer_buf3<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> i <span class="op">=</span> timer_buf3<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> i <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> i <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>                TIMER_MANAGER</span>
 <span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>lock()</span>
 <span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>init_timer(timer_index3<span class="op">,</span> <span class="op">&amp;</span>timer_buf3<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
@@ -385,7 +388,7 @@ PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを
 <span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>                    <span class="dv">15</span><span class="op">,</span></span>
 <span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>                    <span class="dv">111</span><span class="op">,</span></span>
 <span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>                )<span class="op">;</span></span>
-<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>                TIMER_MANAGER</span>
 <span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>lock()</span>
 <span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>init_timer(timer_index3<span class="op">,</span> <span class="op">&amp;</span>timer_buf3<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
@@ -401,7 +404,7 @@ PIT(Programmable Interval Timer)を設定し、タイマからの割り込みを
 <span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>            TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>set_time(timer_index3<span class="op">,</span> <span class="dv">50</span>)<span class="op">;</span></span>
 <span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>            sheet_manager<span class="op">.</span>refresh(shi_bg<span class="op">,</span> <span class="dv">8</span><span class="op">,</span> <span class="dv">96</span><span class="op">,</span> <span class="dv">16</span><span class="op">,</span> <span class="dv">112</span>)</span>
-<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
 <span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span></code></pre></div>
 <p>10秒、3秒の経過で表示、および点滅する矩形を表示するようになっている。</p>

@@ -21,7 +21,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は14日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は14日目の内容。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。14日目 - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は14日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は14日目の内容。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,11 +63,12 @@
     <span class="date">Posted on 2019-07-01</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html" rel="tag">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html" rel="tag">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a></span>
     
 </div>
 
-<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は14日目の内容。 <!--more--></p>
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は14日目の内容。
+<!--more--></p>
 <h2 id="解像度の変更">解像度の変更</h2>
 <p>画面を高解像度にする。アセンブリ言語での処理になるので、ほぼ本の通りすすめる。</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">; nasmhead.asm</span></span>
@@ -162,12 +165,12 @@
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> cursor_x <span class="op">=</span> min_cursor_x<span class="op">;</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> cursor_c <span class="op">=</span> <span class="pp">Color::</span>White<span class="op">;</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        cli()<span class="op">;</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> FIFO_BUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> FIFO_BUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> i <span class="op">=</span> FIFO_BUF<span class="op">.</span>lock()<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> KEYBOARD_OFFSET <span class="op">&lt;=</span> i <span class="op">&amp;&amp;</span> i <span class="op">&lt;=</span> <span class="dv">511</span> <span class="op">{</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> KEYBOARD_OFFSET <span class="op">&lt;=</span> i <span class="op">&amp;&amp;</span> i <span class="op">&lt;=</span> <span class="dv">511</span> <span class="op">{</span></span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> key <span class="op">=</span> i <span class="op">-</span> KEYBOARD_OFFSET<span class="op">;</span></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>                <span class="pp">write_with_bg!</span>(</span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                    sheet_manager<span class="op">,</span></span>
@@ -183,9 +186,9 @@
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;{:x}&quot;</span><span class="op">,</span></span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>                    key</span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>                )<span class="op">;</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> key <span class="op">&lt;</span> KEYTABLE<span class="op">.</span>len() <span class="kw">as</span> <span class="dt">u32</span> <span class="op">{</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> key <span class="op">&lt;</span> KEYTABLE<span class="op">.</span>len() <span class="kw">as</span> <span class="dt">u32</span> <span class="op">{</span></span>
 <span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// ウィンドウのテキスト領域内に表示</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> KEYTABLE[key <span class="kw">as</span> <span class="dt">usize</span>] <span class="op">!=</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> cursor_x <span class="op">&lt;</span> max_cursor_x <span class="op">{</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> KEYTABLE[key <span class="kw">as</span> <span class="dt">usize</span>] <span class="op">!=</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> cursor_x <span class="op">&lt;</span> max_cursor_x <span class="op">{</span></span>
 <span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>                        <span class="pp">write_with_bg!</span>(</span>
 <span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>                            sheet_manager<span class="op">,</span></span>
 <span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>                            shi_win<span class="op">,</span></span>
@@ -203,7 +206,7 @@
 <span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>                        cursor_x <span class="op">+=</span> <span class="dv">8</span><span class="op">;</span></span>
 <span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
 <span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// バックスペースの場合は空白を表示してカーソルをもどす</span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> key <span class="op">==</span> <span class="dv">0x0e</span> <span class="op">&amp;&amp;</span> cursor_x <span class="op">&gt;</span> min_cursor_x <span class="op">{</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> key <span class="op">==</span> <span class="dv">0x0e</span> <span class="op">&amp;&amp;</span> cursor_x <span class="op">&gt;</span> min_cursor_x <span class="op">{</span></span>
 <span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>                        <span class="pp">write_with_bg!</span>(</span>
 <span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>                            sheet_manager<span class="op">,</span></span>
 <span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>                            shi_win<span class="op">,</span></span>
@@ -223,11 +226,11 @@
 <span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>                    sheet_manager<span class="op">.</span>refresh(shi_win<span class="op">,</span> cursor_x <span class="kw">as</span> <span class="dt">i32</span><span class="op">,</span> <span class="dv">28</span><span class="op">,</span> cursor_x <span class="kw">as</span> <span class="dt">i32</span> <span class="op">+</span> <span class="dv">8</span><span class="op">,</span> <span class="dv">44</span>)<span class="op">;</span></span>
 <span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 省略</span></span>
 <span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>        <span class="co">// カーソル表示部分</span></span>
-<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> i <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> i <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>                    TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>init_timer(timer_index3<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>                    cursor_c <span class="op">=</span> <span class="pp">Color::</span>Black<span class="op">;</span></span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>                    TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>init_timer(timer_index3<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
 <span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>                    cursor_c <span class="op">=</span> <span class="pp">Color::</span>White<span class="op">;</span></span>
 <span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
@@ -247,13 +250,13 @@
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>start<span class="at">]</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="co">// 省略</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="dv">512</span> <span class="op">&lt;=</span> i <span class="op">&amp;&amp;</span> i <span class="op">&lt;=</span> <span class="dv">767</span> <span class="op">{</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="dv">512</span> <span class="op">&lt;=</span> i <span class="op">&amp;&amp;</span> i <span class="op">&lt;=</span> <span class="dv">767</span> <span class="op">{</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// 省略</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">let</span> (new_x<span class="op">,</span> new_y) <span class="op">=</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                        sheet_manager<span class="op">.</span>get_new_point(shi_mouse<span class="op">,</span> mouse_dec<span class="op">.</span>x<span class="op">.</span>get()<span class="op">,</span> mouse_dec<span class="op">.</span>y<span class="op">.</span>get())<span class="op">;</span></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                    sheet_manager<span class="op">.</span>slide(shi_mouse<span class="op">,</span> new_x<span class="op">,</span> new_y)<span class="op">;</span></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// 左クリックをおしていた場合</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> (mouse_dec<span class="op">.</span>btn<span class="op">.</span>get() <span class="op">&amp;</span> <span class="dv">0x01</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> (mouse_dec<span class="op">.</span>btn<span class="op">.</span>get() <span class="op">&amp;</span> <span class="dv">0x01</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                        sheet_manager<span class="op">.</span>slide(shi_win<span class="op">,</span> new_x <span class="op">-</span> <span class="dv">80</span><span class="op">,</span> new_y <span class="op">-</span> <span class="dv">8</span>)<span class="op">;</span></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// 省略</span></span></code></pre></div>

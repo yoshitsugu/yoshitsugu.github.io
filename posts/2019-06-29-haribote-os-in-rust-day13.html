@@ -21,7 +21,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は13日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は13日目の内容。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。13日目 - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は13日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は13日目の内容。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,11 +63,12 @@
     <span class="date">Posted on 2019-06-29</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html" rel="tag">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html" rel="tag">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a></span>
     
 </div>
 
-<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は13日目の内容。 <!--more--></p>
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は13日目の内容。
+<!--more--></p>
 <h2 id="write_with_bg-マクロの導入"><code>write_with_bg!</code> マクロの導入</h2>
 <p>本では矩形を描画し、その上に文字を表示する部分をまとめて関数にしていた。<br />
 たしかに、Rustのコードでも、矩形と文字描画の部分で、サイズ指定などが重複しており煩わしかったので、マクロでまとめてみる。</p>
@@ -113,13 +116,13 @@
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>set_time(timer_index3<span class="op">,</span> <span class="dv">50</span>)<span class="op">;</span></span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 省略</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> timer_buf<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> timer_buf<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>            <span class="co">// timer_bufで判定したあとに、データで判定</span></span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> i <span class="op">=</span> timer_buf<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> i <span class="op">==</span> <span class="dv">10</span> <span class="op">{</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> i <span class="op">==</span> <span class="dv">10</span> <span class="op">{</span></span>
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>                <span class="pp">write_with_bg!</span>(</span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>                    sheet_manager<span class="op">,</span></span>
 <span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>                    shi_bg<span class="op">,</span></span>
@@ -133,12 +136,12 @@
 <span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>                    <span class="dv">7</span><span class="op">,</span></span>
 <span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;10[sec]&quot;</span></span>
 <span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>                )<span class="op">;</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> i <span class="op">==</span> <span class="dv">3</span> <span class="op">{</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> i <span class="op">==</span> <span class="dv">3</span> <span class="op">{</span></span>
 <span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>                <span class="co">// ...</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> i <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> i <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// ...</span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// ...</span></span>
 <span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
@@ -153,19 +156,19 @@
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> count_done <span class="op">=</span> <span class="cn">false</span><span class="op">;</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        count <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 省略</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> i <span class="op">==</span> <span class="dv">10</span> <span class="op">{</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> i <span class="op">==</span> <span class="dv">10</span> <span class="op">{</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                <span class="pp">write_with_bg!</span>(sheet_manager<span class="op">,</span> shi_bg<span class="op">,</span> buf_bg_addr<span class="op">,</span> <span class="op">*</span>SCREEN_WIDTH <span class="kw">as</span> <span class="dt">isize</span><span class="op">,</span> <span class="op">*</span>SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">isize</span><span class="op">,</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                                <span class="dv">0</span><span class="op">,</span> <span class="dv">64</span><span class="op">,</span> <span class="pp">Color::</span>White<span class="op">,</span> <span class="pp">Color::</span>DarkCyan<span class="op">,</span> <span class="dv">7</span><span class="op">,</span> <span class="st">&quot;10[sec]&quot;</span>)<span class="op">;</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> <span class="op">!</span>count_done <span class="op">{</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">!</span>count_done <span class="op">{</span></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// ウィンドウ内にループ数を表示</span></span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                    <span class="pp">write_with_bg!</span>(sheet_manager<span class="op">,</span> shi_win<span class="op">,</span> buf_win_addr<span class="op">,</span> <span class="dv">160</span><span class="op">,</span> <span class="dv">52</span><span class="op">,</span> </span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                                   <span class="dv">40</span><span class="op">,</span> <span class="dv">28</span><span class="op">,</span> <span class="pp">Color::</span>Black<span class="op">,</span>  <span class="pp">Color::</span>LightGray<span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="st">&quot;{:&gt;010}&quot;</span><span class="op">,</span> count)<span class="op">;</span></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>                    count_done <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> i <span class="op">==</span> <span class="dv">3</span> <span class="op">{</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> i <span class="op">==</span> <span class="dv">3</span> <span class="op">{</span></span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                <span class="pp">write_with_bg!</span>(sheet_manager<span class="op">,</span> shi_bg<span class="op">,</span> buf_bg_addr<span class="op">,</span> <span class="op">*</span>SCREEN_WIDTH <span class="kw">as</span> <span class="dt">isize</span><span class="op">,</span> <span class="op">*</span>SCREEN_HEIGHT <span class="kw">as</span> <span class="dt">isize</span><span class="op">,</span></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                              <span class="dv">0</span><span class="op">,</span> <span class="dv">80</span><span class="op">,</span> <span class="pp">Color::</span>White<span class="op">,</span> <span class="pp">Color::</span>DarkCyan<span class="op">,</span> <span class="dv">6</span><span class="op">,</span> <span class="st">&quot;3[sec]&quot;</span>)<span class="op">;</span></span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                <span class="co">// 起動直後から測定すると誤差が大きいのでここから測定</span></span>
@@ -181,7 +184,8 @@
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>5回目: 47981996</span></code></pre></div>
 <p>結構バラつきがあるが、QEMU上での確認なのでホストマシンの状況にも影響をうけそうだ。</p>
 <h2 id="fifoキューを統一">FIFOキューを統一</h2>
-<p>性能向上のため、割り込みデータを保持するのに使っているFIFOキューをキーボード用、マウス用、タイマ用でわけず、すべて同じFIFOキューを使うようにする。キューにつめこむデータの値の範囲で区別できるようにする。 以下、細かい差分が多いので、おおまかなところの差分だけ載せる。</p>
+<p>性能向上のため、割り込みデータを保持するのに使っているFIFOキューをキーボード用、マウス用、タイマ用でわけず、すべて同じFIFOキューを使うようにする。キューにつめこむデータの値の範囲で区別できるようにする。
+以下、細かい差分が多いので、おおまかなところの差分だけ載せる。</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// fifo.rs</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Fifo <span class="op">{</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> buf<span class="op">:</span> RefCell<span class="op">&lt;</span>[<span class="dt">u32</span><span class="op">;</span> <span class="dv">128</span>]<span class="op">&gt;,</span> <span class="co">// 値をカバーできるようにu8 -&gt; u32にする</span></span>
@@ -217,14 +221,14 @@
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>start<span class="at">]</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> FIFO_BUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span> <span class="co">// FIFO_BUFで判定</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> FIFO_BUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span> <span class="co">// FIFO_BUFで判定</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> i <span class="op">=</span> FIFO_BUF<span class="op">.</span>lock()<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="dv">256</span> <span class="op">&lt;=</span> i <span class="op">&amp;&amp;</span> i <span class="op">&lt;=</span> <span class="dv">511</span> <span class="op">{</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="dv">256</span> <span class="op">&lt;=</span> i <span class="op">&amp;&amp;</span> i <span class="op">&lt;=</span> <span class="dv">511</span> <span class="op">{</span></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                <span class="co">// キーボード用の処理</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="dv">512</span> <span class="op">&lt;=</span> i <span class="op">&amp;&amp;</span> i <span class="op">&lt;=</span> <span class="dv">767</span> <span class="op">{</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="dv">512</span> <span class="op">&lt;=</span> i <span class="op">&amp;&amp;</span> i <span class="op">&lt;=</span> <span class="dv">767</span> <span class="op">{</span></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                <span class="co">// マウス用の処理</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="co">// タイマ用の処理 省略</span></span></code></pre></div>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="co">// タイマ用の処理 省略</span></span></code></pre></div>
 <h3 id="実行結果-1">実行結果</h3>
 <p>FIFOキューを統一した結果の性能向上を測るため、再度ベンチマークで計測してみた</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>1回目: 70267378</span>
@@ -269,15 +273,15 @@
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    out8(PIC0_OCW2<span class="op">,</span> <span class="dv">0x60</span>)<span class="op">;</span> <span class="co">// IRQ-00受付完了をPICに通知</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> tm <span class="op">=</span> TIMER_MANAGER<span class="op">.</span>lock()<span class="op">;</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    tm<span class="op">.</span>count <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> tm<span class="op">.</span>next_tick <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> tm<span class="op">.</span>next_tick <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> timer_index <span class="op">=</span> tm<span class="op">.</span>t0<span class="op">;</span></span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> timeout_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>tm<span class="op">.</span>counting <span class="op">{</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>tm<span class="op">.</span>counting <span class="op">{</span></span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        timeout_count <span class="op">=</span> i<span class="op">;</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> tm<span class="op">.</span>timers_data[timer_index]<span class="op">.</span>timeout <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>            <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> tm<span class="op">.</span>timers_data[timer_index]<span class="op">.</span>timeout <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span></span>
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> t_mut <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> tm<span class="op">.</span>timers_data[timer_index]<span class="op">;</span></span>
@@ -292,9 +296,9 @@
 <span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    tm<span class="op">.</span>counting <span class="op">-=</span> timeout_count<span class="op">;</span></span>
 <span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    tm<span class="op">.</span>t0 <span class="op">=</span> timer_index<span class="op">;</span></span>
 <span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> tm<span class="op">.</span>counting <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> tm<span class="op">.</span>counting <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>        tm<span class="op">.</span>next_tick <span class="op">=</span> tm<span class="op">.</span>timers_data[tm<span class="op">.</span>t0]<span class="op">.</span>timeout<span class="op">;</span></span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>        tm<span class="op">.</span>next_tick <span class="op">=</span> <span class="dv">0xffffffff</span><span class="op">;</span></span>
 <span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
@@ -310,33 +314,33 @@
 <span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> eflags <span class="op">=</span> load_eflags()<span class="op">;</span></span>
 <span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>        cli()<span class="op">;</span></span>
 <span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>counting <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>counting <span class="op">==</span> <span class="dv">1</span> <span class="op">{</span></span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>counting <span class="op">==</span> <span class="dv">1</span> <span class="op">{</span></span>
 <span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> timer <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">.</span>timers_data[timer_index]<span class="op">;</span></span>
 <span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>t0 <span class="op">=</span> timer_index<span class="op">;</span></span>
 <span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>            timer<span class="op">.</span>next <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>next_tick <span class="op">=</span> timer<span class="op">.</span>timeout<span class="op">;</span></span>
 <span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>            store_eflags(eflags)<span class="op">;</span></span>
-<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> t_index <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>t0<span class="op">;</span></span>
-<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>timers_data[timer_index]<span class="op">.</span>timeout <span class="op">&lt;=</span> <span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout <span class="op">{</span></span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>timers_data[timer_index]<span class="op">.</span>timeout <span class="op">&lt;=</span> <span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout <span class="op">{</span></span>
 <span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>            <span class="co">// 先頭に入れる</span></span>
 <span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> timer <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">.</span>timers_data[timer_index]<span class="op">;</span></span>
 <span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>t0 <span class="op">=</span> timer_index<span class="op">;</span></span>
 <span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>            timer<span class="op">.</span>next <span class="op">=</span> t_index<span class="op">;</span></span>
 <span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>next_tick <span class="op">=</span> timer<span class="op">.</span>timeout<span class="op">;</span></span>
 <span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>            store_eflags(eflags)<span class="op">;</span></span>
-<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> old_t_index <span class="op">=</span> t_index<span class="op">;</span></span>
 <span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 間に入るところを探す</span></span>
-<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>        <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>        <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>            old_t_index <span class="op">=</span> t_index<span class="op">;</span></span>
 <span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>            t_index <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>timers_data[t_index]<span class="op">.</span>next<span class="op">;</span></span>
-<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> t_index <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
-<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>                <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> t_index <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>timers_data[timer_index]<span class="op">.</span>timeout <span class="op">&lt;=</span> <span class="kw">self</span><span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout <span class="op">{</span></span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>timers_data[timer_index]<span class="op">.</span>timeout <span class="op">&lt;=</span> <span class="kw">self</span><span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout <span class="op">{</span></span>
 <span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>                <span class="op">{</span></span>
 <span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">let</span> <span class="kw">mut</span> s <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">.</span>timers_data[old_t_index]<span class="op">;</span></span>
 <span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>                    s<span class="op">.</span>next <span class="op">=</span> timer_index<span class="op">;</span></span>
@@ -346,7 +350,7 @@
 <span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>                    timer<span class="op">.</span>next <span class="op">=</span> t_index<span class="op">;</span></span>
 <span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>                store_eflags(eflags)<span class="op">;</span></span>
-<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>                <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 入るところが見つからなかったので、最後に入れる</span></span>
@@ -398,31 +402,31 @@
 <span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>            timer<span class="op">.</span>timeout <span class="op">=</span> timeout <span class="op">+</span> <span class="kw">self</span><span class="op">.</span>count<span class="op">;</span></span>
 <span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>            timer<span class="op">.</span>flag <span class="op">=</span> <span class="pp">TimerFlag::</span>COUNTING<span class="op">;</span></span>
 <span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>t0<span class="op">.</span>is_none() <span class="op">{</span></span>
-<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>t0<span class="op">.</span>is_none() <span class="op">{</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> eflags <span class="op">=</span> load_eflags()<span class="op">;</span></span>
 <span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>        cli()<span class="op">;</span></span>
 <span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> t_index <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>t0<span class="op">.</span>unwrap()<span class="op">;</span></span>
-<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>timers_data[timer_index]<span class="op">.</span>timeout <span class="op">&lt;=</span> <span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout <span class="op">{</span></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>timers_data[timer_index]<span class="op">.</span>timeout <span class="op">&lt;=</span> <span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout <span class="op">{</span></span>
 <span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>            <span class="co">// 先頭に入れる</span></span>
 <span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> timer <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">.</span>timers_data[timer_index]<span class="op">;</span></span>
 <span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>t0 <span class="op">=</span> <span class="cn">Some</span>(timer_index)<span class="op">;</span></span>
 <span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>            timer<span class="op">.</span>next <span class="op">=</span> <span class="cn">Some</span>(t_index)<span class="op">;</span></span>
 <span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>next_tick <span class="op">=</span> timer<span class="op">.</span>timeout<span class="op">;</span></span>
 <span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>            store_eflags(eflags)<span class="op">;</span></span>
-<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> old_t_index<span class="op">:</span> <span class="dt">usize</span><span class="op">;</span></span>
 <span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 挿入できるインデックスをさがす</span></span>
-<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>        <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>            old_t_index <span class="op">=</span> t_index<span class="op">;</span></span>
-<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>timers_data[t_index]<span class="op">.</span>next<span class="op">.</span>is_none() <span class="op">{</span></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>timers_data[t_index]<span class="op">.</span>next<span class="op">.</span>is_none() <span class="op">{</span></span>
 <span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>                store_eflags(eflags)<span class="op">;</span></span>
-<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>                <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>            t_index <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>timers_data[t_index]<span class="op">.</span>next<span class="op">.</span>unwrap()<span class="op">;</span></span>
-<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>timers_data[timer_index]<span class="op">.</span>timeout <span class="op">&lt;=</span> <span class="kw">self</span><span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout <span class="op">{</span></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>timers_data[timer_index]<span class="op">.</span>timeout <span class="op">&lt;=</span> <span class="kw">self</span><span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout <span class="op">{</span></span>
 <span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>                <span class="op">{</span></span>
 <span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">let</span> <span class="kw">mut</span> s <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">.</span>timers_data[old_t_index]<span class="op">;</span></span>
 <span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>                    s<span class="op">.</span>next <span class="op">=</span> <span class="cn">Some</span>(timer_index)<span class="op">;</span></span>
@@ -432,7 +436,7 @@
 <span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>                    timer<span class="op">.</span>next <span class="op">=</span> <span class="cn">Some</span>(t_index)<span class="op">;</span></span>
 <span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>                store_eflags(eflags)<span class="op">;</span></span>
-<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>                <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
@@ -443,17 +447,17 @@
 <span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>    out8(PIC0_OCW2<span class="op">,</span> <span class="dv">0x60</span>)<span class="op">;</span> <span class="co">// IRQ-00受付完了をPICに通知</span></span>
 <span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> tm <span class="op">=</span> TIMER_MANAGER<span class="op">.</span>lock()<span class="op">;</span></span>
 <span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>    tm<span class="op">.</span>count <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> tm<span class="op">.</span>next_tick <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
-<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> tm<span class="op">.</span>next_tick <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> timer_index <span class="op">=</span> tm<span class="op">.</span>t0<span class="op">;</span></span>
-<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
-<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> timer_index<span class="op">.</span>is_none() <span class="op">{</span></span>
-<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> timer_index<span class="op">.</span>is_none() <span class="op">{</span></span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> t_index <span class="op">=</span> timer_index<span class="op">.</span>unwrap()<span class="op">;</span></span>
-<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> tm<span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
-<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a>            <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> tm<span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> timer <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> tm<span class="op">.</span>timers_data[t_index]<span class="op">;</span></span>
 <span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>        timer<span class="op">.</span>flag <span class="op">=</span> <span class="pp">TimerFlag::</span>USED<span class="op">;</span></span>
@@ -461,7 +465,7 @@
 <span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a>        timer_index <span class="op">=</span> timer<span class="op">.</span>next<span class="op">;</span></span>
 <span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>    tm<span class="op">.</span>t0 <span class="op">=</span> timer_index<span class="op">;</span></span>
-<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(t_index) <span class="op">=</span> timer_index <span class="op">{</span></span>
+<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(t_index) <span class="op">=</span> timer_index <span class="op">{</span></span>
 <span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a>        tm<span class="op">.</span>next_tick <span class="op">=</span> tm<span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout<span class="op">;</span></span>
 <span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>

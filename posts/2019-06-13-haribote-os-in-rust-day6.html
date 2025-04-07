@@ -21,7 +21,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は6日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は6日目の内容。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。6日目 - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は6日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は6日目の内容。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,11 +63,12 @@
     <span class="date">Posted on 2019-06-13</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html" rel="tag">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html" rel="tag">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a></span>
     
 </div>
 
-<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は6日目の内容。 <!--more--></p>
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は6日目の内容。
+<!--more--></p>
 <h2 id="gdt-idtの定義">GDT, IDTの定義</h2>
 <p>前回やらなかったGDT, IDTの定義をする。<br />
 新しく <code>descriptor_table.rs</code> というファイルを作り、そこに追記する。</p>
@@ -85,7 +88,7 @@
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> SegmentDescriptor <span class="op">{</span></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> new(<span class="kw">mut</span> limit<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span> base<span class="op">:</span> <span class="dt">i32</span><span class="op">,</span> <span class="kw">mut</span> ar<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> SegmentDescriptor <span class="op">{</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> limit <span class="op">&gt;</span> <span class="dv">0xfffff</span> <span class="op">{</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> limit <span class="op">&gt;</span> <span class="dv">0xfffff</span> <span class="op">{</span></span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>            ar <span class="op">|=</span> <span class="dv">0x8000</span><span class="op">;</span></span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>            limit <span class="op">/=</span> <span class="dv">0x1000</span><span class="op">;</span></span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
@@ -136,7 +139,7 @@
 <span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="kw">crate</span><span class="pp">::interrupt::</span><span class="op">{</span>inthandler21<span class="op">,</span> inthandler2c<span class="op">};</span></span>
 <span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">asm::</span><span class="op">{</span>load_gdtr<span class="op">,</span> load_idtr<span class="op">};</span></span>
 <span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="co">// GDTの初期化</span></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..=</span>(LIMIT_GDT <span class="op">/</span> <span class="dv">8</span>) <span class="op">{</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..=</span>(LIMIT_GDT <span class="op">/</span> <span class="dv">8</span>) <span class="op">{</span></span>
 <span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> gdt <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((ADR_GDT <span class="op">+</span> i <span class="op">*</span> <span class="dv">8</span>) <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> SegmentDescriptor) <span class="op">};</span></span>
 <span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>gdt <span class="op">=</span> <span class="pp">SegmentDescriptor::</span>new(<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
@@ -148,7 +151,7 @@
 <span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    load_gdtr(LIMIT_GDT<span class="op">,</span> ADR_GDT)<span class="op">;</span></span>
 <span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>    <span class="co">// IDTの初期化</span></span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..=</span>(LIMIT_IDT <span class="op">/</span> <span class="dv">8</span>) <span class="op">{</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..=</span>(LIMIT_IDT <span class="op">/</span> <span class="dv">8</span>) <span class="op">{</span></span>
 <span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> idt <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((ADR_IDT <span class="op">+</span> i <span class="op">*</span> <span class="dv">8</span>) <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> GateDescriptor) <span class="op">};</span></span>
 <span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>idt <span class="op">=</span> <span class="pp">GateDescriptor::</span>new(<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
@@ -162,7 +165,8 @@
 <span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Cで実装した場合とメモリ配置が同じになるように、structには <code>#[repr(C, packed)]</code> をつけている。見た目は本のCのコードとあまりかわらないと思う。</p>
 <h2 id="asm.rsの追記">asm.rsの追記</h2>
-<p><code>load_gdtr</code>, <code>load_idtr</code> などは <code>asm.rs</code> のほうに追加しておく。ついでにわりこみハンドラを生成するマクロ <code>handler!</code> もつくった。( マクロについては<a href="https://os.phil-opp.com/better-exception-messages/#a-handler-macro">ここ</a>が参考になった。)</p>
+<p><code>load_gdtr</code>, <code>load_idtr</code> などは <code>asm.rs</code> のほうに追加しておく。ついでにわりこみハンドラを生成するマクロ <code>handler!</code> もつくった。(
+マクロについては<a href="https://os.phil-opp.com/better-exception-messages/#a-handler-macro">ここ</a>が参考になった。)</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// asm.rs</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">Copy</span><span class="at">)]</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>repr<span class="at">(</span>C<span class="op">,</span> packed<span class="at">)]</span></span>
@@ -257,7 +261,7 @@
 <span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span> <span class="pp">ScreenWriter::</span>new(<span class="pp">Screen::</span>new()<span class="op">,</span> <span class="pp">Color::</span>White<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">core::fmt::</span><span class="bu">Write</span><span class="op">;</span></span>
 <span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    <span class="pp">write!</span>(writer<span class="op">,</span> <span class="st">&quot;INT 21 (IRQ-1) : PS/2 keyboard&quot;</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>        <span class="kw">crate</span><span class="pp">::asm::</span>hlt()<span class="op">;</span></span>
 <span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
@@ -269,7 +273,7 @@
 <span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span> <span class="pp">ScreenWriter::</span>new(<span class="pp">Screen::</span>new()<span class="op">,</span> <span class="pp">Color::</span>White<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">core::fmt::</span><span class="bu">Write</span><span class="op">;</span></span>
 <span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>    <span class="pp">write!</span>(writer<span class="op">,</span> <span class="st">&quot;INT 2C (IRQ-12) : PS/2 mouse&quot;</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>        <span class="kw">crate</span><span class="pp">::asm::</span>hlt()<span class="op">;</span></span>
 <span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
@@ -292,7 +296,7 @@
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span> <span class="pp">ScreenWriter::</span>new(screen<span class="op">,</span> <span class="pp">vga::Color::</span>White<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">core::fmt::</span><span class="bu">Write</span><span class="op">;</span></span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="pp">write!</span>(writer<span class="op">,</span> <span class="st">&quot;ABC&quot;</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        hlt()</span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
@@ -304,7 +308,8 @@
 <p>打鍵に反応して表示がかわったことがわかる。</p>
 <p>今回実装コードの差分自体は多くなかったが、ハマってしまいだいぶ時間がかかった。動かないときに何をデバッグしてよいのか最初はわからず、苦労した。gdbでメモリのdumpを見ながらデバッグをしたが、今まであまりしてこなかったので、gdbの操作含め勉強になった。</p>
 <p>6日目は以上となる。ここまでの内容のコードは<a href="https://github.com/yoshitsugu/hariboteos_in_rust/tree/day6">yoshitsugu/hariboteos_in_rustのday6</a>としてタグを打ってある。</p>
-<p><code>Screen</code> などは <a href="https://os.phil-opp.com/">Writing an OS in Rust</a> の <code>WRITER</code> のように、<code>spin_no_std</code> な <code>lazy_static!</code> を使って <code>static</code> として管理したいのだが、<code>entered unreachable code</code> というエラーがでてしまいできていない。調べても同様の事例がでてこないので、自分のHariboteOS環境特有の現象なのだろうか。</p>
+<p><code>Screen</code> などは <a href="https://os.phil-opp.com/">Writing an OS in Rust</a> の <code>WRITER</code> のように、<code>spin_no_std</code>
+な <code>lazy_static!</code> を使って <code>static</code> として管理したいのだが、<code>entered unreachable code</code> というエラーがでてしまいできていない。調べても同様の事例がでてこないので、自分のHariboteOS環境特有の現象なのだろうか。</p>
 <h2 id="参考文献">参考文献</h2>
 <ul>
 <li><a href="https://os.phil-opp.com/first-edition/extra/naked-exceptions/">Handling Exceptions using naked Functions</a>

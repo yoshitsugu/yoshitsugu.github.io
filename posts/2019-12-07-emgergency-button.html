@@ -21,7 +21,8 @@
     
 
 
-幼児の娘が緊急事態を伝えられるようにした。 " />
+幼児の娘が緊急事態を伝えられるようにした。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="AWS IoT ButtonとRaspberry Piで子どもでも緊急事態を連絡できるようにする - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-幼児の娘が緊急事態を伝えられるようにした。 " />
+幼児の娘が緊急事態を伝えられるようにした。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,11 +63,12 @@
     <span class="date">Posted on 2019-12-07</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'AWS IoT Button'." href="../tags/AWS%20IoT%20Button.html">AWS IoT Button</a>, <a title="All pages tagged 'Raspberry Pi'." href="../tags/Raspberry%20Pi.html">Raspberry Pi</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a>, <a title="All pages tagged 'IoT'." href="../tags/IoT.html">IoT</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'AWS IoT Button'." href="../tags/AWS%20IoT%20Button.html" rel="tag">AWS IoT Button</a>, <a title="All pages tagged 'Raspberry Pi'." href="../tags/Raspberry%20Pi.html" rel="tag">Raspberry Pi</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a>, <a title="All pages tagged 'IoT'." href="../tags/IoT.html" rel="tag">IoT</a></span>
     
 </div>
 
-<p>幼児の娘が緊急事態を伝えられるようにした。 <!--more--></p>
+<p>幼児の娘が緊急事態を伝えられるようにした。
+<!--more--></p>
 <h2 id="背景">背景</h2>
 <p>私には幼児の娘がおり、妻の仕事の関係上、2人きりで生活することが多い。<br />
 もし2人きりのときに自分が倒れた場合、携帯電話などを持たない娘は連絡の手段がない。そこで、AWS IoT Buttonを押すだけで、家庭用Slackに通知することで、少なくとも妻には連絡がいくようにした。<br />
@@ -156,8 +159,8 @@
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>subscribe(<span class="st">&quot;panic_button&quot;</span><span class="op">,</span> <span class="pp">QoS::</span>AtLeastOnce)</span>
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> notification <span class="kw">in</span> notifications <span class="op">{</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> notification <span class="op">{</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> notification <span class="kw">in</span> notifications <span class="op">{</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> notification <span class="op">{</span></span>
 <span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>            Publish(_) <span class="op">=&gt;</span> <span class="op">{</span></span>
 <span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>                <span class="co">// publishをうけたとった場合だけ以下を実行</span></span>
 <span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> slack <span class="op">=</span> <span class="pp">Slack::</span>new(<span class="op">&amp;*</span>slack_hook_url)<span class="op">.</span>unwrap()<span class="op">;</span></span>
@@ -179,7 +182,7 @@
 <span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>arg(<span class="st">&quot;90%&quot;</span>)</span>
 <span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>output()</span>
 <span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>expect(<span class="st">&quot;Cannot change volume&quot;</span>)<span class="op">;</span></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> _ <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">5</span> <span class="op">{</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> _ <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">5</span> <span class="op">{</span></span>
 <span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// aplayで音楽を再生</span></span>
 <span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>                    <span class="pp">Command::</span>new(<span class="st">&quot;aplay&quot;</span>)</span>
 <span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span>arg(<span class="op">&amp;*</span>music_file)</span>
@@ -198,13 +201,14 @@
 <iframe width="600" height="337" src="https://www.youtube.com/embed/oHe0b-iSPB4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
 </iframe>
 <h2 id="感想">感想</h2>
-<p>AWS IoT ButtonとRaspberry Piを使うことで比較的簡単に実現できた。 AWS IoT Coreは他にもいろいろと機能がありそうで、そのうち触ってみたい。<br />
+<p>AWS IoT ButtonとRaspberry Piを使うことで比較的簡単に実現できた。
+AWS IoT Coreは他にもいろいろと機能がありそうで、そのうち触ってみたい。<br />
 また同じような仕組みで、Slack通知とともにカメラで室内写真を撮っておくったり、できることはまだありそうだ。娘に実際に使ってもらいつつ、改善をすすめていきたい。</p>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p><a href="https://dev.classmethod.jp/cloud/aws/aws-iot-enterprise-button/">【国内販売開始】AWS IoT Enterprise Button試してみたらホンマに簡単にLambda関数を実行できた ｜ Developers.IO</a> など<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p><a href="https://qiita.com/gnk263/items/a7937259746c81a6b052">Raspberry PiでAWS IoT Coreと接続し、GPIO制御をしてみた - Qiita</a> など<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p><a href="https://dev.classmethod.jp/cloud/aws/aws-iot-enterprise-button/">【国内販売開始】AWS IoT Enterprise Button試してみたらホンマに簡単にLambda関数を実行できた ｜ Developers.IO</a> など<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://qiita.com/gnk263/items/a7937259746c81a6b052">Raspberry PiでAWS IoT Coreと接続し、GPIO制御をしてみた - Qiita</a> など<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

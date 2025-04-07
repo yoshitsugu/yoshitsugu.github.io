@@ -21,7 +21,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は5日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は5日目の内容。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。5日目 - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は5日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は5日目の内容。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,11 +63,13 @@
     <span class="date">Posted on 2019-06-06</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html" rel="tag">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html" rel="tag">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a></span>
     
 </div>
 
-<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は5日目の内容。 <!--more--> 記事をまとめるため、<a href="../tags/OS自作入門.html">OS自作入門</a> タグを作った</p>
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は5日目の内容。
+<!--more-->
+記事をまとめるため、<a href="../tags/OS自作入門.html">OS自作入門</a> タグを作った</p>
 <h2 id="定数をasmheadから読み込む">定数をasmheadから読み込む。</h2>
 <p>前回定義した画面サイズなどは実はasmhead.asm内で定義されていた。本の内容上はasmhead.asm内の定義から定数関係の情報をひいてくるとともに、Cのstructの導入をしている。Rust実装もそれに従う。<br />
 本文中ではbootinfoとしてブート時の情報をまとめているが、実装のまとめ方を変えて、vga.rsの中に画面情報だけまとめたScreenというstructを作ることにする。まだ書籍の後のほうまで見たわけではないので、これで不都合がでるかもしれないが、その時はまた修正することにする。</p>
@@ -99,7 +103,7 @@
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> eflags <span class="op">=</span> <span class="pp">asm::</span>load_eflags()<span class="op">;</span></span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>        <span class="pp">asm::</span>cli()<span class="op">;</span></span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>        <span class="pp">asm::</span>out8(<span class="dv">0x03c8</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">16</span> <span class="op">{</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">16</span> <span class="op">{</span></span>
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>            <span class="co">// 書き込むときは上位2ビットを0にしないといけない。See: http://oswiki.osask.jp/?VGA#o2d4bfd3</span></span>
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>            <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span><span class="op">,</span> COLOR_PALETTE[i][<span class="dv">0</span>] <span class="op">/</span> <span class="dv">4</span>)<span class="op">;</span></span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>            <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span><span class="op">,</span> COLOR_PALETTE[i][<span class="dv">1</span>] <span class="op">/</span> <span class="dv">4</span>)<span class="op">;</span></span>
@@ -133,8 +137,8 @@
 <span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    <span class="co">// boxfill8もScreenのメソッドとして定義する</span></span>
 <span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> boxfill8(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> color<span class="op">:</span> Color<span class="op">,</span> x0<span class="op">:</span> <span class="dt">isize</span><span class="op">,</span> y0<span class="op">:</span> <span class="dt">isize</span><span class="op">,</span> x1<span class="op">:</span> <span class="dt">isize</span><span class="op">,</span> y1<span class="op">:</span> <span class="dt">isize</span>) <span class="op">{</span></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> y <span class="kw">in</span> y0<span class="op">..=</span>y1 <span class="op">{</span></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> x <span class="kw">in</span> x0<span class="op">..=</span>x1 <span class="op">{</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> y <span class="kw">in</span> y0<span class="op">..=</span>y1 <span class="op">{</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> x <span class="kw">in</span> x0<span class="op">..=</span>x1 <span class="op">{</span></span>
 <span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> ptr <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((<span class="kw">self</span><span class="op">.</span>vram <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span>)<span class="op">.</span>offset(y <span class="op">*</span> <span class="kw">self</span><span class="op">.</span>scrnx <span class="kw">as</span> <span class="dt">isize</span> <span class="op">+</span> x)) <span class="op">};</span></span>
 <span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>ptr <span class="op">=</span> color <span class="kw">as</span> <span class="dt">u8</span><span class="op">;</span></span>
 <span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
@@ -147,7 +151,7 @@
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">-&gt;</span> <span class="op">!</span> <span class="op">{</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> screen <span class="op">=</span> <span class="pp">Screen::</span>new()<span class="op">;</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    screen<span class="op">.</span>init()<span class="op">;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        hlt()</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
@@ -194,9 +198,9 @@
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> font <span class="op">=</span> FONTS[<span class="dt">char</span> <span class="kw">as</span> <span class="dt">usize</span>]<span class="op">;</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> color <span class="op">=</span> color <span class="kw">as</span> <span class="dt">u8</span><span class="op">;</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> offset <span class="op">=</span> startx <span class="op">+</span> starty <span class="op">*</span> <span class="kw">self</span><span class="op">.</span>scrnx <span class="kw">as</span> <span class="dt">isize</span><span class="op">;</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>FONT_HEIGHT <span class="op">{</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>FONT_WIDTH <span class="op">{</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> font[y][x] <span class="op">{</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>FONT_HEIGHT <span class="op">{</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>FONT_WIDTH <span class="op">{</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> font[y][x] <span class="op">{</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">let</span> cell <span class="op">=</span> (y <span class="op">*</span> <span class="kw">self</span><span class="op">.</span>scrnx <span class="kw">as</span> <span class="dt">usize</span> <span class="op">+</span> x) <span class="kw">as</span> <span class="dt">isize</span><span class="op">;</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">let</span> ptr <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((<span class="kw">self</span><span class="op">.</span>vram <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span>)<span class="op">.</span>offset(cell <span class="op">+</span> offset)) <span class="op">};</span></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                    <span class="op">*</span>ptr <span class="op">=</span> color<span class="op">;</span></span>
@@ -231,31 +235,31 @@
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> <span class="pp">fmt::</span><span class="bu">Write</span> <span class="kw">for</span> ScreenWriter <span class="op">{</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> <span class="pp">fmt::</span><span class="bu">Write</span> <span class="cf">for</span> ScreenWriter <span class="op">{</span></span>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> write_str(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> s<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span>) <span class="op">-&gt;</span> <span class="pp">fmt::</span><span class="dt">Result</span> <span class="op">{</span></span>
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> str_bytes <span class="op">=</span> s<span class="op">.</span>as_bytes()<span class="op">;</span></span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> height <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>screen<span class="op">.</span>scrny <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> width <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>screen<span class="op">.</span>scrnx <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>str_bytes<span class="op">.</span>len() <span class="op">{</span></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> str_bytes[i] <span class="op">==</span> <span class="ch">b'</span><span class="sc">\n</span><span class="ch">'</span> <span class="op">{</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>str_bytes<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> str_bytes[i] <span class="op">==</span> <span class="ch">b'</span><span class="sc">\n</span><span class="ch">'</span> <span class="op">{</span></span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>newline()<span class="op">;</span></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>                <span class="kw">return</span> <span class="cn">Ok</span>(())<span class="op">;</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="cn">Ok</span>(())<span class="op">;</span></span>
 <span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>x <span class="op">+</span> FONT_WIDTH <span class="op">&lt;</span> width <span class="op">&amp;&amp;</span> <span class="kw">self</span><span class="op">.</span>y <span class="op">+</span> FONT_HEIGHT <span class="op">&lt;</span> height <span class="op">{</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>x <span class="op">+</span> FONT_WIDTH <span class="op">&lt;</span> width <span class="op">&amp;&amp;</span> <span class="kw">self</span><span class="op">.</span>y <span class="op">+</span> FONT_HEIGHT <span class="op">&lt;</span> height <span class="op">{</span></span>
 <span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>screen</span>
 <span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>print_char(str_bytes[i]<span class="op">,</span> <span class="kw">self</span><span class="op">.</span>color<span class="op">,</span> <span class="kw">self</span><span class="op">.</span>x <span class="kw">as</span> <span class="dt">isize</span><span class="op">,</span> <span class="kw">self</span><span class="op">.</span>y <span class="kw">as</span> <span class="dt">isize</span>)<span class="op">;</span></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>y <span class="op">+</span> FONT_HEIGHT <span class="op">*</span> <span class="dv">2</span> <span class="op">&lt;</span> height <span class="op">{</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>y <span class="op">+</span> FONT_HEIGHT <span class="op">*</span> <span class="dv">2</span> <span class="op">&lt;</span> height <span class="op">{</span></span>
 <span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>                <span class="co">// 1行ずらせば入る場合は1行ずらしてから表示</span></span>
 <span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>newline()<span class="op">;</span></span>
 <span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>screen</span>
 <span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>print_char(str_bytes[i]<span class="op">,</span> <span class="kw">self</span><span class="op">.</span>color<span class="op">,</span> <span class="kw">self</span><span class="op">.</span>x <span class="kw">as</span> <span class="dt">isize</span><span class="op">,</span> <span class="kw">self</span><span class="op">.</span>y <span class="kw">as</span> <span class="dt">isize</span>)<span class="op">;</span></span>
 <span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>            <span class="co">// 次の文字用の位置に移動</span></span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>x <span class="op">+</span> FONT_WIDTH <span class="op">&lt;</span> width <span class="op">{</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>x <span class="op">+</span> FONT_WIDTH <span class="op">&lt;</span> width <span class="op">{</span></span>
 <span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>x <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>x <span class="op">+</span> FONT_WIDTH<span class="op">;</span></span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>y <span class="op">+</span> FONT_HEIGHT <span class="op">&lt;</span> height <span class="op">{</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>y <span class="op">+</span> FONT_HEIGHT <span class="op">&lt;</span> height <span class="op">{</span></span>
 <span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>newline()<span class="op">;</span></span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>x <span class="op">=</span> width<span class="op">;</span></span>
 <span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>y <span class="op">=</span> height<span class="op">;</span></span>
 <span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
@@ -321,9 +325,9 @@
 <span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>            <span class="op">*</span><span class="st">b&quot;.............***&quot;</span><span class="op">,</span></span>
 <span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">;</span></span>
 <span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MOUSE_CURSOR_HEIGHT <span class="op">{</span></span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MOUSE_CURSOR_WIDTH <span class="op">{</span></span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>                <span class="kw">match</span> cursor[y][x] <span class="op">{</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MOUSE_CURSOR_HEIGHT <span class="op">{</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MOUSE_CURSOR_WIDTH <span class="op">{</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>                <span class="cf">match</span> cursor[y][x] <span class="op">{</span></span>
 <span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>                    <span class="ch">b'*'</span> <span class="op">=&gt;</span> <span class="kw">self</span><span class="op">.</span>mouse[y][x] <span class="op">=</span> <span class="pp">Color::</span>Black<span class="op">,</span></span>
 <span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>                    <span class="ch">b'O'</span> <span class="op">=&gt;</span> <span class="kw">self</span><span class="op">.</span>mouse[y][x] <span class="op">=</span> <span class="pp">Color::</span>White<span class="op">,</span></span>
 <span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>                    _ <span class="op">=&gt;</span> ()<span class="op">,</span> <span class="co">// 背景は初期化時に背景色をいれている。後の章で透過にも対応するのだろうか。。？</span></span>
@@ -342,8 +346,8 @@
 <span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>        px0<span class="op">:</span> <span class="dt">isize</span><span class="op">,</span></span>
 <span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>        py0<span class="op">:</span> <span class="dt">isize</span><span class="op">,</span></span>
 <span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">{</span></span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>pysize <span class="op">{</span></span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>pxsize <span class="op">{</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>pysize <span class="op">{</span></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>pxsize <span class="op">{</span></span>
 <span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> ptr <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span></span>
 <span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>                    <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((<span class="kw">self</span><span class="op">.</span>vram <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span>)</span>
 <span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span>offset((py0 <span class="op">+</span> y) <span class="op">*</span> (<span class="kw">self</span><span class="op">.</span>scrnx <span class="kw">as</span> <span class="dt">isize</span>) <span class="op">+</span> (px0 <span class="op">+</span> x)))</span>

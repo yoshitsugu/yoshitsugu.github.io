@@ -21,7 +21,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は8日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は8日目の内容。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。8日目 - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は8日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は8日目の内容。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,11 +63,12 @@
     <span class="date">Posted on 2019-06-19</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html" rel="tag">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html" rel="tag">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a></span>
     
 </div>
 
-<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は8日目の内容。 <!--more--></p>
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は8日目の内容。
+<!--more--></p>
 <h2 id="in8-のバグの修正"><code>in8</code> のバグの修正</h2>
 <p><code>in8</code> が間違っていたので直す</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// asm.rs</span></span>
@@ -79,7 +82,8 @@
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    r</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <h2 id="マウス入力を3バイトずつ読み出す">マウス入力を3バイトずつ読み出す</h2>
-<p>マウスの入力は3バイトずつにまとめて扱うようだ。 <code>mouse.rs</code> というファイルを追加し、まとめるためのstructを定義する。</p>
+<p>マウスの入力は3バイトずつにまとめて扱うようだ。
+<code>mouse.rs</code> というファイルを追加し、まとめるためのstructを定義する。</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// mouse.rs</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">crate</span><span class="pp">::vga::</span><span class="op">{</span>Color<span class="op">,</span> Screen<span class="op">};</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">core::cell::</span><span class="op">{</span>Cell<span class="op">,</span> RefCell<span class="op">};</span></span>
@@ -114,15 +118,15 @@
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> decode(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> data<span class="op">:</span> <span class="dt">u8</span>) <span class="op">-&gt;</span> <span class="dt">Option</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="op">{</span></span>
 <span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>        <span class="kw">use</span> <span class="pp">MouseDecPhase::</span><span class="op">*;</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> <span class="kw">self</span><span class="op">.</span>phase<span class="op">.</span>get() <span class="op">{</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> <span class="kw">self</span><span class="op">.</span>phase<span class="op">.</span>get() <span class="op">{</span></span>
 <span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>            START <span class="op">=&gt;</span> <span class="op">{</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> data <span class="op">==</span> <span class="dv">0xfa</span> <span class="op">{</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> data <span class="op">==</span> <span class="dv">0xfa</span> <span class="op">{</span></span>
 <span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>phase<span class="op">.</span>set(FIRST)</span>
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>                <span class="cn">None</span></span>
 <span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>            FIRST <span class="op">=&gt;</span> <span class="op">{</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> (data <span class="op">&amp;</span> <span class="dv">0xc8</span>) <span class="op">==</span> <span class="dv">0x08</span> <span class="op">{</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (data <span class="op">&amp;</span> <span class="dv">0xc8</span>) <span class="op">==</span> <span class="dv">0x08</span> <span class="op">{</span></span>
 <span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">let</span> <span class="kw">mut</span> buf <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>buf<span class="op">.</span>borrow_mut()<span class="op">;</span></span>
 <span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>                    buf[<span class="dv">0</span>] <span class="op">=</span> data<span class="op">;</span></span>
 <span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>phase<span class="op">.</span>set(SECOND)<span class="op">;</span></span>
@@ -142,10 +146,10 @@
 <span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>btn<span class="op">.</span>set((buf[<span class="dv">0</span>] <span class="op">&amp;</span> <span class="dv">0x07</span>) <span class="kw">as</span> <span class="dt">i32</span>)<span class="op">;</span></span>
 <span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>x<span class="op">.</span>set(buf[<span class="dv">1</span>] <span class="kw">as</span> <span class="dt">i32</span>)<span class="op">;</span></span>
 <span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>y<span class="op">.</span>set(buf[<span class="dv">2</span>] <span class="kw">as</span> <span class="dt">i32</span>)<span class="op">;</span></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> (buf[<span class="dv">0</span>] <span class="op">&amp;</span> <span class="dv">0x10</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (buf[<span class="dv">0</span>] <span class="op">&amp;</span> <span class="dv">0x10</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>x<span class="op">.</span>set((buf[<span class="dv">1</span>] <span class="kw">as</span> <span class="dt">u32</span> <span class="op">|</span> <span class="dv">0xffffff00</span>) <span class="kw">as</span> <span class="dt">i32</span>)<span class="op">;</span></span>
 <span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> (buf[<span class="dv">0</span>] <span class="op">&amp;</span> <span class="dv">0x20</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (buf[<span class="dv">0</span>] <span class="op">&amp;</span> <span class="dv">0x20</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>y<span class="op">.</span>set((buf[<span class="dv">2</span>] <span class="kw">as</span> <span class="dt">u32</span> <span class="op">|</span> <span class="dv">0xffffff00</span>) <span class="kw">as</span> <span class="dt">i32</span>)<span class="op">;</span></span>
 <span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>y<span class="op">.</span>set(<span class="op">-</span><span class="kw">self</span><span class="op">.</span>y<span class="op">.</span>get())<span class="op">;</span></span>
@@ -154,7 +158,8 @@
 <span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>CのコードをRustに書き換えただけなので、あまり特筆するべきポイントはない。 <code>Cell</code>, <code>RefCell</code> の利用、関数呼び出しからstructのメソッド定義に変えたところ、くらいだろうか。</p>
+<p>CのコードをRustに書き換えただけなので、あまり特筆するべきポイントはない。
+<code>Cell</code>, <code>RefCell</code> の利用、関数呼び出しからstructのメソッド定義に変えたところ、くらいだろうか。</p>
 <h2 id="画面に表示する">画面に表示する</h2>
 <p>画面に表示するため、まずはマウスの座標を保持するstructを作る。このstructに今まで <code>vga.rs</code> のほうにあったマウスまわりの処理もまとめることにする。</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">//mouse.rs</span></span>
@@ -191,9 +196,9 @@
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> cursor<span class="op">:</span> [[Color<span class="op">;</span> MOUSE_CURSOR_WIDTH]<span class="op">;</span> MOUSE_CURSOR_HEIGHT] <span class="op">=</span></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>            [[<span class="pp">Color::</span>DarkCyan<span class="op">;</span> MOUSE_CURSOR_WIDTH]<span class="op">;</span> MOUSE_CURSOR_HEIGHT]<span class="op">;</span></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MOUSE_CURSOR_HEIGHT <span class="op">{</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MOUSE_CURSOR_WIDTH <span class="op">{</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>                <span class="kw">match</span> cursor_icon[y][x] <span class="op">{</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MOUSE_CURSOR_HEIGHT <span class="op">{</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MOUSE_CURSOR_WIDTH <span class="op">{</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>                <span class="cf">match</span> cursor_icon[y][x] <span class="op">{</span></span>
 <span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>                    <span class="ch">b'*'</span> <span class="op">=&gt;</span> cursor[y][x] <span class="op">=</span> <span class="pp">Color::</span>Black<span class="op">,</span></span>
 <span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>                    <span class="ch">b'O'</span> <span class="op">=&gt;</span> cursor[y][x] <span class="op">=</span> <span class="pp">Color::</span>White<span class="op">,</span></span>
 <span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>                    _ <span class="op">=&gt;</span> ()<span class="op">,</span></span>
@@ -223,18 +228,18 @@
 <span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> my <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>y<span class="op">.</span>get() <span class="op">+</span> y<span class="op">;</span></span>
 <span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> xmax <span class="op">=</span> screen<span class="op">.</span>scrnx <span class="kw">as</span> <span class="dt">i32</span> <span class="op">-</span> MOUSE_CURSOR_WIDTH <span class="kw">as</span> <span class="dt">i32</span><span class="op">;</span></span>
 <span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> ymax <span class="op">=</span> screen<span class="op">.</span>scrny <span class="kw">as</span> <span class="dt">i32</span> <span class="op">-</span> MOUSE_CURSOR_HEIGHT <span class="kw">as</span> <span class="dt">i32</span><span class="op">;</span></span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> mx <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> mx <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>x<span class="op">.</span>set(<span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> mx <span class="op">&gt;</span> xmax <span class="op">{</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> mx <span class="op">&gt;</span> xmax <span class="op">{</span></span>
 <span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>x<span class="op">.</span>set(xmax)<span class="op">;</span></span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>x<span class="op">.</span>set(mx)<span class="op">;</span></span>
 <span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> my <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> my <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>y<span class="op">.</span>set(<span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> my <span class="op">&gt;</span> ymax <span class="op">{</span></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> my <span class="op">&gt;</span> ymax <span class="op">{</span></span>
 <span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>y<span class="op">.</span>set(ymax)<span class="op">;</span></span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>y<span class="op">.</span>set(my)<span class="op">;</span></span>
 <span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 現在位置で描画</span></span>
@@ -277,37 +282,37 @@
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    mouse<span class="op">.</span>render()<span class="op">;</span></span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 追加ここまで</span></span>
 <span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    enable_mouse()<span class="op">;</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        cli()<span class="op">;</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> KEYBUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> KEYBUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> key <span class="op">=</span> KEYBUF<span class="op">.</span>lock()<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
 <span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>            (<span class="pp">Screen::</span>new())<span class="op">.</span>boxfill8(<span class="pp">Color::</span>DarkCyan<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">16</span><span class="op">,</span> <span class="dv">16</span>)<span class="op">;</span></span>
 <span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span> <span class="pp">ScreenWriter::</span>new(<span class="pp">Screen::</span>new()<span class="op">,</span> <span class="pp">vga::Color::</span>White<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>            <span class="pp">write!</span>(writer<span class="op">,</span> <span class="st">&quot;{:x}&quot;</span><span class="op">,</span> key)<span class="op">.</span>unwrap()<span class="op">;</span></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> MOUSEBUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> MOUSEBUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>            <span class="co">// このブロックを変更: マウスの座標のテキスト表示とカーソルの表示</span></span>
 <span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> i <span class="op">=</span> MOUSEBUF<span class="op">.</span>lock()<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> mouse_dec<span class="op">.</span>decode(i)<span class="op">.</span>is_some() <span class="op">{</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> mouse_dec<span class="op">.</span>decode(i)<span class="op">.</span>is_some() <span class="op">{</span></span>
 <span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>                (<span class="pp">Screen::</span>new())<span class="op">.</span>boxfill8(<span class="pp">Color::</span>DarkCyan<span class="op">,</span> <span class="dv">32</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">32</span> <span class="op">+</span> <span class="dv">15</span> <span class="op">*</span> <span class="dv">8</span> <span class="op">-</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">16</span>)<span class="op">;</span></span>
 <span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span> <span class="pp">ScreenWriter::</span>new(<span class="pp">Screen::</span>new()<span class="op">,</span> <span class="pp">vga::Color::</span>White<span class="op">,</span> <span class="dv">32</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>                <span class="pp">write!</span>(</span>
 <span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>                    writer<span class="op">,</span></span>
 <span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;[{}{}{} {:&gt;4},{:&gt;4}]&quot;</span><span class="op">,</span></span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> (mouse_dec<span class="op">.</span>btn<span class="op">.</span>get() <span class="op">&amp;</span> <span class="dv">0x01</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> (mouse_dec<span class="op">.</span>btn<span class="op">.</span>get() <span class="op">&amp;</span> <span class="dv">0x01</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>                        <span class="ch">'L'</span> <span class="co">// 左クリック</span></span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>                        <span class="ch">'l'</span></span>
 <span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>                    <span class="op">},</span></span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> (mouse_dec<span class="op">.</span>btn<span class="op">.</span>get() <span class="op">&amp;</span> <span class="dv">0x04</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> (mouse_dec<span class="op">.</span>btn<span class="op">.</span>get() <span class="op">&amp;</span> <span class="dv">0x04</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>                        <span class="ch">'C'</span> <span class="co">// 中央クリック</span></span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>                        <span class="ch">'c'</span></span>
 <span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>                    <span class="op">},</span></span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> (mouse_dec<span class="op">.</span>btn<span class="op">.</span>get() <span class="op">&amp;</span> <span class="dv">0x02</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> (mouse_dec<span class="op">.</span>btn<span class="op">.</span>get() <span class="op">&amp;</span> <span class="dv">0x02</span>) <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>                        <span class="ch">'R'</span> <span class="co">// 右クリック</span></span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>                        <span class="ch">'r'</span></span>
 <span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>                    <span class="op">},</span></span>
 <span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>                    mouse_dec<span class="op">.</span>x<span class="op">.</span>get()<span class="op">,</span></span>
@@ -316,7 +321,7 @@
 <span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>                mouse<span class="op">.</span>move_and_render(mouse_dec<span class="op">.</span>x<span class="op">.</span>get()<span class="op">,</span> mouse_dec<span class="op">.</span>y<span class="op">.</span>get())<span class="op">;</span></span>
 <span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>            stihlt()<span class="op">;</span></span>
 <span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>

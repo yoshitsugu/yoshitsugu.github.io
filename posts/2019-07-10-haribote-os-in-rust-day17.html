@@ -21,7 +21,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は17日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は17日目の内容。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。17日目 - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は17日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は17日目の内容。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,18 +63,19 @@
     <span class="date">Posted on 2019-07-10</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html" rel="tag">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html" rel="tag">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a></span>
     
 </div>
 
-<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は17日目の内容。 <!--more--></p>
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は17日目の内容。
+<!--more--></p>
 <h2 id="アイドルタスクを作成する">アイドルタスクを作成する</h2>
 <p>現在タスクA(メインのharibote_os)とタスクBが3種類ある状態となっている。<br />
 これでタスクBをすべて起動しない場合、タスクAはスリープしようとするが、切り替える先のタスクがなくなってしまう。<br />
 この問題を解消するため、アイドル(hlt)するだけのタスクを最初に設定するようにする。</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// mt.rs</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> init(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> memman<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> MemMan) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">,</span> <span class="op">&amp;</span><span class="ot">'static</span> <span class="dt">str</span><span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MAX_TASKS <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MAX_TASKS <span class="op">{</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> task <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">.</span>tasks_data[i]<span class="op">;</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>            task<span class="op">.</span>select <span class="op">=</span> (TASK_GDT0 <span class="op">+</span> i <span class="kw">as</span> <span class="dt">i32</span>) <span class="op">*</span> <span class="dv">8</span><span class="op">;</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> gdt <span class="op">=</span></span>
@@ -201,19 +204,19 @@
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>init_timer(timer_index<span class="op">,</span> fifo_addr<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>set_time(timer_index<span class="op">,</span> <span class="dv">50</span>)<span class="op">;</span></span>
 <span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        cli()<span class="op">;</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> fifo<span class="op">.</span>status() <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> fifo<span class="op">.</span>status() <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>            task_manager<span class="op">.</span>sleep(task_index)<span class="op">;</span></span>
 <span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> i <span class="op">=</span> fifo<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> i <span class="op">&lt;=</span> <span class="dv">1</span> <span class="op">{</span></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> i <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> i <span class="op">&lt;=</span> <span class="dv">1</span> <span class="op">{</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> i <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>                    TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>init_timer(timer_index<span class="op">,</span> fifo_addr<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>                    cursor_c <span class="op">=</span> <span class="pp">Color::</span>White<span class="op">;</span></span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>                    TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>init_timer(timer_index<span class="op">,</span> fifo_addr<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
 <span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>                    cursor_c <span class="op">=</span> <span class="pp">Color::</span>Black<span class="op">;</span></span>
 <span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
@@ -242,11 +245,11 @@ Tabキーの入力をうけとり、フォーカスするウィンドウを切�
 あまり面白い箇所はないので、詳細な差分は<a href="https://github.com/yoshitsugu/hariboteos_in_rust/commit/c6c1fafcdf5c1bc3b20f1d7adba91e949491557e">GitHubのcommit log</a>参照として、重要なところだけ記載する。</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// lib.rs</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">// タブは0x0f</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> key <span class="op">==</span> <span class="dv">0x0f</span> <span class="op">{</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> active_window <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> key <span class="op">==</span> <span class="dv">0x0f</span> <span class="op">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> active_window <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        active_window <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="co">// windowタイトルの表示切替</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        active_window <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="co">// windowタイトルの表示切替</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
@@ -255,9 +258,9 @@ Tabキーの入力をうけとり、フォーカスするウィンドウを切�
 これでfifoからtask、taskからfifoの双方向の参照ができ、若干気持ち悪さが増したが、一旦気にせずそのまま進める。</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// lib.rs</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">// 通常の文字入力の表示</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> KEYTABLE[key <span class="kw">as</span> <span class="dt">usize</span>] <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> active_window <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> cursor_x <span class="op">&lt;</span> max_cursor_x <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> KEYTABLE[key <span class="kw">as</span> <span class="dt">usize</span>] <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> active_window <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> cursor_x <span class="op">&lt;</span> max_cursor_x <span class="op">{</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="pp">write_with_bg!</span>(</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                sheet_manager<span class="op">,</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                shi_win<span class="op">,</span></span>
@@ -273,7 +276,7 @@ Tabキーの入力をうけとり、フォーカスするウィンドウを切�
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>            )<span class="op">;</span></span>
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>            cursor_x <span class="op">+=</span> <span class="dv">8</span><span class="op">;</span></span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>        <span class="co">// consoleのタスクに保持しているfifoに送る</span></span>
 <span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> ctask <span class="op">=</span> task_manager<span class="op">.</span>tasks_data[console_task_index]<span class="op">;</span></span>
 <span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> fifo <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;*</span>(ctask<span class="op">.</span>fifo_addr <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> Fifo) <span class="op">};</span></span>
@@ -290,19 +293,19 @@ Tabキーの入力をうけとり、フォーカスするウィンドウを切�
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 省略..</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">// loop内にShiftキーのハンドリングを追加する</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                <span class="co">// 左シフト ON</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> key <span class="op">==</span> <span class="dv">0x2a</span> <span class="op">{</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> key <span class="op">==</span> <span class="dv">0x2a</span> <span class="op">{</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                    key_shift<span class="op">.</span><span class="dv">0</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                <span class="co">// 右シフト ON</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> key <span class="op">==</span> <span class="dv">0x36</span> <span class="op">{</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> key <span class="op">==</span> <span class="dv">0x36</span> <span class="op">{</span></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                    key_shift<span class="op">.</span><span class="dv">1</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                <span class="co">// 左シフト OFF</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> key <span class="op">==</span> <span class="dv">0xaa</span> <span class="op">{</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> key <span class="op">==</span> <span class="dv">0xaa</span> <span class="op">{</span></span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                    key_shift<span class="op">.</span><span class="dv">0</span> <span class="op">=</span> <span class="cn">false</span><span class="op">;</span></span>
 <span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>                <span class="co">// 右シフト OFF</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> key <span class="op">==</span> <span class="dv">0xb6</span> <span class="op">{</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> key <span class="op">==</span> <span class="dv">0xb6</span> <span class="op">{</span></span>
 <span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>                    key_shift<span class="op">.</span><span class="dv">1</span> <span class="op">=</span> <span class="cn">false</span><span class="op">;</span></span>
 <span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span>    </span></code></pre></div>
 <p>次にkeyboard.rsに追加した*Lock系のキーの状態管理用のstructとShiftキーを押したとき用のKEYTABLEを説明する。</p>
@@ -328,9 +331,9 @@ Tabキーの入力をうけとり、フォーカスするウィンドウを切�
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> LockKeys <span class="op">{</span></span>
 <span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> as_bytes(<span class="op">&amp;</span><span class="kw">self</span>) <span class="op">-&gt;</span> <span class="dt">u8</span> <span class="op">{</span></span>
 <span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> result<span class="op">:</span> <span class="dt">u8</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>        result <span class="op">+=</span> <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>scroll_lock <span class="op">{</span> <span class="dv">1</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">};</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>        result <span class="op">+=</span> <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>num_lock <span class="op">{</span> <span class="dv">2</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">};</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>        result <span class="op">+=</span> <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>caps_lock <span class="op">{</span> <span class="dv">4</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">};</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>        result <span class="op">+=</span> <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>scroll_lock <span class="op">{</span> <span class="dv">1</span> <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">};</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>        result <span class="op">+=</span> <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>num_lock <span class="op">{</span> <span class="dv">2</span> <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">};</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>        result <span class="op">+=</span> <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>caps_lock <span class="op">{</span> <span class="dv">4</span> <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span> <span class="dv">0</span> <span class="op">};</span></span>
 <span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>        result</span>
 <span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
@@ -350,16 +353,16 @@ Tabキーの入力をうけとり、フォーカスするウィンドウを切�
 <div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// lib.rs</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">// haribote_os()のloop内処理</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">mut</span> chr <span class="op">=</span> <span class="dv">0</span> <span class="kw">as</span> <span class="dt">u8</span><span class="op">;</span> <span class="co">// 文字コード保持用の変数</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> key <span class="op">&lt;</span> KEYTABLE0<span class="op">.</span>len() <span class="kw">as</span> <span class="dt">u32</span> <span class="op">{</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> key_shift <span class="op">==</span> (<span class="cn">false</span><span class="op">,</span> <span class="cn">false</span>) <span class="op">{</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> key <span class="op">&lt;</span> KEYTABLE0<span class="op">.</span>len() <span class="kw">as</span> <span class="dt">u32</span> <span class="op">{</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> key_shift <span class="op">==</span> (<span class="cn">false</span><span class="op">,</span> <span class="cn">false</span>) <span class="op">{</span></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        chr <span class="op">=</span> KEYTABLE0[key <span class="kw">as</span> <span class="dt">usize</span>]<span class="op">;</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        chr <span class="op">=</span> KEYTABLE1[key <span class="kw">as</span> <span class="dt">usize</span>]<span class="op">;</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> <span class="ch">b'A'</span> <span class="op">&lt;=</span> chr <span class="op">&amp;&amp;</span> chr <span class="op">&lt;=</span> <span class="ch">b'Z'</span> <span class="op">{</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="ch">b'A'</span> <span class="op">&lt;=</span> chr <span class="op">&amp;&amp;</span> chr <span class="op">&lt;=</span> <span class="ch">b'Z'</span> <span class="op">{</span></span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// アルファベットの場合、ShiftキーとCapsLockの状態で大文字小文字を決める</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="op">!</span>lock_keys<span class="op">.</span>caps_lock <span class="op">&amp;&amp;</span> key_shift <span class="op">==</span> (<span class="cn">false</span><span class="op">,</span> <span class="cn">false</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">!</span>lock_keys<span class="op">.</span>caps_lock <span class="op">&amp;&amp;</span> key_shift <span class="op">==</span> (<span class="cn">false</span><span class="op">,</span> <span class="cn">false</span>)</span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">||</span> lock_keys<span class="op">.</span>caps_lock <span class="op">&amp;&amp;</span> key_shift <span class="op">!=</span> (<span class="cn">false</span><span class="op">,</span> <span class="cn">false</span>)</span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>        chr <span class="op">+=</span> <span class="dv">0x20</span><span class="op">;</span></span>

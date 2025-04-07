@@ -21,7 +21,8 @@
     
 
 
-Stateモナドについて、自分なりにまとめる。自分用のメモなので詳しくしりたい人は下の参考リンクなどをみるほうがよいと思う。 " />
+Stateモナドについて、自分なりにまとめる。自分用のメモなので詳しくしりたい人は下の参考リンクなどをみるほうがよいと思う。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="Stateモナドについてメモ - TSUGULOG" />
@@ -34,7 +35,8 @@ Stateモナドについて、自分なりにまとめる。自分用のメモな
     
 
 
-Stateモナドについて、自分なりにまとめる。自分用のメモなので詳しくしりたい人は下の参考リンクなどをみるほうがよいと思う。 " />
+Stateモナドについて、自分なりにまとめる。自分用のメモなので詳しくしりたい人は下の参考リンクなどをみるほうがよいと思う。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,11 +63,12 @@ Stateモナドについて、自分なりにまとめる。自分用のメモな
     <span class="date">Posted on 2016-03-15</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'Monad'." href="../tags/Monad.html">Monad</a>, <a title="All pages tagged 'Haskell'." href="../tags/Haskell.html">Haskell</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Monad'." href="../tags/Monad.html" rel="tag">Monad</a>, <a title="All pages tagged 'Haskell'." href="../tags/Haskell.html" rel="tag">Haskell</a></span>
     
 </div>
 
-<p>Stateモナドについて、自分なりにまとめる。自分用のメモなので詳しくしりたい人は下の参考リンクなどをみるほうがよいと思う。 <!--more--></p>
+<p>Stateモナドについて、自分なりにまとめる。自分用のメモなので詳しくしりたい人は下の参考リンクなどをみるほうがよいと思う。
+<!--more--></p>
 <h2 id="モナドとは">モナドとは</h2>
 <p>モナドについては箱にたとえる方法や、関数型言語で副作用をあつかうための仕組み、などいろいろな説明がある<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。使ってみて感覚をつかむのがいいと思う。自分としてはコンテキストをあつかう、という説明がしっくりきた。そのうち自分の言葉で説明するエントリも書く予定。<br />
 モナドのインスタンスとするには <code>return</code> と <code>bind (&gt;&gt;=)</code>を定義する必要がある。</p>
@@ -80,7 +83,8 @@ Stateモナドについて、自分なりにまとめる。自分用のメモな
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> a <span class="ot">=</span> <span class="dt">State</span> (\s <span class="ot">-&gt;</span> (a, s))</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">State</span> x <span class="op">&gt;&gt;=</span> f <span class="ot">=</span> <span class="dt">State</span> (\s <span class="ot">-&gt;</span> <span class="kw">let</span> (a, s') <span class="ot">=</span> x s <span class="kw">in</span> runState (f a) s')</span></code></pre></div>
 <h2 id="例">例</h2>
-<p><a href="https://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-State-Lazy.html" target="_blank">公式ドキュメント</a>から引用 <code>n + x</code>をStateモナドを使って実装している。</p>
+<p><a href="https://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-State-Lazy.html" target="_blank">公式ドキュメント</a>から引用
+<code>n + x</code>をStateモナドを使って実装している。</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">tick ::</span> <span class="dt">State</span> <span class="dt">Int</span> <span class="dt">Int</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>tick <span class="ot">=</span> <span class="kw">do</span> n <span class="ot">&lt;-</span> get</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>          put (n<span class="op">+</span><span class="dv">1</span>)</span>
@@ -110,7 +114,8 @@ Stateモナドについて、自分なりにまとめる。自分用のメモな
 <p>状態はすてて値を返す。</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">evalState ::</span> (<span class="dt">State</span> s a) <span class="ot">-&gt;</span> s <span class="ot">-&gt;</span> a</span></code></pre></div>
 <h2 id="無限の猿定理">無限の猿定理</h2>
-<p>最近流行っているっぽい？無限の猿定理<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>の一種、「ズン」と「ドコ」をランダムに繰り返し、「ズンズンズンズンドコ」になったら停止して「キヨシ」と表示するプログラムもStateモナドを使って書ける。 「ズン」の回数をカウントするのにStateモナドを使った。</p>
+<p>最近流行っているっぽい？無限の猿定理<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>の一種、「ズン」と「ドコ」をランダムに繰り返し、「ズンズンズンズンドコ」になったら停止して「キヨシ」と表示するプログラムもStateモナドを使って書ける。
+「ズン」の回数をカウントするのにStateモナドを使った。</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Control.Monad.State</span></span>
@@ -158,11 +163,11 @@ Stateモナドについて、自分なりにまとめる。自分用のメモな
 <li><a href="http://qiita.com/lotz/items/503ef04b03433d29f77c" target="_blank">Stateモナドが便利に使えた！</a></li>
 <li><a href="http://gihyo.jp/book/2014/978-4-7741-6926-2" target="_blank">関数プログラミング実践入門</a></li>
 </ul>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p><a href="http://qiita.com/hiruberuto/items/8bbc0343bf794c368287" target="_blank">ポケモンにたとえるなんてものもある(!?)</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p><a href="https://ja.wikipedia.org/wiki/%E7%84%A1%E9%99%90%E3%81%AE%E7%8C%BF%E5%AE%9A%E7%90%86" target="_blank">Wikipedia</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p><a href="http://qiita.com/hiruberuto/items/8bbc0343bf794c368287" target="_blank">ポケモンにたとえるなんてものもある(!?)</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://ja.wikipedia.org/wiki/%E7%84%A1%E9%99%90%E3%81%AE%E7%8C%BF%E5%AE%9A%E7%90%86" target="_blank">Wikipedia</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

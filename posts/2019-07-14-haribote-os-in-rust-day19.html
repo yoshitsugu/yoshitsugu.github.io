@@ -21,7 +21,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は19日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は19日目の内容。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。19日目 - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は19日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は19日目の内容。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,11 +63,12 @@
     <span class="date">Posted on 2019-07-14</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html" rel="tag">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html" rel="tag">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a></span>
     
 </div>
 
-<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は19日目の内容。 <!--more--></p>
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は19日目の内容。
+<!--more--></p>
 <h2 id="cattypeコマンドを追加する">cat(type)コマンドを追加する</h2>
 <p>前回に引き続きコマンド追加となる。<br />
 今回は<code>cat</code>に相当する機能ということで、例によって本では<code>type</code>になっているがここでは<code>cat</code>として実装する。</p>
@@ -95,17 +98,17 @@
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                <span class="op">$</span>error</span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>            )<span class="op">;</span></span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>            cursor_y <span class="op">=</span> newline(<span class="op">$</span>cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> cmdline_strs <span class="op">=</span> cmdline<span class="op">.</span>split(<span class="op">|</span>s<span class="op">|</span> <span class="op">*</span>s <span class="op">==</span> <span class="dv">0</span> <span class="op">||</span> <span class="op">*</span>s <span class="op">==</span> <span class="ch">b' '</span>)<span class="op">;</span></span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> cmdline_strs <span class="op">=</span> cmdline_strs<span class="op">.</span>skip_while(<span class="op">|</span>cmd<span class="op">|</span> cmd<span class="op">.</span>len() <span class="op">==</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> cmd <span class="op">=</span> cmdline_strs<span class="op">.</span>next()<span class="op">;</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> cmd<span class="op">.</span>is_none() <span class="op">{</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> cmd<span class="op">.</span>is_none() <span class="op">{</span></span>
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="pp">display_error!</span>(<span class="st">&quot;Bad Command&quot;</span><span class="op">,</span> cursor_y)<span class="op">;</span></span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> cmd <span class="op">=</span> from_utf8(<span class="op">&amp;</span>cmd<span class="op">.</span>unwrap())<span class="op">.</span>unwrap()<span class="op">;</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> cmd <span class="op">==</span> <span class="st">&quot;mem&quot;</span> <span class="op">{</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> cmd <span class="op">==</span> <span class="st">&quot;mem&quot;</span> <span class="op">{</span></span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span></code></pre></div>
 <p>あわせて、<code>display_error</code>という文字列を表示するだけのマクロを用意してエラメッセージ表示を完結に記述できるようにした。</p>
 <p>ファイルの中身を表示するにあたり、<code>FileInfo</code>のメソッドとしてファイルの中身の先頭番地を返せるようにしておく。</p>
@@ -121,11 +124,11 @@
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">isize</span> <span class="op">{</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> cmd <span class="op">==</span> <span class="st">&quot;cat&quot;</span> <span class="op">{</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> cmd <span class="op">==</span> <span class="st">&quot;cat&quot;</span> <span class="op">{</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="co">// ファイル名となるところを抽出</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> filename <span class="op">=</span> cmdline_strs<span class="op">.</span>skip_while(<span class="op">|</span>strs<span class="op">|</span> strs<span class="op">.</span>len() <span class="op">==</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> filename <span class="op">=</span> filename<span class="op">.</span>next()<span class="op">;</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> filename<span class="op">.</span>is_none() <span class="op">{</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> filename<span class="op">.</span>is_none() <span class="op">{</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>            <span class="pp">display_error!</span>(<span class="st">&quot;File Not Found&quot;</span><span class="op">,</span> cursor_y)<span class="op">;</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> filename <span class="op">=</span> filename<span class="op">.</span>unwrap()<span class="op">;</span></span>
@@ -135,72 +138,72 @@
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> extname <span class="op">=</span> filename<span class="op">.</span>next()<span class="op">;</span></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> b <span class="op">=</span> [<span class="ch">b' '</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span></span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> e <span class="op">=</span> [<span class="ch">b' '</span><span class="op">;</span> <span class="dv">3</span>]<span class="op">;</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(basename) <span class="op">=</span> basename <span class="op">{</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> fi <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>b<span class="op">.</span>len() <span class="op">{</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> basename<span class="op">.</span>len() <span class="op">&lt;=</span> fi <span class="op">{</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(basename) <span class="op">=</span> basename <span class="op">{</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> fi <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>b<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> basename<span class="op">.</span>len() <span class="op">&lt;=</span> fi <span class="op">{</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> <span class="ch">b'a'</span> <span class="op">&lt;=</span> basename[fi] <span class="op">&amp;&amp;</span> basename[fi] <span class="op">&lt;=</span> <span class="ch">b'z'</span> <span class="op">{</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="ch">b'a'</span> <span class="op">&lt;=</span> basename[fi] <span class="op">&amp;&amp;</span> basename[fi] <span class="op">&lt;=</span> <span class="ch">b'z'</span> <span class="op">{</span></span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// 小文字は大文字で正規化しておく</span></span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>                    b[fi] <span class="op">=</span> basename[fi] <span class="op">-</span> <span class="dv">0x20</span><span class="op">;</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>                    b[fi] <span class="op">=</span> basename[fi]<span class="op">;</span></span>
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>            <span class="pp">display_error!</span>(<span class="st">&quot;File Not Found&quot;</span><span class="op">,</span> cursor_y)<span class="op">;</span></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(extname) <span class="op">=</span> extname <span class="op">{</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> fi <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>e<span class="op">.</span>len() <span class="op">{</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> extname<span class="op">.</span>len() <span class="op">&lt;=</span> fi <span class="op">{</span></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(extname) <span class="op">=</span> extname <span class="op">{</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> fi <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>e<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> extname<span class="op">.</span>len() <span class="op">&lt;=</span> fi <span class="op">{</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> <span class="ch">b'a'</span> <span class="op">&lt;=</span> extname[fi] <span class="op">&amp;&amp;</span> extname[fi] <span class="op">&lt;=</span> <span class="ch">b'z'</span> <span class="op">{</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="ch">b'a'</span> <span class="op">&lt;=</span> extname[fi] <span class="op">&amp;&amp;</span> extname[fi] <span class="op">&lt;=</span> <span class="ch">b'z'</span> <span class="op">{</span></span>
 <span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>                    e[fi] <span class="op">=</span> extname[fi] <span class="op">-</span> <span class="dv">0x20</span><span class="op">;</span></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>                    e[fi] <span class="op">=</span> extname[fi]<span class="op">;</span></span>
 <span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> target_finfo<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>FileInfo<span class="op">&gt;</span> <span class="op">=</span> <span class="cn">None</span><span class="op">;</span></span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> findex <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MAX_FILE_INFO <span class="op">{</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> findex <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MAX_FILE_INFO <span class="op">{</span></span>
 <span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> finfo <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span></span>
 <span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>((ADR_DISKIMG <span class="op">+</span> ADR_FILE_OFFSET <span class="op">+</span> findex <span class="op">*</span> <span class="pp">core::mem::size_of::</span><span class="op">&lt;</span>FileInfo<span class="op">&gt;</span>())</span>
 <span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> FileInfo)</span>
 <span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>            <span class="op">};</span></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> finfo<span class="op">.</span>name[<span class="dv">0</span>] <span class="op">==</span> <span class="dv">0x00</span> <span class="op">{</span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>                <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> finfo<span class="op">.</span>name[<span class="dv">0</span>] <span class="op">==</span> <span class="dv">0x00</span> <span class="op">{</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> finfo<span class="op">.</span>name[<span class="dv">0</span>] <span class="op">!=</span> <span class="dv">0xe5</span> <span class="op">{</span></span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> (finfo<span class="op">.</span>ftype <span class="op">&amp;</span> <span class="dv">0x18</span>) <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> finfo<span class="op">.</span>name[<span class="dv">0</span>] <span class="op">!=</span> <span class="dv">0xe5</span> <span class="op">{</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (finfo<span class="op">.</span>ftype <span class="op">&amp;</span> <span class="dv">0x18</span>) <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">let</span> <span class="kw">mut</span> filename_equal <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>finfo<span class="op">.</span>name<span class="op">.</span>len() <span class="op">{</span></span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">if</span> finfo<span class="op">.</span>name[y] <span class="op">!=</span> b[y] <span class="op">{</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>finfo<span class="op">.</span>name<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> finfo<span class="op">.</span>name[y] <span class="op">!=</span> b[y] <span class="op">{</span></span>
 <span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>                            filename_equal <span class="op">=</span> <span class="cn">false</span><span class="op">;</span></span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>                            <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>                            <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span></span>
 <span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>finfo<span class="op">.</span>ext<span class="op">.</span>len() <span class="op">{</span></span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">if</span> finfo<span class="op">.</span>ext[y] <span class="op">!=</span> e[y] <span class="op">{</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>finfo<span class="op">.</span>ext<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> finfo<span class="op">.</span>ext[y] <span class="op">!=</span> e[y] <span class="op">{</span></span>
 <span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>                            filename_equal <span class="op">=</span> <span class="cn">false</span><span class="op">;</span></span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>                            <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>                            <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span></span>
 <span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> filename_equal <span class="op">{</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> filename_equal <span class="op">{</span></span>
 <span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>                        target_finfo <span class="op">=</span> <span class="cn">Some</span>(finfo)<span class="op">;</span></span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
 <span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(finfo) <span class="op">=</span> target_finfo <span class="op">{</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(finfo) <span class="op">=</span> target_finfo <span class="op">{</span></span>
 <span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> content_length <span class="op">=</span> finfo<span class="op">.</span>size<span class="op">;</span></span>
 <span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> cursor_x <span class="op">=</span> <span class="dv">8</span><span class="op">;</span></span>
-<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>content_length <span class="op">{</span></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>content_length <span class="op">{</span></span>
 <span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> chr <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">*</span>((finfo<span class="op">.</span>content_addr() <span class="op">+</span> x <span class="kw">as</span> <span class="dt">usize</span>) <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> <span class="dt">u8</span>) <span class="op">};</span></span>
-<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> chr <span class="op">==</span> <span class="dv">0x09</span> <span class="op">{</span></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> chr <span class="op">==</span> <span class="dv">0x09</span> <span class="op">{</span></span>
 <span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// タブ</span></span>
-<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>                        <span class="pp">write_with_bg!</span>(</span>
 <span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>                            sheet_manager<span class="op">,</span></span>
 <span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>                            sheet_index<span class="op">,</span></span>
@@ -214,23 +217,23 @@
 <span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot; &quot;</span></span>
 <span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>                        )<span class="op">;</span></span>
 <span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>                        cursor_x <span class="op">+=</span> <span class="dv">8</span><span class="op">;</span></span>
-<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">if</span> cursor_x <span class="op">==</span> MAX_CURSOR_X <span class="op">{</span></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> cursor_x <span class="op">==</span> MAX_CURSOR_X <span class="op">{</span></span>
 <span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>                            cursor_x <span class="op">=</span> <span class="dv">8</span><span class="op">;</span></span>
 <span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>                            cursor_y <span class="op">=</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
 <span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span></span>
-<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">if</span> (cursor_x <span class="op">-</span> <span class="dv">8</span>) <span class="op">&amp;</span> <span class="dv">0x1f</span> <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> (cursor_x <span class="op">-</span> <span class="dv">8</span>) <span class="op">&amp;</span> <span class="dv">0x1f</span> <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>                            <span class="co">// 32で割り切れたらbreak</span></span>
-<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>                            <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>                            <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span></span>
 <span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
-<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> chr <span class="op">==</span> <span class="dv">0x0a</span> <span class="op">{</span></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> chr <span class="op">==</span> <span class="dv">0x0a</span> <span class="op">{</span></span>
 <span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// 改行</span></span>
 <span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>                    cursor_x <span class="op">=</span> <span class="dv">8</span><span class="op">;</span></span>
 <span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>                    cursor_y <span class="op">=</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
-<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> chr <span class="op">==</span> <span class="dv">0x0d</span> <span class="op">{</span></span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> chr <span class="op">==</span> <span class="dv">0x0d</span> <span class="op">{</span></span>
 <span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// 復帰</span></span>
 <span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// 何もしない</span></span>
-<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>                    <span class="pp">write_with_bg!</span>(</span>
 <span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a>                        sheet_manager<span class="op">,</span></span>
 <span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a>                        sheet_index<span class="op">,</span></span>
@@ -245,17 +248,17 @@
 <span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a>                        chr <span class="kw">as</span> <span class="dt">char</span></span>
 <span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a>                    )<span class="op">;</span></span>
 <span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a>                    cursor_x <span class="op">+=</span> <span class="dv">8</span><span class="op">;</span></span>
-<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> cursor_x <span class="op">==</span> MAX_CURSOR_X <span class="op">{</span></span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> cursor_x <span class="op">==</span> MAX_CURSOR_X <span class="op">{</span></span>
 <span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a>                        cursor_x <span class="op">=</span> <span class="dv">8</span><span class="op">;</span></span>
 <span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a>                        cursor_y <span class="op">=</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
 <span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
 <span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a>            cursor_y <span class="op">=</span> newline(cursor_y<span class="op">,</span> sheet_manager<span class="op">,</span> sheet_index)<span class="op">;</span></span>
-<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a>            <span class="pp">display_error!</span>(<span class="st">&quot;File Not Found&quot;</span><span class="op">,</span> cursor_y)<span class="op">;</span></span>
 <span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span></code></pre></div>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span></code></pre></div>
 <p>やたらと長くなってしまったが、やっていることは割と素直で、ファイルを探し、あれば中身を読み込んで表示、ということをしている。<br />
 タブや改行はそれぞれ別に処理するようにしている。</p>
 <h3 id="実行結果">実行結果</h3>
@@ -276,15 +279,15 @@
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> size <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>size <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> buf_addr <span class="op">=</span> buf_addr <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> clustno <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>clustno <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">loop</span> <span class="op">{</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> size <span class="op">&lt;=</span> <span class="dv">512</span> <span class="op">{</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>size <span class="op">{</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">loop</span> <span class="op">{</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> size <span class="op">&lt;=</span> <span class="dv">512</span> <span class="op">{</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>size <span class="op">{</span></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">let</span> buf <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((buf_addr <span class="op">+</span> i) <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span>) <span class="op">};</span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                    <span class="op">*</span>buf <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">*</span>((img_addr <span class="op">+</span> clustno <span class="op">*</span> <span class="dv">512</span> <span class="op">+</span> i) <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> <span class="dt">u8</span>) <span class="op">};</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">512</span> <span class="op">{</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">512</span> <span class="op">{</span></span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> buf <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((buf_addr <span class="op">+</span> i) <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span>) <span class="op">};</span></span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>buf <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">*</span>((img_addr <span class="op">+</span> clustno <span class="op">*</span> <span class="dv">512</span> <span class="op">+</span> i) <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> <span class="dt">u8</span>) <span class="op">};</span></span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
@@ -298,7 +301,7 @@
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co">// FAT情報を復号化</span></span>
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> read_fat(fat<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [<span class="dt">u32</span><span class="op">;</span> MAX_FAT]<span class="op">,</span> img<span class="op">:</span> [<span class="dt">u8</span><span class="op">;</span> MAX_FAT <span class="op">*</span> <span class="dv">4</span>]) <span class="op">{</span></span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> (<span class="dv">0</span><span class="op">..</span>MAX_FAT)<span class="op">.</span>step_by(<span class="dv">2</span>) <span class="op">{</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> (<span class="dv">0</span><span class="op">..</span>MAX_FAT)<span class="op">.</span>step_by(<span class="dv">2</span>) <span class="op">{</span></span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        fat[i <span class="op">+</span> <span class="dv">0</span>] <span class="op">=</span> ((img[j <span class="op">+</span> <span class="dv">0</span>] <span class="kw">as</span> <span class="dt">u32</span>) <span class="op">|</span> (img[j <span class="op">+</span> <span class="dv">1</span>] <span class="kw">as</span> <span class="dt">u32</span>) <span class="op">&lt;&lt;</span> <span class="dv">8</span>) <span class="op">&amp;</span> <span class="dv">0xfff</span><span class="op">;</span></span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>        fat[i <span class="op">+</span> <span class="dv">1</span>] <span class="op">=</span> ((img[j <span class="op">+</span> <span class="dv">1</span>] <span class="kw">as</span> <span class="dt">u32</span>) <span class="op">&gt;&gt;</span> <span class="dv">4</span> <span class="op">|</span> (img[j <span class="op">+</span> <span class="dv">2</span>] <span class="kw">as</span> <span class="dt">u32</span>) <span class="op">&lt;&lt;</span> <span class="dv">4</span>) <span class="op">&amp;</span> <span class="dv">0xfff</span><span class="op">;</span></span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>        j <span class="op">+=</span> <span class="dv">3</span><span class="op">;</span></span>
@@ -327,13 +330,13 @@
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    fat<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u32</span><span class="op">;</span> MAX_FAT]<span class="op">,</span></span>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">isize</span> <span class="op">{</span></span>
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(finfo) <span class="op">=</span> target_finfo <span class="op">{</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(finfo) <span class="op">=</span> target_finfo <span class="op">{</span></span>
 <span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> content_addr <span class="op">=</span> memman<span class="op">.</span>alloc_4k(finfo<span class="op">.</span>size)<span class="op">.</span>unwrap() <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
 <span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>            finfo<span class="op">.</span>load_file(content_addr<span class="op">,</span> fat<span class="op">,</span> ADR_DISKIMG <span class="op">+</span> <span class="dv">0x003e00</span>)<span class="op">;</span></span>
 <span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> cursor_x <span class="op">=</span> <span class="dv">8</span><span class="op">;</span></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>finfo<span class="op">.</span>size <span class="op">{</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>finfo<span class="op">.</span>size <span class="op">{</span></span>
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> chr <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">*</span>((content_addr <span class="op">+</span> x <span class="kw">as</span> <span class="dt">usize</span>) <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> <span class="dt">u8</span>) <span class="op">};</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> chr <span class="op">==</span> <span class="dv">0x09</span> <span class="op">{</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> chr <span class="op">==</span> <span class="dv">0x09</span> <span class="op">{</span></span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span></code></pre></div>
 <p>実行結果の画面は以前と変わらないので省略する。</p>
 <h2 id="アプリケーションの起動">アプリケーションの起動</h2>
@@ -353,59 +356,59 @@
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> extname <span class="op">=</span> filename<span class="op">.</span>next()<span class="op">;</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> b <span class="op">=</span> [<span class="ch">b' '</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> e <span class="op">=</span> [<span class="ch">b' '</span><span class="op">;</span> <span class="dv">3</span>]<span class="op">;</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(basename) <span class="op">=</span> basename <span class="op">{</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> fi <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>b<span class="op">.</span>len() <span class="op">{</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> basename<span class="op">.</span>len() <span class="op">&lt;=</span> fi <span class="op">{</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(basename) <span class="op">=</span> basename <span class="op">{</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> fi <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>b<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> basename<span class="op">.</span>len() <span class="op">&lt;=</span> fi <span class="op">{</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="ch">b'a'</span> <span class="op">&lt;=</span> basename[fi] <span class="op">&amp;&amp;</span> basename[fi] <span class="op">&lt;=</span> <span class="ch">b'z'</span> <span class="op">{</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="ch">b'a'</span> <span class="op">&lt;=</span> basename[fi] <span class="op">&amp;&amp;</span> basename[fi] <span class="op">&lt;=</span> <span class="ch">b'z'</span> <span class="op">{</span></span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>                <span class="co">// 小文字は大文字で正規化しておく</span></span>
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>                b[fi] <span class="op">=</span> basename[fi] <span class="op">-</span> <span class="dv">0x20</span><span class="op">;</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>                b[fi] <span class="op">=</span> basename[fi]<span class="op">;</span></span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="cn">None</span><span class="op">;</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="cn">None</span><span class="op">;</span></span>
 <span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(extname) <span class="op">=</span> extname <span class="op">{</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> fi <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>e<span class="op">.</span>len() <span class="op">{</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> extname<span class="op">.</span>len() <span class="op">&lt;=</span> fi <span class="op">{</span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>                <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(extname) <span class="op">=</span> extname <span class="op">{</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> fi <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>e<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> extname<span class="op">.</span>len() <span class="op">&lt;=</span> fi <span class="op">{</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="ch">b'a'</span> <span class="op">&lt;=</span> extname[fi] <span class="op">&amp;&amp;</span> extname[fi] <span class="op">&lt;=</span> <span class="ch">b'z'</span> <span class="op">{</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="ch">b'a'</span> <span class="op">&lt;=</span> extname[fi] <span class="op">&amp;&amp;</span> extname[fi] <span class="op">&lt;=</span> <span class="ch">b'z'</span> <span class="op">{</span></span>
 <span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>                e[fi] <span class="op">=</span> extname[fi] <span class="op">-</span> <span class="dv">0x20</span><span class="op">;</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>                e[fi] <span class="op">=</span> extname[fi]<span class="op">;</span></span>
 <span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> findex <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MAX_FILE_INFO <span class="op">{</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> findex <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>MAX_FILE_INFO <span class="op">{</span></span>
 <span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> finfo <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span></span>
 <span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>            <span class="op">*</span>((ADR_DISKIMG <span class="op">+</span> ADR_FILE_OFFSET <span class="op">+</span> findex <span class="op">*</span> <span class="pp">core::mem::size_of::</span><span class="op">&lt;</span>FileInfo<span class="op">&gt;</span>())</span>
 <span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>                <span class="kw">as</span> <span class="op">*</span><span class="kw">const</span> FileInfo)</span>
 <span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> finfo<span class="op">.</span>name[<span class="dv">0</span>] <span class="op">==</span> <span class="dv">0x00</span> <span class="op">{</span></span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>            <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> finfo<span class="op">.</span>name[<span class="dv">0</span>] <span class="op">==</span> <span class="dv">0x00</span> <span class="op">{</span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> finfo<span class="op">.</span>name[<span class="dv">0</span>] <span class="op">!=</span> <span class="dv">0xe5</span> <span class="op">{</span></span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> (finfo<span class="op">.</span>ftype <span class="op">&amp;</span> <span class="dv">0x18</span>) <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> finfo<span class="op">.</span>name[<span class="dv">0</span>] <span class="op">!=</span> <span class="dv">0xe5</span> <span class="op">{</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (finfo<span class="op">.</span>ftype <span class="op">&amp;</span> <span class="dv">0x18</span>) <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> <span class="kw">mut</span> filename_equal <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>finfo<span class="op">.</span>name<span class="op">.</span>len() <span class="op">{</span></span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> finfo<span class="op">.</span>name[y] <span class="op">!=</span> b[y] <span class="op">{</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>finfo<span class="op">.</span>name<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> finfo<span class="op">.</span>name[y] <span class="op">!=</span> b[y] <span class="op">{</span></span>
 <span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>                        filename_equal <span class="op">=</span> <span class="cn">false</span><span class="op">;</span></span>
-<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
 <span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
-<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>finfo<span class="op">.</span>ext<span class="op">.</span>len() <span class="op">{</span></span>
-<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> finfo<span class="op">.</span>ext[y] <span class="op">!=</span> e[y] <span class="op">{</span></span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>finfo<span class="op">.</span>ext<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> finfo<span class="op">.</span>ext[y] <span class="op">!=</span> e[y] <span class="op">{</span></span>
 <span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>                        filename_equal <span class="op">=</span> <span class="cn">false</span><span class="op">;</span></span>
-<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
 <span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
-<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> filename_equal <span class="op">{</span></span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> filename_equal <span class="op">{</span></span>
 <span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>                    target_finfo <span class="op">=</span> <span class="cn">Some</span>(finfo)<span class="op">;</span></span>
-<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
@@ -414,9 +417,9 @@
 <span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p><code>hlt</code>コマンドとして先ほどの<code>HLT</code>するだけのasmファイルをアセンブルした<code>hlt.bin</code>を探して起動するようにする。</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// console.rs</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> cmd <span class="op">==</span> <span class="st">&quot;hlt&quot;</span> <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> cmd <span class="op">==</span> <span class="st">&quot;hlt&quot;</span> <span class="op">{</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> finfo <span class="op">=</span> search_file(<span class="st">b&quot;hlt.bin&quot;</span>)<span class="op">;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> finfo<span class="op">.</span>is_none() <span class="op">{</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> finfo<span class="op">.</span>is_none() <span class="op">{</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            <span class="pp">display_error!</span>(<span class="st">&quot;File Not Found&quot;</span><span class="op">,</span> cursor_y)<span class="op">;</span></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> finfo <span class="op">=</span> finfo<span class="op">.</span>unwrap()<span class="op">;</span></span>

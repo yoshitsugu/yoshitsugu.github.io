@@ -63,7 +63,7 @@ Ractor::TVar に対応する TMVar がほしくなったので作った
     <span class="date">Posted on 2020-11-30</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'Ractor'." href="../tags/Ractor.html">Ractor</a>, <a title="All pages tagged 'Ractor::TMVar'." href="../tags/Ractor%3A%3ATMVar.html">Ractor::TMVar</a>, <a title="All pages tagged 'Ractor::TVar'." href="../tags/Ractor%3A%3ATVar.html">Ractor::TVar</a>, <a title="All pages tagged 'STM'." href="../tags/STM.html">STM</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Ractor'." href="../tags/Ractor.html" rel="tag">Ractor</a>, <a title="All pages tagged 'Ractor::TMVar'." href="../tags/Ractor%3A%3ATMVar.html" rel="tag">Ractor::TMVar</a>, <a title="All pages tagged 'Ractor::TVar'." href="../tags/Ractor%3A%3ATVar.html" rel="tag">Ractor::TVar</a>, <a title="All pages tagged 'STM'." href="../tags/STM.html" rel="tag">STM</a></span>
     
 </div>
 
@@ -105,29 +105,29 @@ Ractor::TVar に対応する TMVar がほしくなったので作った
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">class</span> <span class="dt">TMVar</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ractor::TMVarの値が空であることを示すマーク代わり</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cn">BLANK</span> <span class="kw">=</span> <span class="wa">:RACTOR_TMVAR_BLANK</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cn">BLANK</span> <span class="op">=</span> <span class="wa">:RACTOR_TMVAR_BLANK</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">def</span> initialize(tvar <span class="kw">=</span> <span class="dv">nil</span>)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@tvar</span> <span class="kw">=</span> <span class="dt">Ractor</span><span class="kw">::</span><span class="dt">TVar</span><span class="at">.new</span>(tvar)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">def</span> initialize(tvar <span class="op">=</span> <span class="dv">nil</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@tvar</span> <span class="op">=</span> <span class="dt">Ractor</span><span class="op">::</span><span class="dt">TVar</span><span class="at">.new</span>(tvar)</span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># takeTMVarに相当する</span></span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">def</span> value</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      v <span class="kw">=</span> <span class="ot">@tvar</span><span class="at">.value</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">raise</span> <span class="dt">Ractor</span><span class="kw">::</span><span class="dt">RetryTransaction</span> <span class="cf">if</span> v <span class="kw">==</span> <span class="cn">BLANK</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      v <span class="op">=</span> <span class="ot">@tvar</span><span class="at">.value</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">raise</span> <span class="dt">Ractor</span><span class="op">:</span><span class="wa">:RetryTransaction</span> <span class="cf">if</span> v <span class="op">==</span> <span class="cn">BLANK</span></span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Ractor::TVarはatomicallyの中でしか代入できないので、atomicallyで包んでいる</span></span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>      <span class="dt">Ractor</span><span class="at">.atomically</span> <span class="cf">do</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        <span class="ot">@tvar</span><span class="at">.value</span> <span class="kw">=</span> <span class="cn">BLANK</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        <span class="ot">@tvar</span><span class="at">.value</span> <span class="op">=</span> <span class="cn">BLANK</span></span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>      <span class="cf">end</span></span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>      v</span>
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># putTMVarに相当する</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">def</span> value<span class="kw">=</span>(new_value)</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">raise</span> <span class="dt">Ractor</span><span class="kw">::</span><span class="dt">RetryTransaction</span> <span class="cf">if</span> <span class="ot">@tvar</span><span class="at">.value</span> !<span class="kw">=</span> <span class="cn">BLANK</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">def</span> value<span class="op">=</span>(new_value)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">raise</span> <span class="dt">Ractor</span><span class="op">:</span><span class="wa">:RetryTransaction</span> <span class="cf">if</span> <span class="ot">@tvar</span><span class="at">.value</span> <span class="op">!=</span> <span class="cn">BLANK</span></span>
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@tvar</span><span class="at">.value</span> <span class="kw">=</span> new_value</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@tvar</span><span class="at">.value</span> <span class="op">=</span> new_value</span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
@@ -141,23 +141,23 @@ Haskell の TMVar では Maybe 型を使っているが、Ruby では使えな�
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="vs">'securerandom'</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="vs">'ractor/tmvar'</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cn">NUM_OF_PHILOSOPHERS</span> <span class="kw">=</span> <span class="dv">5</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cn">NUM_OF_PHILOSOPHERS</span> <span class="op">=</span> <span class="dv">5</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Philosopher</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> initialize(name, left, right)</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@name</span> <span class="kw">=</span> name<span class="at">.freeze</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@left</span> <span class="kw">=</span> left</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@right</span> <span class="kw">=</span> right</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@name</span> <span class="op">=</span> name<span class="at">.freeze</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@left</span> <span class="op">=</span> left</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@right</span> <span class="op">=</span> right</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> eat</span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">puts</span> <span class="st">&quot;</span><span class="sc">#{</span><span class="ot">@name</span><span class="sc">}</span><span class="st"> eating...&quot;</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> <span class="dt">SecureRandom</span><span class="at">.random_number</span> <span class="kw">*</span> <span class="dv">5</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> <span class="dt">SecureRandom</span><span class="at">.random_number</span> <span class="op">*</span> <span class="dv">5</span></span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> think</span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">puts</span> <span class="st">&quot;</span><span class="sc">#{</span><span class="ot">@name</span><span class="sc">}</span><span class="st"> thinking...&quot;</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> <span class="dt">SecureRandom</span><span class="at">.random_number</span> <span class="kw">*</span> <span class="dv">5</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> <span class="dt">SecureRandom</span><span class="at">.random_number</span> <span class="op">*</span> <span class="dv">5</span></span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> take_forks</span>
@@ -169,8 +169,8 @@ Haskell の TMVar では Maybe 型を使っているが、Ruby では使えな�
 <span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> put_forks</span>
 <span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Ractor</span><span class="at">.atomically</span> <span class="cf">do</span></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@right</span><span class="at">.value</span> <span class="kw">=</span> <span class="dv">nil</span></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@left</span><span class="at">.value</span> <span class="kw">=</span> <span class="dv">nil</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@right</span><span class="at">.value</span> <span class="op">=</span> <span class="dv">nil</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@left</span><span class="at">.value</span> <span class="op">=</span> <span class="dv">nil</span></span>
 <span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a></span>
@@ -184,16 +184,16 @@ Haskell の TMVar では Maybe 型を使っているが、Ruby では使えな�
 <span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
 <span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>forks <span class="kw">=</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="at">.times.map</span> <span class="cf">do</span></span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Ractor</span><span class="kw">::</span><span class="dt">TMVar</span><span class="at">.new</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>forks <span class="op">=</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="at">.times.map</span> <span class="cf">do</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Ractor</span><span class="op">::</span><span class="dt">TMVar</span><span class="at">.new</span></span>
 <span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
 <span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>rs <span class="kw">=</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="at">.times.map</span> <span class="cf">do</span> <span class="kw">|</span>i<span class="kw">|</span></span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Ractor</span><span class="at">.new</span>(<span class="st">&quot;philosopher </span><span class="sc">#{</span>i <span class="kw">+</span> <span class="dv">1</span><span class="sc">}</span><span class="st">&quot;</span>, forks<span class="kw">[</span>i<span class="kw">]</span>, forks<span class="kw">[</span>(i <span class="kw">+</span> <span class="dv">1</span>) <span class="kw">%</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="kw">]</span>) <span class="cf">do</span> <span class="kw">|</span>n, l, r<span class="kw">|</span></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>rs <span class="op">=</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="at">.times.map</span> <span class="cf">do</span> <span class="op">|</span>i<span class="op">|</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Ractor</span><span class="at">.new</span>(<span class="st">&quot;philosopher </span><span class="sc">#{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="st">&quot;</span>, forks<span class="kw">[</span>i<span class="kw">]</span>, forks<span class="kw">[</span>(i <span class="op">+</span> <span class="dv">1</span>) <span class="op">%</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="kw">]</span>) <span class="cf">do</span> <span class="op">|</span>n, l, r<span class="op">|</span></span>
 <span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Philosopher</span><span class="at">.new</span>(n, l, r)<span class="at">.start</span></span>
 <span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a><span class="dt">Ractor</span><span class="at">.select</span>(<span class="kw">*</span>rs)</span></code></pre></div>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a><span class="dt">Ractor</span><span class="at">.select</span>(<span class="op">*</span>rs)</span></code></pre></div>
 <p>Ractor::TVar で解くため、ループでのロック取得や、raise Ractor::RetryTransaction を使った retry で行っていた制御を Ractor::TMVar に隠蔽でき、スッキリしたコードになったと思う。</p>
 <h2 id="まとめ">まとめ</h2>
 <p>Haskell の TMVar を参考にした、Ractor::TMVar を作った。<br />

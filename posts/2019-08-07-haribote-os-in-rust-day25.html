@@ -21,7 +21,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は25日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は25日目の内容。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。25日目 - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は25日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は25日目の内容。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,22 +63,23 @@
     <span class="date">Posted on 2019-08-07</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html" rel="tag">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html" rel="tag">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a></span>
     
 </div>
 
-<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は25日目の内容。 <!--more--></p>
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は25日目の内容。
+<!--more--></p>
 <h2 id="beep音をならす">BEEP音をならす</h2>
 <p>BEEP音をならすシステムコールをつくる。</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// console.rs</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>no_mangle<span class="at">]</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> hrb_api(<span class="co">/*省略*/</span>) <span class="op">-&gt;</span> <span class="dt">usize</span> <span class="op">{</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> edx <span class="op">==</span> <span class="dv">20</span> <span class="op">{</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> eax <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> edx <span class="op">==</span> <span class="dv">20</span> <span class="op">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> eax <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> i <span class="op">=</span> in8(<span class="dv">0x61</span>)<span class="op">;</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>            out8(<span class="dv">0x61</span><span class="op">,</span> i <span class="op">&amp;</span> <span class="dv">0x0d</span>)<span class="op">;</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> i <span class="op">=</span> <span class="dv">1193180000</span> <span class="op">/</span> eax<span class="op">;</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            out8(<span class="dv">0x43</span><span class="op">,</span> <span class="dv">0xb6</span>)<span class="op">;</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>            out8(<span class="dv">0x42</span><span class="op">,</span> i <span class="kw">as</span> <span class="dt">u8</span>)<span class="op">;</span></span>
@@ -97,13 +100,13 @@
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        _api_inittimer(timer_index<span class="op">.</span>clone()<span class="op">,</span> <span class="dv">128</span>)<span class="op">;</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> i <span class="op">=</span> <span class="dv">20000000</span><span class="op">;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">while</span> i <span class="op">&gt;=</span> <span class="dv">20000</span> <span class="op">{</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> i <span class="op">&gt;=</span> <span class="dv">20000</span> <span class="op">{</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">unsafe</span> <span class="op">{</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>            _api_beep(i)<span class="op">;</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>            _api_settimer(timer_index<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> get_key(<span class="dv">1</span>) <span class="op">!=</span> <span class="dv">128</span> <span class="op">{</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>            <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> get_key(<span class="dv">1</span>) <span class="op">!=</span> <span class="dv">128</span> <span class="op">{</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        i <span class="op">-=</span> i <span class="op">/</span> <span class="dv">100</span><span class="op">;</span></span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
@@ -118,23 +121,23 @@
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> eflags <span class="op">=</span> <span class="pp">asm::</span>load_eflags()<span class="op">;</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="pp">asm::</span>cli()<span class="op">;</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="pp">asm::</span>out8(<span class="dv">0x03c8</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">16</span> <span class="op">{</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">16</span> <span class="op">{</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 書き込むときは上位2ビットを0にしないといけない。See: http://oswiki.osask.jp/?VGA#o2d4bfd3</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span><span class="op">,</span> COLOR_PALETTE[i][<span class="dv">0</span>] <span class="op">/</span> <span class="dv">4</span>)<span class="op">;</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span><span class="op">,</span> COLOR_PALETTE[i][<span class="dv">1</span>] <span class="op">/</span> <span class="dv">4</span>)<span class="op">;</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span><span class="op">,</span> COLOR_PALETTE[i][<span class="dv">2</span>] <span class="op">/</span> <span class="dv">4</span>)<span class="op">;</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> color_palette2<span class="op">:</span> [<span class="dt">u8</span><span class="op">;</span> <span class="dv">216</span> <span class="op">*</span> <span class="dv">3</span>] <span class="op">=</span> [<span class="dv">0</span><span class="op">;</span> <span class="dv">216</span> <span class="op">*</span> <span class="dv">3</span>]<span class="op">;</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> b <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">6</span> <span class="op">{</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> g <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">6</span> <span class="op">{</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> r <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">6</span> <span class="op">{</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> b <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">6</span> <span class="op">{</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> g <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">6</span> <span class="op">{</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> r <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">6</span> <span class="op">{</span></span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                color_palette2[(r <span class="op">+</span> g <span class="op">*</span> <span class="dv">6</span> <span class="op">+</span> b <span class="op">*</span> <span class="dv">36</span>) <span class="op">*</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">0</span>] <span class="op">=</span> r <span class="kw">as</span> <span class="dt">u8</span> <span class="op">*</span> <span class="dv">51</span><span class="op">;</span></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>   				color_palette2[(r <span class="op">+</span> g <span class="op">*</span> <span class="dv">6</span> <span class="op">+</span> b <span class="op">*</span> <span class="dv">36</span>) <span class="op">*</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">1</span>] <span class="op">=</span> g <span class="kw">as</span> <span class="dt">u8</span> <span class="op">*</span> <span class="dv">51</span><span class="op">;</span></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>				color_palette2[(r <span class="op">+</span> g <span class="op">*</span> <span class="dv">6</span> <span class="op">+</span> b <span class="op">*</span> <span class="dv">36</span>) <span class="op">*</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">2</span>] <span class="op">=</span> b <span class="kw">as</span> <span class="dt">u8</span> <span class="op">*</span> <span class="dv">51</span><span class="op">;</span></span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">216</span> <span class="op">{</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">216</span> <span class="op">{</span></span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span><span class="op">,</span> color_palette2[i <span class="op">*</span> <span class="dv">3</span>] <span class="op">/</span> <span class="dv">4</span>)<span class="op">;</span></span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span><span class="op">,</span> color_palette2[i <span class="op">*</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">1</span>] <span class="op">/</span> <span class="dv">4</span>)<span class="op">;</span></span>
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span><span class="op">,</span> color_palette2[i <span class="op">*</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">2</span>] <span class="op">/</span> <span class="dv">4</span>)<span class="op">;</span></span>
@@ -149,8 +152,8 @@
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">unsafe</span> <span class="op">{</span> _api_initmalloc() <span class="op">};</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> buf_addr <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> _api_malloc(<span class="dv">144</span> <span class="op">*</span> <span class="dv">164</span>) <span class="op">};</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> sheet_index <span class="op">=</span> open_window(buf_addr<span class="op">,</span> <span class="dv">144</span><span class="op">,</span> <span class="dv">164</span><span class="op">,</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="st">b&quot;color&quot;</span><span class="op">.</span>as_ptr() <span class="kw">as</span> <span class="dt">usize</span>)<span class="op">;</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">128</span> <span class="op">{</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">128</span> <span class="op">{</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">128</span> <span class="op">{</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">128</span> <span class="op">{</span></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> r <span class="op">=</span> x <span class="op">*</span> <span class="dv">2</span><span class="op">;</span></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> g <span class="op">=</span> y <span class="op">*</span> <span class="dv">2</span><span class="op">;</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> b <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
@@ -174,8 +177,8 @@
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">unsafe</span> <span class="op">{</span> _api_initmalloc() <span class="op">};</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> buf_addr <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> _api_malloc(<span class="dv">144</span> <span class="op">*</span> <span class="dv">164</span>) <span class="op">};</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> sheet_index <span class="op">=</span> open_window(buf_addr<span class="op">,</span> <span class="dv">144</span><span class="op">,</span> <span class="dv">164</span><span class="op">,</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="st">b&quot;color&quot;</span><span class="op">.</span>as_ptr() <span class="kw">as</span> <span class="dt">usize</span>)<span class="op">;</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">128</span> <span class="op">{</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">128</span> <span class="op">{</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">128</span> <span class="op">{</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">128</span> <span class="op">{</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> ptr <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>((buf_addr <span class="op">+</span> x <span class="op">+</span> <span class="dv">8</span> <span class="op">+</span> (y <span class="op">+</span> <span class="dv">28</span>) <span class="op">*</span> <span class="dv">144</span>) <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span>) <span class="op">};</span></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">*</span>ptr <span class="op">=</span> rgb2pal(x <span class="kw">as</span> <span class="dt">i32</span> <span class="op">*</span> <span class="dv">2</span><span class="op">,</span> y <span class="kw">as</span> <span class="dt">i32</span> <span class="op">*</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> x <span class="kw">as</span> <span class="dt">i32</span><span class="op">,</span> y <span class="kw">as</span> <span class="dt">i32</span>)<span class="op">;</span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
@@ -197,7 +200,7 @@
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>	<span class="kw">let</span> r <span class="op">=</span> (r <span class="op">+</span> i) <span class="op">/</span> <span class="dv">4</span><span class="op">;</span></span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>	<span class="kw">let</span> g <span class="op">=</span> (g <span class="op">+</span> i) <span class="op">/</span> <span class="dv">4</span><span class="op">;</span></span>
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>	<span class="kw">let</span> b <span class="op">=</span> (b <span class="op">+</span> i) <span class="op">/</span> <span class="dv">4</span><span class="op">;</span></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> (<span class="dv">16</span> <span class="op">+</span> r <span class="op">+</span> g <span class="op">*</span> <span class="dv">6</span> <span class="op">+</span> b <span class="op">*</span> <span class="dv">36</span>) <span class="kw">as</span> <span class="dt">u8</span><span class="op">;</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="dv">16</span> <span class="op">+</span> r <span class="op">+</span> g <span class="op">*</span> <span class="dv">6</span> <span class="op">+</span> b <span class="op">*</span> <span class="dv">36</span>) <span class="kw">as</span> <span class="dt">u8</span><span class="op">;</span></span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>実行結果は以下の通り。</p>
 <p><img src="../images/20190807/color2.png" class="blog-img img-responsive" alt="色の追加2" title="色の追加2" /></p>
@@ -215,7 +218,7 @@
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> console_bufs<span class="op">:</span> [<span class="dt">usize</span><span class="op">;</span> CONSOLE_COUNT] <span class="op">=</span> [<span class="dv">0</span><span class="op">;</span> CONSOLE_COUNT]<span class="op">;</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> console_tasks<span class="op">:</span> [<span class="dt">usize</span><span class="op">;</span> CONSOLE_COUNT] <span class="op">=</span> [<span class="dv">0</span><span class="op">;</span> CONSOLE_COUNT]<span class="op">;</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> ci <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>CONSOLE_COUNT <span class="op">{</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ci <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>CONSOLE_COUNT <span class="op">{</span></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 今までコンソール用に準備していたものを単純に置き換えていく</span></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        console_sheets[ci] <span class="op">=</span> sheet_manager<span class="op">.</span>alloc()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        console_bufs[ci] <span class="op">=</span> memman</span>

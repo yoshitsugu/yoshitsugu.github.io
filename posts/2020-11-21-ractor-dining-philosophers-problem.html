@@ -63,7 +63,7 @@ Ruby に Software Transactional Memory (STM) を入れようと思った話 を�
     <span class="date">Posted on 2020-11-21</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'Ruby'." href="../tags/Ruby.html">Ruby</a>, <a title="All pages tagged 'Ractor'." href="../tags/Ractor.html">Ractor</a>, <a title="All pages tagged 'STM'." href="../tags/STM.html">STM</a>, <a title="All pages tagged 'Ractor::TVar'." href="../tags/Ractor%3A%3ATVar.html">Ractor::TVar</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Ruby'." href="../tags/Ruby.html" rel="tag">Ruby</a>, <a title="All pages tagged 'Ractor'." href="../tags/Ractor.html" rel="tag">Ractor</a>, <a title="All pages tagged 'STM'." href="../tags/STM.html" rel="tag">STM</a>, <a title="All pages tagged 'Ractor::TVar'." href="../tags/Ractor%3A%3ATVar.html" rel="tag">Ractor::TVar</a></span>
     
 </div>
 
@@ -75,36 +75,36 @@ Ruby に Software Transactional Memory (STM) を入れようと思った話 を�
 <p>素直に悲観的ロックでこの問題を解くとデッドロックが発生する。Ractor を使って書くと以下のようになる。</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="vs">'securerandom'</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cn">NUM_OF_PHILOSOPHERS</span> <span class="kw">=</span> <span class="dv">5</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cn">NUM_OF_PHILOSOPHERS</span> <span class="op">=</span> <span class="dv">5</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Philosopher</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> initialize(name, left, right)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@name</span> <span class="kw">=</span> name</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@left</span> <span class="kw">=</span> left</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@right</span> <span class="kw">=</span> right</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@name</span> <span class="op">=</span> name</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@left</span> <span class="op">=</span> left</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@right</span> <span class="op">=</span> right</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> eat</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">puts</span> <span class="st">&quot;</span><span class="sc">#{</span><span class="ot">@name</span><span class="sc">}</span><span class="st"> eating...&quot;</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> <span class="dt">SecureRandom</span><span class="at">.random_number</span> <span class="kw">*</span> <span class="dv">5</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> <span class="dt">SecureRandom</span><span class="at">.random_number</span> <span class="op">*</span> <span class="dv">5</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> think</span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">puts</span> <span class="st">&quot;</span><span class="sc">#{</span><span class="ot">@name</span><span class="sc">}</span><span class="st"> thinking...&quot;</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> <span class="dt">SecureRandom</span><span class="at">.random_number</span> <span class="kw">*</span> <span class="dv">5</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> <span class="dt">SecureRandom</span><span class="at">.random_number</span> <span class="op">*</span> <span class="dv">5</span></span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> take_forks</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@left</span> <span class="kw">&lt;&lt;</span> <span class="wa">:lock</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@left</span> <span class="op">&lt;&lt;</span> <span class="wa">:lock</span></span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@left</span><span class="at">.take</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@right</span> <span class="kw">&lt;&lt;</span> <span class="wa">:lock</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@right</span> <span class="op">&lt;&lt;</span> <span class="wa">:lock</span></span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@right</span><span class="at">.take</span></span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> put_forks</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@right</span> <span class="kw">&lt;&lt;</span> <span class="wa">:unlock</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@right</span> <span class="op">&lt;&lt;</span> <span class="wa">:unlock</span></span>
 <span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@right</span><span class="at">.take</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@left</span> <span class="kw">&lt;&lt;</span> <span class="wa">:unlock</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@left</span> <span class="op">&lt;&lt;</span> <span class="wa">:unlock</span></span>
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@left</span><span class="at">.take</span></span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
@@ -118,11 +118,11 @@ Ruby に Software Transactional Memory (STM) を入れようと思った話 を�
 <span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
 <span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>forks <span class="kw">=</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="at">.times.map</span> <span class="cf">do</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>forks <span class="op">=</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="at">.times.map</span> <span class="cf">do</span></span>
 <span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mutexはshareableではないので、Ractorで包む</span></span>
 <span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Ractor</span><span class="at">.new</span> <span class="cf">do</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    mutex <span class="kw">=</span> <span class="dt">Mutex</span><span class="at">.new</span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> msg <span class="kw">=</span> <span class="dt">Ractor</span><span class="at">.receive</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    mutex <span class="op">=</span> <span class="dt">Mutex</span><span class="at">.new</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> msg <span class="op">=</span> <span class="dt">Ractor</span><span class="at">.receive</span></span>
 <span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> msg</span>
 <span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>      <span class="cf">when</span> <span class="wa">:lock</span></span>
 <span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>        mutex<span class="at">.lock</span></span>
@@ -135,12 +135,12 @@ Ruby に Software Transactional Memory (STM) を入れようと思った話 を�
 <span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
 <span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>rs <span class="kw">=</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="at">.times.map</span> <span class="cf">do</span> <span class="kw">|</span>i<span class="kw">|</span></span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Ractor</span><span class="at">.new</span>(<span class="st">&quot;philosopher </span><span class="sc">#{</span>i <span class="kw">+</span> <span class="dv">1</span><span class="sc">}</span><span class="st">&quot;</span>, forks<span class="kw">[</span>i <span class="kw">%</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="kw">]</span>, forks<span class="kw">[</span>(i <span class="kw">+</span> <span class="dv">1</span>) <span class="kw">%</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="kw">]</span>) <span class="cf">do</span> <span class="kw">|</span>n, l, r<span class="kw">|</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>rs <span class="op">=</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="at">.times.map</span> <span class="cf">do</span> <span class="op">|</span>i<span class="op">|</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Ractor</span><span class="at">.new</span>(<span class="st">&quot;philosopher </span><span class="sc">#{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="st">&quot;</span>, forks<span class="kw">[</span>i <span class="op">%</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="kw">]</span>, forks<span class="kw">[</span>(i <span class="op">+</span> <span class="dv">1</span>) <span class="op">%</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="kw">]</span>) <span class="cf">do</span> <span class="op">|</span>n, l, r<span class="op">|</span></span>
 <span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Philosopher</span><span class="at">.new</span>(n, l, r)<span class="at">.start</span></span>
 <span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="dt">Ractor</span><span class="at">.select</span>(<span class="kw">*</span>rs)</span></code></pre></div>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="dt">Ractor</span><span class="at">.select</span>(<span class="op">*</span>rs)</span></code></pre></div>
 <p>Mutex を包んだ Ractor を左と右のフォークとして哲学者に渡し、それぞれのロックが獲得できたなら、食事をする。という動きになっている。<br />
 これを実行すると以下のようにデッドロックが発生する。</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ruby <span class="at">--version</span></span>
@@ -167,7 +167,7 @@ ractor-tvar を使えば同じように実装できるのかやってみる。<b
 まずは Gemfile を作って、ractor-tvar をインストールしておく</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gemfile</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>source <span class="vs">'https://rubygems.org'</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>git_source(<span class="wa">:github</span>) <span class="kw">{</span> <span class="kw">|</span>repo<span class="kw">|</span> <span class="st">&quot;https://github.com/</span><span class="sc">#{</span>repo<span class="sc">}</span><span class="st">.git&quot;</span> <span class="kw">}</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>git_source(<span class="wa">:github</span>) <span class="op">{</span> <span class="op">|</span>repo<span class="op">|</span> <span class="st">&quot;https://github.com/</span><span class="sc">#{</span>repo<span class="sc">}</span><span class="st">.git&quot;</span> <span class="op">}</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>ruby <span class="vs">'3.0.0'</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
@@ -180,45 +180,45 @@ ractor-tvar を使えば同じように実装できるのかやってみる。<b
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="vs">'securerandom'</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="vs">'ractor/tvar'</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cn">NUM_OF_PHILOSOPHERS</span> <span class="kw">=</span> <span class="dv">5</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cn">NUM_OF_PHILOSOPHERS</span> <span class="op">=</span> <span class="dv">5</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Philosopher</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> initialize(name, left, right)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@name</span> <span class="kw">=</span> name</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@left</span> <span class="kw">=</span> left</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@right</span> <span class="kw">=</span> right</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@name</span> <span class="op">=</span> name</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@left</span> <span class="op">=</span> left</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@right</span> <span class="op">=</span> right</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> eat</span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">puts</span> <span class="st">&quot;</span><span class="sc">#{</span><span class="ot">@name</span><span class="sc">}</span><span class="st"> eating...&quot;</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> <span class="dt">SecureRandom</span><span class="at">.random_number</span> <span class="kw">*</span> <span class="dv">5</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> <span class="dt">SecureRandom</span><span class="at">.random_number</span> <span class="op">*</span> <span class="dv">5</span></span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> think</span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">puts</span> <span class="st">&quot;</span><span class="sc">#{</span><span class="ot">@name</span><span class="sc">}</span><span class="st"> thinking...&quot;</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> <span class="dt">SecureRandom</span><span class="at">.random_number</span> <span class="kw">*</span> <span class="dv">5</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> <span class="dt">SecureRandom</span><span class="at">.random_number</span> <span class="op">*</span> <span class="dv">5</span></span>
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> take_forks</span>
 <span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">loop</span> <span class="cf">do</span></span>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>      <span class="dt">Ractor</span><span class="at">.atomically</span> <span class="cf">do</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        <span class="ot">@left</span><span class="at">.value</span> <span class="kw">=</span> <span class="ot">@name</span><span class="at">.freeze</span> <span class="cf">if</span> <span class="ot">@left</span><span class="at">.value</span> <span class="kw">==</span> <span class="dv">nil</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        <span class="ot">@left</span><span class="at">.value</span> <span class="op">=</span> <span class="ot">@name</span><span class="at">.freeze</span> <span class="cf">if</span> <span class="ot">@left</span><span class="at">.value</span> <span class="op">==</span> <span class="dv">nil</span></span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>      <span class="cf">end</span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span> <span class="cf">if</span> <span class="ot">@left</span><span class="at">.value</span> <span class="kw">==</span> <span class="ot">@name</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span> <span class="cf">if</span> <span class="ot">@left</span><span class="at">.value</span> <span class="op">==</span> <span class="ot">@name</span></span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">loop</span> <span class="cf">do</span></span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>      <span class="dt">Ractor</span><span class="at">.atomically</span> <span class="cf">do</span></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>        <span class="ot">@right</span><span class="at">.value</span> <span class="kw">=</span> <span class="ot">@name</span><span class="at">.freeze</span> <span class="cf">if</span> <span class="ot">@right</span><span class="at">.value</span> <span class="kw">==</span> <span class="dv">nil</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>        <span class="ot">@right</span><span class="at">.value</span> <span class="op">=</span> <span class="ot">@name</span><span class="at">.freeze</span> <span class="cf">if</span> <span class="ot">@right</span><span class="at">.value</span> <span class="op">==</span> <span class="dv">nil</span></span>
 <span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>      <span class="cf">end</span></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span> <span class="cf">if</span> <span class="ot">@right</span><span class="at">.value</span> <span class="kw">==</span> <span class="ot">@name</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span> <span class="cf">if</span> <span class="ot">@right</span><span class="at">.value</span> <span class="op">==</span> <span class="ot">@name</span></span>
 <span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> put_forks</span>
 <span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Ractor</span><span class="at">.atomically</span> <span class="cf">do</span></span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@right</span><span class="at">.value</span> <span class="kw">=</span> <span class="dv">nil</span></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@left</span><span class="at">.value</span> <span class="kw">=</span> <span class="dv">nil</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@right</span><span class="at">.value</span> <span class="op">=</span> <span class="dv">nil</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@left</span><span class="at">.value</span> <span class="op">=</span> <span class="dv">nil</span></span>
 <span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
@@ -232,23 +232,24 @@ ractor-tvar を使えば同じように実装できるのかやってみる。<b
 <span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
 <span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>forks <span class="kw">=</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="at">.times.map</span> <span class="cf">do</span></span>
-<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Ractor</span><span class="kw">::</span><span class="dt">TVar</span><span class="at">.new</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>forks <span class="op">=</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="at">.times.map</span> <span class="cf">do</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Ractor</span><span class="op">::</span><span class="dt">TVar</span><span class="at">.new</span></span>
 <span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
 <span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>rs <span class="kw">=</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="at">.times.map</span> <span class="cf">do</span> <span class="kw">|</span>i<span class="kw">|</span></span>
-<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Ractor</span><span class="at">.new</span>(<span class="st">&quot;philosopher </span><span class="sc">#{</span>i <span class="kw">+</span> <span class="dv">1</span><span class="sc">}</span><span class="st">&quot;</span>, forks<span class="kw">[</span>i<span class="kw">]</span>, forks<span class="kw">[</span>(i <span class="kw">+</span> <span class="dv">1</span>) <span class="kw">%</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="kw">]</span>) <span class="cf">do</span> <span class="kw">|</span>n, l, r<span class="kw">|</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>rs <span class="op">=</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="at">.times.map</span> <span class="cf">do</span> <span class="op">|</span>i<span class="op">|</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Ractor</span><span class="at">.new</span>(<span class="st">&quot;philosopher </span><span class="sc">#{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="st">&quot;</span>, forks<span class="kw">[</span>i<span class="kw">]</span>, forks<span class="kw">[</span>(i <span class="op">+</span> <span class="dv">1</span>) <span class="op">%</span> <span class="cn">NUM_OF_PHILOSOPHERS</span><span class="kw">]</span>) <span class="cf">do</span> <span class="op">|</span>n, l, r<span class="op">|</span></span>
 <span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Philosopher</span><span class="at">.new</span>(n, l, r)<span class="at">.start</span></span>
 <span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="dt">Ractor</span><span class="at">.select</span>(<span class="kw">*</span>rs)</span></code></pre></div>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="dt">Ractor</span><span class="at">.select</span>(<span class="op">*</span>rs)</span></code></pre></div>
 <p>Ractor::TVar に自分の名前を入れることでロックの代わりとした。<br />
 これを実行してみると以下のように、デッドロックになることなく進むことが確認できた。</p>
 <p><img src="../images/20201121_stm.gif" class="blog-img img-responsive"></p>
 <p>(2020/11/27 追記) <code>Ractor::RetryTransaction</code> を使えばループいらないのではという指摘をいただいたので<a href="https://github.com/yoshitsugu/dining_philosophers_problem_ractor/commit/217014ad4b9405a5b57f6e172d71ae6ed1aff117">そのように修正</a>した。感謝。</p>
 <h2 id="まとめ">まとめ</h2>
-<p>STM を使うことで、食事する哲学者の問題のデッドロックを回避できた。 今回作ったコードは <a href="https://github.com/yoshitsugu/dining_philosophers_problem_ractor">yoshitsugu/dining_philosophers_problem_ractor</a> として GitHub に公開してある。</p>
+<p>STM を使うことで、食事する哲学者の問題のデッドロックを回避できた。
+今回作ったコードは <a href="https://github.com/yoshitsugu/dining_philosophers_problem_ractor">yoshitsugu/dining_philosophers_problem_ractor</a> として GitHub に公開してある。</p>
 
 <div class="social-buttons">
 <a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2020-11-21-ractor-dining-philosophers-problem.html" class="hatena-bookmark-button" data-hatena-bookmark-title="Ractorで「食事する哲学者の問題」を解く - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>

@@ -21,7 +21,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は15日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は15日目の内容。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。15日目 - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は15日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は15日目の内容。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,11 +63,12 @@
     <span class="date">Posted on 2019-07-04</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html" rel="tag">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html" rel="tag">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a></span>
     
 </div>
 
-<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は15日目の内容。 <!--more--></p>
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は15日目の内容。
+<!--more--></p>
 <h2 id="タスクのスイッチをする">タスクのスイッチをする</h2>
 <p>マルチタスクを目指して、まずは2つのタスクの切り替えを目指す。<br />
 そのために、まずはタスクの状態保持用のTSSを定義する。</p>
@@ -134,7 +137,7 @@
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    tss_b<span class="op">.</span>gs <span class="op">=</span> <span class="dv">1</span> <span class="op">*</span> <span class="dv">8</span><span class="op">;</span></span></code></pre></div>
 <p>また、10秒たったらタスクスイッチするように設定する。</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// lib.rs</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> i <span class="op">==</span> <span class="dv">10</span> <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> i <span class="op">==</span> <span class="dv">10</span> <span class="op">{</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">write_with_bg!</span>(</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        sheet_manager<span class="op">,</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        shi_bg<span class="op">,</span></span>
@@ -149,7 +152,7 @@
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;10[sec]&quot;</span></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    taskswitch(<span class="dv">4</span> <span class="op">*</span> <span class="dv">8</span>)<span class="op">;</span> <span class="co">// &lt;- 追加</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> i <span class="op">==</span> <span class="dv">3</span> <span class="op">{</span></span></code></pre></div>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> i <span class="op">==</span> <span class="dv">3</span> <span class="op">{</span></span></code></pre></div>
 <p><code>boot_b_main</code> は5秒経過で元のタスクに戻るように定義する。</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// lib.rs</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> task_b_main() <span class="op">{</span></span>
@@ -163,15 +166,15 @@
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> timer_indexB <span class="op">=</span> TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>alloc()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>init_timer(timer_indexB<span class="op">,</span> fifo_addr<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>set_time(timer_indexB<span class="op">,</span> <span class="dv">500</span>)<span class="op">;</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        cli()<span class="op">;</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> fifo<span class="op">.</span>status() <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> fifo<span class="op">.</span>status() <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            hlt()<span class="op">;</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> i <span class="op">=</span> fifo<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> i <span class="op">==</span> <span class="dv">1</span> <span class="op">{</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> i <span class="op">==</span> <span class="dv">1</span> <span class="op">{</span></span>
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>                <span class="co">// 5秒たったらharibote_os()に戻る            </span></span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>                taskswitch(<span class="dv">3</span> <span class="op">*</span> <span class="dv">8</span>)<span class="op">;</span></span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
@@ -240,9 +243,9 @@
 <span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>      SHEET_BG_ADDR <span class="op">=</span> shi_bg<span class="op">;</span></span>
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="co">// ...</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> i <span class="op">==</span> <span class="dv">2</span> <span class="op">{</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> i <span class="op">==</span> <span class="dv">2</span> <span class="op">{</span></span>
 <span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>                farjmp(<span class="dv">0</span><span class="op">,</span> <span class="dv">4</span> <span class="op">*</span> <span class="dv">8</span>)<span class="op">;</span></span>
 <span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>                TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>set_time(timer_index_ts<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
 <span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
@@ -277,18 +280,18 @@
 <span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>set_time(timer_index_sp<span class="op">,</span> <span class="dv">800</span>)<span class="op">;</span></span>
 <span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>        count <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>        cli()<span class="op">;</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> fifo<span class="op">.</span>status() <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> fifo<span class="op">.</span>status() <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> i <span class="op">=</span> fifo<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> i <span class="op">==</span> <span class="dv">2</span> <span class="op">{</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> i <span class="op">==</span> <span class="dv">2</span> <span class="op">{</span></span>
 <span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>                farjmp(<span class="dv">0</span><span class="op">,</span> <span class="dv">3</span> <span class="op">*</span> <span class="dv">8</span>)<span class="op">;</span></span>
 <span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>                TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>set_time(timer_index_ts<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> i <span class="op">==</span> <span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> i <span class="op">==</span> <span class="dv">8</span> <span class="op">{</span></span>
 <span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>                <span class="pp">write_with_bg!</span>(</span>
 <span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>                    sheet_manager<span class="op">,</span></span>
 <span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>                    shi_bg<span class="op">,</span></span>
@@ -311,7 +314,8 @@
 また、カーソルの点滅も見たところ特に違和感なく点滅していた。</p>
 <p><img src="../images/20190704/task_b.png" class="blog-img img-responsive" alt="タスクの高速スイッチ結果" title="タスクの高速スイッチ結果" /></p>
 <h2 id="暗黙的にタスクのスイッチをする">暗黙的にタスクのスイッチをする。</h2>
-<p>これまでは<code>haribote_os()</code>や<code>task_b_main()</code>で明示的に切り替えを行っていたが、暗黙的にタスクのスイッチができるようにする。 <code>tss.rs</code>を<code>mt.rs</code>に名前を変え、こちらに暗黙的な切り替え用の処理を書いていく。</p>
+<p>これまでは<code>haribote_os()</code>や<code>task_b_main()</code>で明示的に切り替えを行っていたが、暗黙的にタスクのスイッチができるようにする。
+<code>tss.rs</code>を<code>mt.rs</code>に名前を変え、こちらに暗黙的な切り替え用の処理を書いていく。</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// lib.rs</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">crate</span><span class="pp">::timer::</span>TIMER_MANAGER<span class="op">;</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -327,13 +331,13 @@
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> mt_taskswitch() <span class="op">{</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">unsafe</span> <span class="op">{</span> MT_TR <span class="op">}</span> <span class="op">==</span> <span class="dv">3</span> <span class="op">*</span> <span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">unsafe</span> <span class="op">{</span> MT_TR <span class="op">}</span> <span class="op">==</span> <span class="dv">3</span> <span class="op">*</span> <span class="dv">8</span> <span class="op">{</span></span>
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">unsafe</span> <span class="op">{</span></span>
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>            MT_TR <span class="op">=</span> <span class="dv">4</span> <span class="op">*</span> <span class="dv">8</span><span class="op">;</span></span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>        TIMER_MANAGER<span class="op">.</span>lock()<span class="op">.</span>set_time(<span class="kw">unsafe</span> <span class="op">{</span> MT_TIMER_INDEX <span class="op">},</span> <span class="dv">2</span>)<span class="op">;</span></span>
 <span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>        <span class="kw">crate</span><span class="pp">::asm::</span>farjmp(<span class="dv">0</span><span class="op">,</span> <span class="dv">4</span> <span class="op">*</span> <span class="dv">8</span>)<span class="op">;</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>        <span class="kw">unsafe</span> <span class="op">{</span></span>
 <span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>            MT_TR <span class="op">=</span> <span class="dv">3</span> <span class="op">*</span> <span class="dv">8</span><span class="op">;</span></span>
 <span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
@@ -349,31 +353,31 @@
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    out8(PIC0_OCW2<span class="op">,</span> <span class="dv">0x60</span>)<span class="op">;</span> <span class="co">// IRQ-00受付完了をPICに通知</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> tm <span class="op">=</span> TIMER_MANAGER<span class="op">.</span>lock()<span class="op">;</span></span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    tm<span class="op">.</span>count <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> tm<span class="op">.</span>next_tick <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> tm<span class="op">.</span>next_tick <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> timer_index <span class="op">=</span> tm<span class="op">.</span>t0<span class="op">;</span></span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> need_taskswitch <span class="op">=</span> <span class="cn">false</span><span class="op">;</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> t_index <span class="op">=</span> timer_index<span class="op">.</span>unwrap()<span class="op">;</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> tm<span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>            <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> tm<span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout <span class="op">&gt;</span> tm<span class="op">.</span>count <span class="op">{</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> timer <span class="op">=</span> <span class="op">&amp;</span><span class="kw">mut</span> tm<span class="op">.</span>timers_data[t_index]<span class="op">;</span></span>
 <span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        timer<span class="op">.</span>flag <span class="op">=</span> <span class="pp">TimerFlag::</span>USED<span class="op">;</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> t_index <span class="op">!=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="kw">crate</span><span class="pp">::mt::</span>MT_TIMER_INDEX <span class="op">}</span> <span class="op">{</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> t_index <span class="op">!=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="kw">crate</span><span class="pp">::mt::</span>MT_TIMER_INDEX <span class="op">}</span> <span class="op">{</span></span>
 <span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> fifo <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>(timer<span class="op">.</span>fifo_addr <span class="kw">as</span> <span class="op">*</span><span class="kw">mut</span> Fifo) <span class="op">};</span></span>
 <span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>            fifo<span class="op">.</span>put(timer<span class="op">.</span>data <span class="kw">as</span> <span class="dt">u32</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>            need_taskswitch <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
 <span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>        timer_index <span class="op">=</span> timer<span class="op">.</span>next<span class="op">;</span></span>
 <span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    tm<span class="op">.</span>t0 <span class="op">=</span> timer_index<span class="op">;</span></span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(t_index) <span class="op">=</span> timer_index <span class="op">{</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(t_index) <span class="op">=</span> timer_index <span class="op">{</span></span>
 <span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>        tm<span class="op">.</span>next_tick <span class="op">=</span> tm<span class="op">.</span>timers_data[t_index]<span class="op">.</span>timeout<span class="op">;</span></span>
 <span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> need_taskswitch <span class="op">{</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> need_taskswitch <span class="op">{</span></span>
 <span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>        <span class="kw">unsafe</span> <span class="op">{</span> NEED_SWITCH <span class="op">=</span> <span class="cn">true</span> <span class="op">};</span></span>
 <span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
@@ -397,7 +401,7 @@
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="st">                      MOV DS,AX</span></span>
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="st">                      MOV ES,AX&quot;</span> <span class="op">:</span> <span class="op">:</span> <span class="op">:</span> <span class="op">:</span> <span class="st">&quot;intel&quot;</span><span class="op">,</span> <span class="st">&quot;volatile&quot;</span>)<span class="op">;</span></span>
 <span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>                <span class="pp">asm!</span>(<span class="st">&quot;CALL $0&quot;</span> <span class="op">:</span> <span class="op">:</span> <span class="st">&quot;r&quot;</span>(<span class="op">$</span>name <span class="kw">as</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span>()) <span class="op">:</span> <span class="op">:</span> <span class="st">&quot;intel&quot;</span>)<span class="op">;</span></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span>  NEED_SWITCH <span class="op">{</span> <span class="co">// タスクスイッチの分岐を追加</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span>  NEED_SWITCH <span class="op">{</span> <span class="co">// タスクスイッチの分岐を追加</span></span>
 <span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>                    NEED_SWITCH <span class="op">=</span> <span class="cn">false</span><span class="op">;</span></span>
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>                    mt_taskswitch()<span class="op">;</span></span>
 <span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>

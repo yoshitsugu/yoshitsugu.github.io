@@ -61,7 +61,7 @@
     <span class="date">Posted on 2018-02-01</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'Haskell'." href="../tags/Haskell.html">Haskell</a>, <a title="All pages tagged 'TravisCI'." href="../tags/TravisCI.html">TravisCI</a>, <a title="All pages tagged 'Hakyll'." href="../tags/Hakyll.html">Hakyll</a>, <a title="All pages tagged 'Docker'." href="../tags/Docker.html">Docker</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Haskell'." href="../tags/Haskell.html" rel="tag">Haskell</a>, <a title="All pages tagged 'TravisCI'." href="../tags/TravisCI.html" rel="tag">TravisCI</a>, <a title="All pages tagged 'Hakyll'." href="../tags/Hakyll.html" rel="tag">Hakyll</a>, <a title="All pages tagged 'Docker'." href="../tags/Docker.html" rel="tag">Docker</a></span>
     
 </div>
 
@@ -88,7 +88,8 @@ TravisCIで行っているデプロイ手順としては以下のようになっ
 <h2 id="デプロイ用docker-imageの作成">デプロイ用Docker imageの作成</h2>
 <ul>
 <li>ライブラリをいろいろインストールするのが面倒だったので <code>buildpack-deps:jessie</code> から作るようにした</li>
-<li>リポジトリを一個作って、Docker HubでAutomated Buildされるようにした。 <a href="https://github.com/yoshitsugu/yoshitsugu.github.io-deployer-docker">yoshitsugu/yoshitsugu.github.io-deployer-docker</a></li>
+<li>リポジトリを一個作って、Docker HubでAutomated Buildされるようにした。
+<a href="https://github.com/yoshitsugu/yoshitsugu.github.io-deployer-docker">yoshitsugu/yoshitsugu.github.io-deployer-docker</a></li>
 </ul>
 <h2 id="travis.yml-の修正">.travis.yml の修正</h2>
 <p>不要なライブラリを消去してinstall部分も以下のように修正した。</p>
@@ -110,11 +111,17 @@ TravisCIで行っているデプロイ手順としては以下のようになっ
 <ul>
 <li>以前
 <div>
-<img src="../images/20180201/old.png" title="fig:" alt="以前" />
+<figure>
+<img src="../images/20180201/old.png" alt="以前" />
+<figcaption aria-hidden="true">以前</figcaption>
+</figure>
 </div></li>
 <li>現在
 <div>
-<img src="../images/20180201/new.png" title="fig:" alt="現在" />
+<figure>
+<img src="../images/20180201/new.png" alt="現在" />
+<figcaption aria-hidden="true">現在</figcaption>
+</figure>
 </div>
 速くなった</li>
 </ul>

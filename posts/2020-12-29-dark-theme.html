@@ -63,7 +63,7 @@
     <span class="date">Posted on 2020-12-29</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'Dark Theme'." href="../tags/Dark%20Theme.html">Dark Theme</a>, <a title="All pages tagged 'Dark Mode'." href="../tags/Dark%20Mode.html">Dark Mode</a>, <a title="All pages tagged 'Hakyll'." href="../tags/Hakyll.html">Hakyll</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Dark Theme'." href="../tags/Dark%20Theme.html" rel="tag">Dark Theme</a>, <a title="All pages tagged 'Dark Mode'." href="../tags/Dark%20Mode.html" rel="tag">Dark Mode</a>, <a title="All pages tagged 'Hakyll'." href="../tags/Hakyll.html" rel="tag">Hakyll</a></span>
     
 </div>
 
@@ -76,28 +76,28 @@
 <p>基本的には <code>@media (prefers-color-scheme: dark)</code> のメディアクエリを使って対応した。<br />
 CSS のカスタムプロパティを使って、まとめて色だけ宣言できるようにした。</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode css"><code class="sourceCode css"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">:root</span> {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">--background-color</span>: <span class="cn">#fff</span><span class="op">;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">--color</span>: <span class="cn">#222</span><span class="op">;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="va">--main-color</span>: <span class="cn">#237dac</span><span class="op">;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">--link-active-color</span>: <span class="cn">#2d3e4a</span><span class="op">;</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="va">--menu-link-color</span>: <span class="cn">#555</span><span class="op">;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="va">--menu-link-background-color</span>: <span class="cn">#eee</span><span class="op">;</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="va">--muted-color</span>: <span class="cn">#999</span><span class="op">;</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="va">--code-border-color</span>: <span class="cn">#e1e4e8</span><span class="op">;</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="va">--code-background-color</span>: <span class="cn">#fafbfc</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">--background-color</span><span class="ch">:</span> <span class="cn">#fff</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">--color</span><span class="ch">:</span> <span class="cn">#222</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="va">--main-color</span><span class="ch">:</span> <span class="cn">#237dac</span><span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">--link-active-color</span><span class="ch">:</span> <span class="cn">#2d3e4a</span><span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="va">--menu-link-color</span><span class="ch">:</span> <span class="cn">#555</span><span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="va">--menu-link-background-color</span><span class="ch">:</span> <span class="cn">#eee</span><span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="va">--muted-color</span><span class="ch">:</span> <span class="cn">#999</span><span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="va">--code-border-color</span><span class="ch">:</span> <span class="cn">#e1e4e8</span><span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="va">--code-background-color</span><span class="ch">:</span> <span class="cn">#fafbfc</span><span class="op">;</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">@media</span> (<span class="kw">prefers-color-scheme</span>: dark) {</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">@media</span> <span class="fu">(</span><span class="kw">prefers-color-scheme</span><span class="ch">:</span> <span class="dv">dark</span><span class="fu">)</span> {</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="in">:root</span> {</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="va">--background-color</span>: <span class="fu">rgb(</span><span class="dv">21</span><span class="op">,</span> <span class="dv">32</span><span class="op">,</span> <span class="dv">43</span><span class="fu">)</span><span class="op">;</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="va">--color</span>: <span class="cn">#fff</span><span class="op">;</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="va">--main-color</span>: <span class="cn">#35b8ff</span><span class="op">;</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="va">--link-active-color</span>: <span class="cn">#8cb3d3</span><span class="op">;</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="va">--menu-link-color</span>: <span class="cn">#eee</span><span class="op">;</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="va">--menu-link-background-color</span>: <span class="fu">rgb(</span><span class="dv">28</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">59</span><span class="fu">)</span><span class="op">;</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="va">--muted-color</span>: <span class="cn">#ddd</span><span class="op">;</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="va">--code-border-color</span>: <span class="cn">#444444</span><span class="op">;</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="va">--code-background-color</span>: <span class="fu">rgb(</span><span class="dv">31</span><span class="op">,</span> <span class="dv">31</span><span class="op">,</span> <span class="dv">31</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="va">--background-color</span><span class="ch">:</span> <span class="fu">rgb(</span><span class="dv">21</span><span class="op">,</span> <span class="dv">32</span><span class="op">,</span> <span class="dv">43</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="va">--color</span><span class="ch">:</span> <span class="cn">#fff</span><span class="op">;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="va">--main-color</span><span class="ch">:</span> <span class="cn">#35b8ff</span><span class="op">;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="va">--link-active-color</span><span class="ch">:</span> <span class="cn">#8cb3d3</span><span class="op">;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="va">--menu-link-color</span><span class="ch">:</span> <span class="cn">#eee</span><span class="op">;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="va">--menu-link-background-color</span><span class="ch">:</span> <span class="fu">rgb(</span><span class="dv">28</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">59</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="va">--muted-color</span><span class="ch">:</span> <span class="cn">#ddd</span><span class="op">;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="va">--code-border-color</span><span class="ch">:</span> <span class="cn">#444444</span><span class="op">;</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="va">--code-background-color</span><span class="ch">:</span> <span class="fu">rgb(</span><span class="dv">31</span><span class="op">,</span> <span class="dv">31</span><span class="op">,</span> <span class="dv">31</span><span class="fu">)</span><span class="op">;</span></span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>シンタックスハイライト部分は <a href="https://github.com/jgm/skylighting">Skylighting</a>というライブラリを使っており、細かい対応が面倒だったので、Hakyll でハイライト用の CSS を生成する際、メディアクエリつきの CSS を後ろにくっつけるようにした。</p>

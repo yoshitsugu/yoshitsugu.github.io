@@ -21,7 +21,8 @@
     
 
 
-3日目 の続きとなる。 " />
+3日目 の続きとなる。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。4日目 - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-3日目 の続きとなる。 " />
+3日目 の続きとなる。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,11 +63,13 @@
     <span class="date">Posted on 2019-06-05</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html" rel="tag">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html" rel="tag">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a></span>
     
 </div>
 
-<p><a href="../posts/2019-06-04-haribote-os-in-rust-day3.html">3日目</a> の続きとなる。 <!--more--> 「30日でできる！OS自作入門」の本に沿ってすすめる。</p>
+<p><a href="../posts/2019-06-04-haribote-os-in-rust-day3.html">3日目</a> の続きとなる。
+<!--more-->
+「30日でできる！OS自作入門」の本に沿ってすすめる。</p>
 <h2 id="色をかえる">色をかえる</h2>
 <p>前回、白一色での出力だったが、本に沿っていろいろな色が表示されるように変更する。</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// lib.rs</span></span>
@@ -78,10 +82,10 @@
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>no_mangle<span class="at">]</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>start<span class="at">]</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">-&gt;</span> <span class="op">!</span> <span class="op">{</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0xa000</span><span class="op">..</span><span class="dv">0xaffff</span> <span class="op">{</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0xa000</span><span class="op">..</span><span class="dv">0xaffff</span> <span class="op">{</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      show_color(i)<span class="op">;</span> <span class="co">// &lt;- 呼出側も変更</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        hlt()</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
@@ -97,10 +101,10 @@
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>start<span class="at">]</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">-&gt;</span> <span class="op">!</span> <span class="op">{</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="pp">vga::</span>set_palette()<span class="op">;</span> <span class="co">// &lt;- 追加</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0xa000</span><span class="op">..</span><span class="dv">0xaffff</span> <span class="op">{</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0xa000</span><span class="op">..</span><span class="dv">0xaffff</span> <span class="op">{</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      show_white(i)<span class="op">;</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        hlt()</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
@@ -162,7 +166,7 @@ Rustでのうまい方法が思いつかず、結局 <code>asm!</code> マクロ
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> eflags <span class="op">=</span> <span class="pp">asm::</span>load_eflags()<span class="op">;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="pp">asm::</span>cli()<span class="op">;</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="pp">asm::</span>out8(<span class="dv">0x03c8</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">15</span> <span class="op">{</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">15</span> <span class="op">{</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 書き込むときは上位2ビットを0にしないといけない。See: http://oswiki.osask.jp/?VGA#o2d4bfd3</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span><span class="op">,</span> COLOR_PALETTE[i][<span class="dv">0</span>] <span class="op">&gt;&gt;</span> <span class="dv">2</span>)<span class="op">;</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="pp">asm::</span>out8(<span class="dv">0x03c9</span><span class="op">,</span> COLOR_PALETTE[i][<span class="dv">1</span>] <span class="op">&gt;&gt;</span> <span class="dv">2</span>)<span class="op">;</span></span>
@@ -178,8 +182,8 @@ Rustでのうまい方法が思いつかず、結局 <code>asm!</code> マクロ
 <p>四角を描画するための関数を定義する。</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// vga.rs</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> boxfill8(ptr<span class="op">:</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span><span class="op">,</span> offset<span class="op">:</span> <span class="dt">isize</span><span class="op">,</span> color<span class="op">:</span> Color<span class="op">,</span> x0<span class="op">:</span> <span class="dt">isize</span><span class="op">,</span> y0<span class="op">:</span> <span class="dt">isize</span><span class="op">,</span> x1<span class="op">:</span> <span class="dt">isize</span><span class="op">,</span> y1<span class="op">:</span> <span class="dt">isize</span>) <span class="op">{</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> y <span class="kw">in</span> y0<span class="op">..=</span>y1 <span class="op">{</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> x <span class="kw">in</span> x0<span class="op">..=</span>x1 <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> y <span class="kw">in</span> y0<span class="op">..=</span>y1 <span class="op">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x <span class="kw">in</span> x0<span class="op">..=</span>x1 <span class="op">{</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> ptr <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="op">*</span>(ptr<span class="op">.</span>offset(y <span class="op">*</span> offset <span class="op">+</span> x)) <span class="op">};</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="op">*</span>ptr <span class="op">=</span> color <span class="kw">as</span> <span class="dt">u8</span><span class="op">;</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
@@ -240,7 +244,7 @@ Rustでのうまい方法が思いつかず、結局 <code>asm!</code> マクロ
 <span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">-&gt;</span> <span class="op">!</span> <span class="op">{</span></span>
 <span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    <span class="pp">vga::</span>set_palette()<span class="op">;</span></span>
 <span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    render_boxes()<span class="op">;</span>  <span class="co">// &lt;- 変更</span></span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        hlt()</span>
 <span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>

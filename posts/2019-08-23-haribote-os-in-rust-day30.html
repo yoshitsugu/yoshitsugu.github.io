@@ -21,7 +21,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回で最後となる。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回で最後となる。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。30日目 - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回で最後となる。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回で最後となる。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,11 +63,12 @@
     <span class="date">Posted on 2019-08-23</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html" rel="tag">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html" rel="tag">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a></span>
     
 </div>
 
-<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回で最後となる。 <!--more--></p>
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回で最後となる。
+<!--more--></p>
 <p>アプリケーションを作っていく。特にソースを載せてもあまり意味がなさそうなので、ソースは載せず、概要と実行結果だけにとどめる。</p>
 <h2 id="数値演算をする">数値演算をする</h2>
 <p>簡単な数値演算プログラムを作る。<br />
@@ -85,16 +88,17 @@
 <p><img src="../images/20190823/gview.gif" class="blog-img img-responsive" alt="画像ビューワ" title="画像ビューワ" /></p>
 <p>30日目は以上となる。ここまでの内容のコードは<a href="https://github.com/yoshitsugu/hariboteos_in_rust/tree/day30">yoshitsugu/hariboteos_in_rustのday30</a>としてタグを打ってある。</p>
 <h2 id="感想など">感想など</h2>
-<p>ここまでで本の内容で実装したいものは実装できたので一旦終了とする。 折角なので、感想も書いておく。</p>
+<p>ここまでで本の内容で実装したいものは実装できたので一旦終了とする。
+折角なので、感想も書いておく。</p>
 <p>自分はあまりOSなどいわゆる低レイヤーと呼ばれるような部分について詳しくなく、もう少し詳しくなりたい、という思いからこの本を読みはじめた。そういう意味では、かなり勉強になったと思う。今の最新のOSはそもそもブートがUEFIになっていたり、メモリ管理にはセグメンテーションではなくページングが必須になっていたり<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>とかなり違うようだが、エッセンスを学ぶにはよかったように思う。</p>
 <p>また、勉強中のRustで書いたため、余計時間がかかった部分もあったが、デバッグ時のエラーメッセージや、所有権の仕組みによるメモリ汚染の防止など、Rustの洗練されている部分の恩恵もかなり受けられたのではないかと思う。<br />
 とはいえ、本のCのコードをそのまま翻訳したような<code>unsafe</code>なコードばかり書いてしまったのでそこはもう少しやり方を変えてもよかったかもしれない。</p>
 <p>最後に、3ヶ月近くかかってしまったが、楽しくすすめられたのでよかったと思う。</p>
 <p><img src="../images/20190823/haribote.png" class="blog-img img-responsive" /></p>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p><a href="https://docs.google.com/presentation/d/1mbLk70RKi-ExLzb78WosCu5DujpQN2K7B9iSbUGRXq4/mobilepresent">こちらのスライド</a> が現代のOSの差分を知るのにちょうどよかった。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p><a href="https://docs.google.com/presentation/d/1mbLk70RKi-ExLzb78WosCu5DujpQN2K7B9iSbUGRXq4/mobilepresent">こちらのスライド</a> が現代のOSの差分を知るのにちょうどよかった。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

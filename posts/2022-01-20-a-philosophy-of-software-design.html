@@ -63,7 +63,7 @@ A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout
     <span class="date">Posted on 2022-01-20</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'Software Design'." href="../tags/Software%20Design.html">Software Design</a>, <a title="All pages tagged 'Book Review'." href="../tags/Book%20Review.html">Book Review</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Software Design'." href="../tags/Software%20Design.html" rel="tag">Software Design</a>, <a title="All pages tagged 'Book Review'." href="../tags/Book%20Review.html" rel="tag">Book Review</a></span>
     
 </div>
 
@@ -77,7 +77,9 @@ e34.fmでも言及されていたDeep Module, Shallow Moduleの話をはじめ�
 <h3 id="complexityとは">complexityとは？</h3>
 <p>システムのcomplexity <span class="math inline"><em>C</em></span> を以下のように定義しているところが興味深い。</p>
 <p>\[ C = _{p} c_p t_p \]</p>
-<p>ここで <span class="math inline"><em>p</em></span> はシステムのある部分、 <span class="math inline"><em>c</em><sub><em>p</em></sub></span> がその部分のcomplexity、 <span class="math inline"><em>t</em><sub><em>p</em></sub></span> が開発者がその部分に費している時間の割合だ。 つまり、読んだり改修したりするのに時間がかかる部分ほど複雑、ということのようだ。 単純に時間でいいのか？という疑問も湧いたが、代案と呼べるほどのものは思いつかなかった。</p>
+<p>ここで <span class="math inline"><em>p</em></span> はシステムのある部分、 <span class="math inline"><em>c</em><sub><em>p</em></sub></span> がその部分のcomplexity、 <span class="math inline"><em>t</em><sub><em>p</em></sub></span> が開発者がその部分に費している時間の割合だ。
+つまり、読んだり改修したりするのに時間がかかる部分ほど複雑、ということのようだ。
+単純に時間でいいのか？という疑問も湧いたが、代案と呼べるほどのものは思いつかなかった。</p>
 <h3 id="complexityの原因とは">complexityの原因とは？</h3>
 <p>以上のようにcomplexityを定義したあと、 “dependencies”(依存関係) と “obscurity”(不明瞭さ) の2点がcomplexityの原因となると述べられていた。</p>
 <h3 id="対策とは">対策とは？</h3>
@@ -92,14 +94,15 @@ e34.fmでも言及されていたDeep Module, Shallow Moduleの話をはじめ�
 ざっくり言うと「高凝集・疎結合」の反対、と言い換えることもできるだろう。また、DDDにおける「ドメインモデル貧血症」もこのInformation Leakageと似た話だと認識している。<br />
 また、よく使われる「decoratorパターン」についても著者は導入前によく検討すべきだと書いていた。Ruby on Railsアプリケーションを書いているとview用のロジックをmodelに書くのではなく、decoratorなどにまとめるべき、という話がよくあるが、その切り分けは自明ではないことも多い。そのため、あとからview以外の他の箇所でも使いたくなることがある。自分も最近はむやみに切り分けず、ある程度fat modelを許容してmodelにまとめるほうが結局いいのではないか、と思っている。もちろんこの辺りはアプリケーションの規模やコンテキストに依るところも大きいだろう。</p>
 <h3 id="コメントについて">コメントについて</h3>
-<p>コード中のコメントは忌避されることも多い。「コードを読めばいいからコメントは不要」という話を聞くこともある(し、自分も言ったことがあると思う)。この本ではコメントは基本的に書くべきもの、と位置づけていて、「コードを読めばいいからコメントは不要」などの言説についても反論を書いていて興味深かった。 もちろん無闇にコメントを書けばいいわけではなく、コードと重複するようなコメントはやはり不要で、もっと抽象的な部分、例えばその実装に至った意図や背景の説明に使うように書いてある。</p>
+<p>コード中のコメントは忌避されることも多い。「コードを読めばいいからコメントは不要」という話を聞くこともある(し、自分も言ったことがあると思う)。この本ではコメントは基本的に書くべきもの、と位置づけていて、「コードを読めばいいからコメントは不要」などの言説についても反論を書いていて興味深かった。
+もちろん無闇にコメントを書けばいいわけではなく、コードと重複するようなコメントはやはり不要で、もっと抽象的な部分、例えばその実装に至った意図や背景の説明に使うように書いてある。</p>
 <h2 id="まとめ">まとめ</h2>
 <p>DRY原則への配慮やlinterからの指摘により「コードの見た目を整える」意味での形だけのコード整理をしてしまっている、というのをときどき見かける。とりあえず目の前のタスクを倒すコードを書き出す前に一回立ち止まって、strategicなdesignのコードになっているか？deepなクラス、モジュールを作れているか？を自問してみてるといいかもしれない。全体像の把握が難しければ、ある程度書いたあとに、Design It Twiceの精神でstrategicに最初からコードを書き直すとどうなるか？を考えてみてもいいかもしれない。</p>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p><a href="https://speakerdeck.com/twada/quality-and-speed-2020-autumn-edition">質とスピード（2020秋100分拡大版）</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p><a href="https://ky-yk-d.hatenablog.com/entry/2022/01/04/100000">ソフトウェアの複雑さに立ち向かう1つの哲学 :『A Philosophy of Software Design』 を読んだ - こまぶろ</a> 等<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p><a href="https://speakerdeck.com/twada/quality-and-speed-2020-autumn-edition">質とスピード（2020秋100分拡大版）</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://ky-yk-d.hatenablog.com/entry/2022/01/04/100000">ソフトウェアの複雑さに立ち向かう1つの哲学 :『A Philosophy of Software Design』 を読んだ - こまぶろ</a> 等<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

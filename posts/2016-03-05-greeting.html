@@ -21,7 +21,8 @@
     
 
 
-そろそろブログくらいさくっとつくれるようになるか、と思い立ち、Hakyllでブログをつくってみた。 ブログのセットアップしながらHaskellもさわれてよい感じである。" />
+そろそろブログくらいさくっとつくれるようになるか、と思い立ち、Hakyllでブログをつくってみた。
+ブログのセットアップしながらHaskellもさわれてよい感じである。" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="ブログをつくってみた - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-そろそろブログくらいさくっとつくれるようになるか、と思い立ち、Hakyllでブログをつくってみた。 ブログのセットアップしながらHaskellもさわれてよい感じである。" />
+そろそろブログくらいさくっとつくれるようになるか、と思い立ち、Hakyllでブログをつくってみた。
+ブログのセットアップしながらHaskellもさわれてよい感じである。" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,12 +63,17 @@
     <span class="date">Posted on 2016-03-05</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'Haskell'." href="../tags/Haskell.html">Haskell</a>, <a title="All pages tagged 'Travis'." href="../tags/Travis.html">Travis</a>, <a title="All pages tagged 'Hakyll'." href="../tags/Hakyll.html">Hakyll</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Haskell'." href="../tags/Haskell.html" rel="tag">Haskell</a>, <a title="All pages tagged 'Travis'." href="../tags/Travis.html" rel="tag">Travis</a>, <a title="All pages tagged 'Hakyll'." href="../tags/Hakyll.html" rel="tag">Hakyll</a></span>
     
 </div>
 
-<p>そろそろブログくらいさくっとつくれるようになるか、と思い立ち、Hakyllでブログをつくってみた。 ブログのセットアップしながらHaskellもさわれてよい感じである。<!--more--><br />
-あまりアウトプットは得意ではないが、これからがんばってやっていきたい。 主に技術的なことをぼちぼちと書いていくことができればと考えている。 考えていたが、技術的なこと縛りにするとネタがなくなりそうなので、なんでも書くことにする。 なんでも書くことにするとなんにも書かなくなりそうな気もする。 世の中のブログを書く人はどういうモチベーションで書いているのだろうか。</p>
+<p>そろそろブログくらいさくっとつくれるようになるか、と思い立ち、Hakyllでブログをつくってみた。
+ブログのセットアップしながらHaskellもさわれてよい感じである。<!--more--><br />
+あまりアウトプットは得意ではないが、これからがんばってやっていきたい。
+主に技術的なことをぼちぼちと書いていくことができればと考えている。
+考えていたが、技術的なこと縛りにするとネタがなくなりそうなので、なんでも書くことにする。
+なんでも書くことにするとなんにも書かなくなりそうな気もする。
+世の中のブログを書く人はどういうモチベーションで書いているのだろうか。</p>
 <h2 id="やったこと">やったこと</h2>
 <h3 id="template作成">1. template作成</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack new blog hakyll-template</span></code></pre></div>
@@ -88,7 +95,8 @@
 <h3 id="github-pageとして公開できるようにgit-submodule-.travis.ymlの設定">4. github pageとして公開できるようにgit submodule, .travis.ymlの設定</h3>
 <p>これが結構大変だった。git submoduleをつかったことがなく、よくわからないので調べながらすすめた。</p>
 <h3 id="独自ドメインで運用">5. 独自ドメインで運用</h3>
-<p>github上でCNAMEの設定と、CloudFlareでDNSの設定をした。 CNAME Flattingを使っているが、CNAME Flattingについてよくわかってないので、あとで確認する。</p>
+<p>github上でCNAMEの設定と、CloudFlareでDNSの設定をした。
+CNAME Flattingを使っているが、CNAME Flattingについてよくわかってないので、あとで確認する。</p>
 <h2 id="疑問点">疑問点</h2>
 <p>markdownで記事をかいているのだが、リンクを別タブでひらかせる方法がわからない。外部リンクは<code>target="_blank"</code>にしないとなんとなく気持ち悪いのだけど、どうしたらいいんだろうか。とりあえずaタグ直書きしている。不便。</p>
 <h2 id="参考にしたブログなど">参考にしたブログなど</h2>

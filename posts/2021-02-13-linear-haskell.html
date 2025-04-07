@@ -63,7 +63,7 @@
     <span class="date">Posted on 2021-02-13</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'Linear Haskell'." href="../tags/Linear%20Haskell.html">Linear Haskell</a>, <a title="All pages tagged 'Haskell'." href="../tags/Haskell.html">Haskell</a>, <a title="All pages tagged 'LinearTypes'." href="../tags/LinearTypes.html">LinearTypes</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Linear Haskell'." href="../tags/Linear%20Haskell.html" rel="tag">Linear Haskell</a>, <a title="All pages tagged 'Haskell'." href="../tags/Haskell.html" rel="tag">Haskell</a>, <a title="All pages tagged 'LinearTypes'." href="../tags/LinearTypes.html" rel="tag">LinearTypes</a></span>
     
 </div>
 
@@ -106,7 +106,8 @@
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span></span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="ex">10</span> <span class="kw">|</span> <span class="ex">tuple2</span> a b = <span class="er">(</span><span class="ex">a,</span> a<span class="kw">)</span></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span>          <span class="ex">^</span></span></code></pre></div>
-<p>tuple1はコンパイル可能だが、tuple2は2箇所でエラーとなる。 エラー内容はそれぞれ</p>
+<p>tuple1はコンパイル可能だが、tuple2は2箇所でエラーとなる。
+エラー内容はそれぞれ</p>
 <ul>
 <li>a はLinear Typeなのに2回評価されているのでエラー</li>
 <li>b はLinear Typeなのに1回も評価されていないのでエラー</li>
@@ -150,7 +151,8 @@
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ot">write ::</span> <span class="dt">MArray</span> a <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, a) <span class="ot">-&gt;</span> <span class="dt">MArray</span> a</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ot">freeze ::</span> <span class="dt">MArray</span> a <span class="op">%</span><span class="dv">1</span> <span class="ot">-&gt;</span> <span class="dt">Unrestricted</span> (<span class="dt">Array</span> a)</span></code></pre></div>
 <p>ここで、 <code>read</code> や <code>write</code> はLinear Typeになっているので1度しかMArrayを評価できない。ただ、返り値としてMArrayを返すので、論理的には新しい <code>MArray</code> ということになり、 <code>read</code> と <code>write</code> をつなげて書くことができる。<br />
-<code>freeze</code> は引数を消費して、 <code>Unrestricted (Array a)</code> としてimmutableなArrayを返している。そのため、これ以上 <code>MArray</code> として <code>read</code> や <code>write</code> ができない。 <code>Unrestricted</code> というのはLinear Typeの制限を受けない値として扱うことを意味する。つまり何度でも評価されるかもしれないし、1度も評価されないかもしれない。 <code>Array</code> 自体はimmutableなので <code>Unrestricted</code> でも安全、ということだろう。<br />
+<code>freeze</code> は引数を消費して、 <code>Unrestricted (Array a)</code> としてimmutableなArrayを返している。そのため、これ以上 <code>MArray</code> として <code>read</code> や <code>write</code> ができない。
+<code>Unrestricted</code> というのはLinear Typeの制限を受けない値として扱うことを意味する。つまり何度でも評価されるかもしれないし、1度も評価されないかもしれない。 <code>Array</code> 自体はimmutableなので <code>Unrestricted</code> でも安全、ということだろう。<br />
 この <strong>「関数は引数を消費する。その後の関数でも続けて消費できる場合は論理的に新しい値として返す」</strong> という流れがLinear Typeでの安全性保証の肝になっているようだ。</p>
 <h3 id="外部リソースアクセスの安全性">外部リソースアクセスの安全性</h3>
 <p>Linear Typeを使ったファイルアクセスについても見ておく。</p>

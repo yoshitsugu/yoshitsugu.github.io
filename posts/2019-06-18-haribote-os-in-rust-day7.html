@@ -21,7 +21,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は7日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は7日目の内容。
+" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@_yoshitsugu" />
         <meta name="twitter:title" content="「30日でできる！OS自作入門」をRustで。7日目 - TSUGULOG" />
@@ -34,7 +35,8 @@
     
 
 
-「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は7日目の内容。 " />
+「30日でできる！OS自作入門 」のC言語の部分をできるだけRustですすめてみる。今回は7日目の内容。
+" />
         <link rel="stylesheet" href="../css/pure-min.css">
         <link rel="stylesheet" href="../css/grids-responsive-min.css">
         <link rel="stylesheet" href="../css/blog.css">
@@ -61,11 +63,12 @@
     <span class="date">Posted on 2019-06-18</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html">Rust</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'OS自作入門'." href="../tags/OS%E8%87%AA%E4%BD%9C%E5%85%A5%E9%96%80.html" rel="tag">OS自作入門</a>, <a title="All pages tagged 'OS'." href="../tags/OS.html" rel="tag">OS</a>, <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a></span>
     
 </div>
 
-<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は7日目の内容。 <!--more--></p>
+<p><a href="https://book.mynavi.jp/supportsite/detail/4839919844.html">「30日でできる！OS自作入門 」</a>のC言語の部分をできるだけRustですすめてみる。今回は7日目の内容。
+<!--more--></p>
 <h2 id="linker-scriptのバグの修正">linker scriptのバグの修正</h2>
 <p><a href="../posts/2019-06-13-haribote-os-in-rust-day6.html">前回</a>の記事で、<code>lazy_static</code>が使えないことに触れた。いろいろと調べた結果、kernel.ldにバグがあったことがわかった。</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>/* 省略 */</span>
@@ -112,29 +115,29 @@
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> put(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> data<span class="op">:</span> <span class="dt">u8</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">,</span> <span class="op">&amp;</span><span class="ot">'static</span> <span class="dt">str</span><span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>free<span class="op">.</span>get() <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>free<span class="op">.</span>get() <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>flags<span class="op">.</span>set(<span class="kw">self</span><span class="op">.</span>flags<span class="op">.</span>get() <span class="op">|</span> FLAGS_OVERRUN)<span class="op">;</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span> <span class="cn">Err</span>(<span class="st">&quot;FLAGS_OVERRUN ERROR&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="cn">Err</span>(<span class="st">&quot;FLAGS_OVERRUN ERROR&quot;</span>)<span class="op">;</span></span>
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span></span>
 <span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> buf <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>buf<span class="op">.</span>borrow_mut()<span class="op">;</span></span>
 <span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>            buf[<span class="kw">self</span><span class="op">.</span>p<span class="op">.</span>get() <span class="kw">as</span> <span class="dt">usize</span>] <span class="op">=</span> data<span class="op">;</span></span>
 <span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>p<span class="op">.</span>set(<span class="kw">self</span><span class="op">.</span>p<span class="op">.</span>get() <span class="op">+</span> <span class="dv">1</span>)<span class="op">;</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>p<span class="op">.</span>get() <span class="op">==</span> <span class="kw">self</span><span class="op">.</span>size <span class="op">{</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>p<span class="op">.</span>get() <span class="op">==</span> <span class="kw">self</span><span class="op">.</span>size <span class="op">{</span></span>
 <span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>p<span class="op">.</span>set(<span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>free<span class="op">.</span>set(<span class="kw">self</span><span class="op">.</span>free<span class="op">.</span>get() <span class="op">-</span> <span class="dv">1</span>)<span class="op">;</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="cn">Ok</span>(())<span class="op">;</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="cn">Ok</span>(())<span class="op">;</span></span>
 <span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> get(<span class="op">&amp;</span><span class="kw">self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">u8</span><span class="op">,</span> <span class="op">&amp;</span><span class="ot">'static</span> <span class="dt">str</span><span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>free<span class="op">.</span>get() <span class="op">==</span> <span class="kw">self</span><span class="op">.</span>size <span class="op">{</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span> <span class="cn">Err</span>(<span class="st">&quot;NO DATA&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>free<span class="op">.</span>get() <span class="op">==</span> <span class="kw">self</span><span class="op">.</span>size <span class="op">{</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="cn">Err</span>(<span class="st">&quot;NO DATA&quot;</span>)<span class="op">;</span></span>
 <span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> data <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>buf<span class="op">.</span>borrow()[<span class="kw">self</span><span class="op">.</span>q<span class="op">.</span>get() <span class="kw">as</span> <span class="dt">usize</span>]<span class="op">;</span></span>
 <span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>q<span class="op">.</span>set(<span class="kw">self</span><span class="op">.</span>q<span class="op">.</span>get() <span class="op">+</span> <span class="dv">1</span>)<span class="op">;</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>q<span class="op">.</span>get() <span class="op">==</span> <span class="kw">self</span><span class="op">.</span>size <span class="op">{</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>q<span class="op">.</span>get() <span class="op">==</span> <span class="kw">self</span><span class="op">.</span>size <span class="op">{</span></span>
 <span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>q<span class="op">.</span>set(<span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>free<span class="op">.</span>set(<span class="kw">self</span><span class="op">.</span>free<span class="op">.</span>get() <span class="op">+</span> <span class="dv">1</span>)<span class="op">;</span></span>
@@ -183,11 +186,11 @@
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="pp">interrupt::</span>allow_input()<span class="op">;</span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> screen <span class="op">=</span> <span class="pp">Screen::</span>new()<span class="op">;</span></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    screen<span class="op">.</span>init()<span class="op">;</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        cli()<span class="op">;</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> KEYBUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> KEYBUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>            stihlt()<span class="op">;</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> key <span class="op">=</span> KEYBUF<span class="op">.</span>lock()<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            (<span class="pp">Screen::</span>new())<span class="op">.</span>boxfill8(<span class="pp">Color::</span>DarkCyan<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">16</span><span class="op">,</span> <span class="dv">16</span>)<span class="op">;</span></span>
@@ -205,12 +208,12 @@
 <div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">//interrupt.rs</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> wait_kbc_sendready() <span class="op">{</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// キーボードコントローラがデータ送信可能になるのを待つ</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">loop</span> <span class="op">{</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> (in8(PORT_KEYSTA) <span class="op">&amp;</span> KEYSTA_SEND_NOTREADY) <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">loop</span> <span class="op">{</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (in8(PORT_KEYSTA) <span class="op">&amp;</span> KEYSTA_SEND_NOTREADY) <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> init_keyboard() <span class="op">{</span></span>
@@ -252,21 +255,21 @@
 <p>さらに、キーボードの場合と同様、ループで画面に表示する処理を追加する</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">extern</span> <span class="st">&quot;C&quot;</span> <span class="kw">fn</span> haribote_os() <span class="op">{</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 省略</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">loop</span> <span class="op">{</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        cli()<span class="op">;</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> KEYBUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> KEYBUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> key <span class="op">=</span> KEYBUF<span class="op">.</span>lock()<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>            (<span class="pp">Screen::</span>new())<span class="op">.</span>boxfill8(<span class="pp">Color::</span>DarkCyan<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">16</span><span class="op">,</span> <span class="dv">16</span>)<span class="op">;</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span> <span class="pp">ScreenWriter::</span>new(<span class="pp">Screen::</span>new()<span class="op">,</span> <span class="pp">vga::Color::</span>White<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            <span class="pp">write!</span>(writer<span class="op">,</span> <span class="st">&quot;{:x}&quot;</span><span class="op">,</span> key)<span class="op">.</span>unwrap()<span class="op">;</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> MOUSEBUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> MOUSEBUF<span class="op">.</span>lock()<span class="op">.</span>status() <span class="op">!=</span> <span class="dv">0</span> <span class="op">{</span></span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> i <span class="op">=</span> MOUSEBUF<span class="op">.</span>lock()<span class="op">.</span>get()<span class="op">.</span>unwrap()<span class="op">;</span></span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>            sti()<span class="op">;</span></span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>            (<span class="pp">Screen::</span>new())<span class="op">.</span>boxfill8(<span class="pp">Color::</span>DarkCyan<span class="op">,</span> <span class="dv">32</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">48</span><span class="op">,</span> <span class="dv">16</span>)<span class="op">;</span></span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> writer <span class="op">=</span> <span class="pp">ScreenWriter::</span>new(<span class="pp">Screen::</span>new()<span class="op">,</span> <span class="pp">vga::Color::</span>White<span class="op">,</span> <span class="dv">32</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>            <span class="pp">write!</span>(writer<span class="op">,</span> <span class="st">&quot;{:x}&quot;</span><span class="op">,</span> i)<span class="op">.</span>unwrap()<span class="op">;</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>            stihlt()<span class="op">;</span></span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>

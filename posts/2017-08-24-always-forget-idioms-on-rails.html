@@ -61,7 +61,7 @@ Ruby on Rails is the great web application framework. I usually use it in the cu
     <span class="date">Posted on 2017-08-24</span>
     
     
-    <span class="tags">, Tags: <a title="All pages tagged 'Ruby on Rails'." href="../tags/Ruby%20on%20Rails.html">Ruby on Rails</a></span>
+    <span class="tags">, Tags: <a title="All pages tagged 'Ruby on Rails'." href="../tags/Ruby%20on%20Rails.html" rel="tag">Ruby on Rails</a></span>
     
 </div>
 
@@ -70,7 +70,7 @@ Ruby on Rails is the great web application framework. I usually use it in the cu
 <h3 id="idiom">Idiom</h3>
 <p><code>ApplicationController.helpers.(helper name)</code></p>
 <h3 id="example">Example</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Post</span> <span class="kw">&lt;</span> <span class="dt">ApplicationRecord</span></span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Post</span> <span class="op">&lt;</span> <span class="dt">ApplicationRecord</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> title_asterisk</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">ApplicationController</span><span class="at">.helpers.with_asterisk</span>(title)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
@@ -79,7 +79,7 @@ Ruby on Rails is the great web application framework. I usually use it in the cu
 <h3 id="idiom-1">Idiom</h3>
 <p><code>Rails.application.routes.url_helpers.(routing helper name)</code></p>
 <h3 id="example-1">Example</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Post</span> <span class="kw">&lt;</span> <span class="dt">ApplicationRecord</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Post</span> <span class="op">&lt;</span> <span class="dt">ApplicationRecord</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> new_or_edit_path</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> persisted?</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">Rails</span><span class="at">.application.routes.url_helpers.new_post_path</span></span>
@@ -92,9 +92,9 @@ Ruby on Rails is the great web application framework. I usually use it in the cu
 <h3 id="idiom-2">Idiom</h3>
 <p><code>model.assign_attributes(attributes)</code></p>
 <h3 id="example-2">Example</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">PostController</span> <span class="kw">&lt;</span> <span class="dt">ApplicationController</span></span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">PostController</span> <span class="op">&lt;</span> <span class="dt">ApplicationController</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> update</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    post <span class="kw">=</span> <span class="dt">Post</span><span class="at">.find</span>(params<span class="kw">[</span><span class="wa">:id</span><span class="kw">]</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    post <span class="op">=</span> <span class="dt">Post</span><span class="at">.find</span>(params<span class="kw">[</span><span class="wa">:id</span><span class="kw">]</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    post<span class="at">.assign_attributes</span>(post_params)</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    post<span class="at">.save!</span> <span class="cf">if</span> post<span class="at">.valid?</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    redirect_to posts_path</span>
@@ -106,23 +106,23 @@ Ruby on Rails is the great web application framework. I usually use it in the cu
 <h3 id="example-3">Example</h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">PostImageUpdater</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> execute</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">ActiveRecord</span><span class="kw">::</span><span class="dt">Base</span><span class="at">.record_timestamps</span> <span class="kw">=</span> <span class="dv">false</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Post</span><span class="at">.all.find_each</span> <span class="cf">do</span> <span class="kw">|</span>post<span class="kw">|</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      post<span class="at">.image</span> <span class="kw">=</span> get_updated_image(post)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">ActiveRecord</span><span class="op">::</span><span class="dt">Base</span><span class="at">.record_timestamps</span> <span class="op">=</span> <span class="dv">false</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Post</span><span class="at">.all.find_each</span> <span class="cf">do</span> <span class="op">|</span>post<span class="op">|</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      post<span class="at">.image</span> <span class="op">=</span> get_updated_image(post)</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">ActiveRecord</span><span class="kw">::</span><span class="dt">Base</span><span class="at">.record_timestamps</span> <span class="kw">=</span> <span class="dv">true</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">ActiveRecord</span><span class="op">::</span><span class="dt">Base</span><span class="at">.record_timestamps</span> <span class="op">=</span> <span class="dv">true</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 <h2 id="basic-auth">5. Basic Auth</h2>
 <h3 id="idiom-4">Idiom</h3>
 <p><code>authenticate_or_request_with_http_basic(realm = "Application", &amp;login_procedure)</code></p>
 <h3 id="example-4">Example</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">WithBasicAuthController</span> <span class="kw">&lt;</span> <span class="dt">ApplicationController</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">WithBasicAuthController</span> <span class="op">&lt;</span> <span class="dt">ApplicationController</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  before_action <span class="wa">:basic_auth</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> basic_auth</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    authenticate_or_request_with_http_basic(<span class="st">&quot;Application&quot;</span>) <span class="cf">do</span> <span class="kw">|</span>name, password<span class="kw">|</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      name <span class="kw">==</span> <span class="cn">ENV</span><span class="kw">[</span><span class="vs">'BASIC_AUTH_NAME'</span><span class="kw">]</span> <span class="kw">&amp;&amp;</span> password <span class="kw">==</span> <span class="cn">ENV</span><span class="kw">[</span><span class="vs">'BASIC_AUTH_PASSWORD'</span><span class="kw">]</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    authenticate_or_request_with_http_basic(<span class="st">&quot;Application&quot;</span>) <span class="cf">do</span> <span class="op">|</span>name, password<span class="op">|</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      name <span class="op">==</span> <span class="cn">ENV</span><span class="kw">[</span><span class="vs">'BASIC_AUTH_NAME'</span><span class="kw">]</span> <span class="op">&amp;&amp;</span> password <span class="op">==</span> <span class="cn">ENV</span><span class="kw">[</span><span class="vs">'BASIC_AUTH_PASSWORD'</span><span class="kw">]</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
