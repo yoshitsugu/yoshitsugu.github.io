@@ -7,8 +7,25 @@
         <description><![CDATA[yoshitsugu's blog]]></description>
         <atom:link href="https://yoshitsugu.net/rss" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Fri, 24 Feb 2023 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Wed, 09 Apr 2025 00:00:00 UT</lastBuildDate>
         <item>
+    <title>Rustのメモリオーダリングについて</title>
+    <link>https://yoshitsugu.net/posts/2025-04-09-memory-barrier.html</link>
+    <description><![CDATA[
+    Posted on 2025-04-09
+    
+    
+    , Tags: Rust, Memory Ordering
+    
+
+
+最近業務でRustを使っており、再入門のため、Rust for Rustaceans を読んでいる。メモリオーダリングまわりについて自分用にまとめておく。
+]]></description>
+    <pubDate>Wed, 09 Apr 2025 00:00:00 UT</pubDate>
+    <guid>https://yoshitsugu.net/posts/2025-04-09-memory-barrier.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+<item>
     <title>産廃業界向けSaaSのスタートアップで働きはじめた</title>
     <link>https://yoshitsugu.net/posts/2023-02-24-change-job-fanfare.html</link>
     <description><![CDATA[
@@ -159,23 +176,6 @@ Software Transactional Memory(STM) の論文を読んだので、メモを公開
 ]]></description>
     <pubDate>Tue, 22 Dec 2020 00:00:00 UT</pubDate>
     <guid>https://yoshitsugu.net/posts/2020-12-22-stm-paper.html</guid>
-    <dc:creator>Kota Yoshitsugu</dc:creator>
-</item>
-<item>
-    <title>Ractor::TMVarを作った</title>
-    <link>https://yoshitsugu.net/posts/2020-11-30-ractor-tmvar.html</link>
-    <description><![CDATA[
-    Posted on 2020-11-30
-    
-    
-    , Tags: Ractor, Ractor::TMVar, Ractor::TVar, STM
-    
-
-
-Ractor::TVar に対応する TMVar がほしくなったので作った
-]]></description>
-    <pubDate>Mon, 30 Nov 2020 00:00:00 UT</pubDate>
-    <guid>https://yoshitsugu.net/posts/2020-11-30-ractor-tmvar.html</guid>
     <dc:creator>Kota Yoshitsugu</dc:creator>
 </item>
 

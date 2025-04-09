@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>Rustのメモリオーダリングについて - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="Rustのメモリオーダリングについて - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2025-04-09-memory-barrier.html" />
+        <meta property="og:description" content="
+    Posted on 2025-04-09
+    
+    
+    , Tags: Rust, Memory Ordering
+    
+
+
+最近業務でRustを使っており、再入門のため、Rust for Rustaceans を読んでいる。メモリオーダリングまわりについて自分用にまとめておく。
+" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="Rustのメモリオーダリングについて - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="
+    Posted on 2025-04-09
+    
+    
+    , Tags: Rust, Memory Ordering
+    
+
+
+最近業務でRustを使っており、再入門のため、Rust for Rustaceans を読んでいる。メモリオーダリングまわりについて自分用にまとめておく。
+" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>Rustのメモリオーダリングについて</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on 2025-04-09</span>
+    
+    
+    <span class="tags">, Tags: <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a>, <a title="All pages tagged 'Memory Ordering'." href="../tags/Memory%20Ordering.html" rel="tag">Memory Ordering</a></span>
+    
+</div>
+
+<p>最近業務でRustを使っており、再入門のため、<a href="https://rust-for-rustaceans.com/">Rust for Rustaceans</a> を読んでいる。メモリオーダリングまわりについて自分用にまとめておく。</p>
+<!--more-->
+<h2 id="メモリオーダリングとは何か">メモリオーダリングとは何か</h2>
+<p>実行速度の最適化のために、CPUでの実行時にはコードに書かれた順番で実行されないことがある。
+例として、Rust for Rustaceansに載っているものとして以下<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>がある。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">static</span> X<span class="op">:</span> AtomicBool <span class="op">=</span> <span class="pp">AtomicBool::</span>new(<span class="cn">false</span>)<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">static</span> Y<span class="op">:</span> AtomicBool <span class="op">=</span> <span class="pp">AtomicBool::</span>new(<span class="cn">false</span>)<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> t1 <span class="op">=</span> spawn(<span class="op">||</span> <span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> r1 <span class="op">=</span> Y<span class="op">.</span>load(<span class="pp">Ordering::</span>Relaxed)<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  X<span class="op">.</span>store(r1<span class="op">,</span> <span class="pp">Ordering::</span>Relaxed)<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> t2 <span class="op">=</span> spawn(<span class="op">||</span> <span class="op">{</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> r2 <span class="op">=</span> X<span class="op">.</span>load(<span class="pp">Ordering::</span>Relaxed)<span class="op">;</span> <span class="co">// 1</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  Y<span class="op">.</span>store(<span class="cn">true</span><span class="op">,</span> <span class="pp">Ordering::</span>Relaxed)<span class="op">;</span>   <span class="co">// 2</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>)<span class="op">;</span></span></code></pre></div>
+<p>ここでの <code>r2</code> はtrueになることがなさそうに見えるが、CPUの最適化により、1より2のほうが先に実行されることがあり、その結果、<code>r2</code> がtrueになり得る、とのことだ。<br>
+このような人間の直感とは違う実行順になると、シングルスレッドの素直なプログラミングなら問題ないものの、マルチスレッドで値を共有するような場合は問題になる(ことがある)。そのため、ある場面ではCPUが実行する順序を制御したくなる。これがメモリオーダリングの役割だ。上記コード中の <code>Ordering::Relaxed</code> もメモリオーダリングの一種であり、「何も制御しない」メモリオーダリングをあらわす。つまり、CPUが実行に最適と判断したら、コード上の見掛けの実行順を無視してよい、ということだ。</p>
+<h2 id="rustにおけるメモリオーダリング">Rustにおけるメモリオーダリング</h2>
+<p>Rustにおいて、メモリオーダリングは以下のenumとして定義されている。<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>non_exhaustive<span class="at">]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> Ordering <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    Relaxed<span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    Release<span class="op">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    Acquire<span class="op">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    AcqRel<span class="op">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    SeqCst<span class="op">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><code>Relaxed</code> は上記の通り、何も制御しない。</p>
+<h2 id="relase-acquire-acqrel">Relase, Acquire, AcqRel</h2>
+<ul>
+<li><code>Ordering::Release</code>
+<ul>
+<li>storeと共に使われ、これより後に書かれたloadやstoreがこれより先に移動されることはないようになる</li>
+</ul></li>
+<li><code>Ordering::Acquire</code>
+<ul>
+<li>loadと共に使われ、これより先に書かれたloadやstoreがこれより後に移動されることはないようになる</li>
+</ul></li>
+<li><code>Ordering::AcqReq</code>
+<ul>
+<li><code>Ordering::Release</code>と <code>Ordering::Acquire</code>の効果を同時に得る</li>
+</ul></li>
+</ul>
+<p>つまり、先ほどの例を</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">static</span> X<span class="op">:</span> AtomicBool <span class="op">=</span> <span class="pp">AtomicBool::</span>new(<span class="cn">false</span>)<span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">static</span> Y<span class="op">:</span> AtomicBool <span class="op">=</span> <span class="pp">AtomicBool::</span>new(<span class="cn">false</span>)<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> t1 <span class="op">=</span> spawn(<span class="op">||</span> <span class="op">{</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> r1 <span class="op">=</span> Y<span class="op">.</span>load(<span class="pp">Ordering::</span>Acquire)<span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  X<span class="op">.</span>store(r1<span class="op">,</span> <span class="pp">Ordering::</span>Release)<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> t2 <span class="op">=</span> spawn(<span class="op">||</span> <span class="op">{</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> r2 <span class="op">=</span> X<span class="op">.</span>load(<span class="pp">Ordering::</span>Acquire)<span class="op">;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  Y<span class="op">.</span>store(<span class="cn">true</span><span class="op">,</span> <span class="pp">Ordering::</span>Release)<span class="op">;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>)<span class="op">;</span></span></code></pre></div>
+<p>のように書き換えれば、前述の問題は起きないことになる。</p>
+<h2 id="seqcst">SeqCst</h2>
+<p>これで安心かと思いきや、まだ問題がある。あまり本にある内容を繰り返してもしょうがないので、詳しくはRust for Rustaceansを読んでもらえればと思うが、おおまかには以下の通りである。</p>
+<ul>
+<li>4つのスレッドが同時に動くとする</li>
+<li>最初の2つで書き込み(スレッドA, Bとする)、後の2つで読み込み(スレッドC, Dとする)をする</li>
+<li>CではAのあとBが実行されたように見え、DではBのあとAが実行されたように見える、という状況がありえる</li>
+</ul>
+<p>というものだ。 <code>Ordering::SeqCst</code> (Sequentially Consistent Ordering)はこれを常に一貫した順序で見えるように制御する。</p>
+<h2 id="rust以外でのメモリオーダリング">Rust以外でのメモリオーダリング</h2>
+<p>ところで、Rust以外でも同等の仕組みはある。上述の <code>enum Ordering</code> のドキュメントにも</p>
+<blockquote>
+<p>Rust’s memory orderings are the same as those of C++20.</p>
+</blockquote>
+<p>との記載がある通り、C++でも同じようなものがあるようだ。<br>
+また、<a href="https://www.amazon.co.jp/dp/4798155039">低レベルプログラミング</a> という書籍によると、これらを「メモリバリア」と呼び、GCCでの実装例を紹介している。書籍内での説明<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>では、</p>
+<blockquote>
+<p><strong>acquire操作</strong><br>
+これは、acquireセマンティクスと呼ばれるプロパティを持つ処理のことだ。ある処理が共有メモリからの読み込みを実行するとき、ソースコードでそれに続くリードとライトとの順序が変更されない保証があれば、その処理は、このプロパティを持つ。
+言い換えると、この操作に続くコードが、これより前に実行されるように並び替えられることはない、という点で、全般的なメモリバリアと似ている</p>
+</blockquote>
+<p>とあり、<code>Ordering::Acquire</code> と同じような説明がなされていることがわかる。同様にrelease操作もある。</p>
+<h2 id="atomic-typesが提供する他のメソッド">atomic typesが提供する他のメソッド</h2>
+<p>Rustの話にもどす。<br>
+Rustのatomic typesが提供するメソッドは他にもある。ここでは詳しくは触れないが、</p>
+<ul>
+<li><code>compare_exchange</code> : 条件つきで値を入れ替える操作をatomicにできる</li>
+<li><code>fetch_add</code> : 数値のインクリメントをatomicにできる</li>
+</ul>
+<p>などがある。並行、並列処理で共有する値を扱うときはこれらのメソッドが必要ないかも検討するとよさそうだ。</p>
+<h2 id="いつこれらのメモリオーダリングやメソッドを使うか">いつこれらのメモリオーダリングやメソッドを使うか</h2>
+<p>速度向上のメリットをとって実行順序が直感的にならないリスクをとるか、意図しない値が書き込まれたり読み込まれたりするリスクを減らし、その分実行速度が落ちることを許容するか、という点はトレードオフがある。
+Rust for Rustaceansにはどのように考えるべきかも書かれている。具体的には、以下の3つの点があげられている。</p>
+<ol type="1">
+<li><p>シンプルにスタートする(Start Simple)</p></li>
+<li><p>ストレステストを書く(Write Stress Test)</p></li>
+<li><p>並行テストのためのツールを使う(Use Concurrency Testing Tools)</p></li>
+</ol>
+<p>1について補足すると、 <code>Ordering::SeqCst</code> などの「シンプルな」(おそらくここではコードを読んで理解する素朴な実行順序に近いものがシンプルと表現されている)ものをまず使うようにする。その後計測してボトルネックとなるところを最適化していく。という流れが推奨されている。</p>
+<p>自分の業務でここまでのことを考えることがあるかどうかは不明だが、このあたりは頭に起きつつ、実装をすすめていきたい。</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Rust for Rustaceans, Chapter 10, Listing 10-2<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://doc.rust-lang.org/std/sync/atomic/enum.Ordering.html">https://doc.rust-lang.org/std/sync/atomic/enum.Ordering.html</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>低レベルプログラミング, 17章マルチスレッド, 17.7 メモリバリア<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2025-04-09-memory-barrier.html" class="hatena-bookmark-button" data-hatena-bookmark-title="Rustのメモリオーダリングについて - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+        </footer>
+        
+      </div>
+    </body>
+</html>
