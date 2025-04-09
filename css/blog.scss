@@ -254,6 +254,11 @@ body {
         max-width: 100%;
       }
     }
+    blockquote {
+      margin: 10px 0px;
+      padding: 5px 40px;
+      border: 1px var(--muted-color) solid;
+    }
   }
   .social-buttons {
     margin-top: 20px;
