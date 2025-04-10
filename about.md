@@ -3,10 +3,11 @@ title: About Me
 ---
 
 Kota Yoshitsugu (吉次 孝太)  
-Web Engineer in Iwate, Japan.
+Web Engineer based in Iwate, Japan.
 
-Working with Ruby / Ruby on Rails, Vue.js / React.js, and so on  
-Learning Haskell and Rust
+Mainly Working with mainly Ruby / Ruby on Rails, and Rust.  
+Also use Vue.js / React.js / plain JavaScript and TypeScript occasionally.  
+Exploring Haskell
 
 GitHub: <a href="https://github.com/yoshitsugu" target="_blank">yoshitsugu</a>  
-Twitter: <a href="https://twitter.com/_yoshitsugu" target="_blank">@\_yoshitsugu</a>
+Twitter: <a href="https://twitter.com/_yoshitsugu" target="_blank">@\_yoshitsugu</a> (inactive)
