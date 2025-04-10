@@ -268,7 +268,8 @@ body {
   }
   #footer {
     bottom: 0;
-    height: 5em;
+    height: 5.5em;
+    line-height: 1.3rem;
     position: absolute;
     margin-top: 1em;
     width: 100%;
@@ -281,6 +282,11 @@ body {
       &:visited {
         color: var(--muted-color);
       }
+    }
+    .privacy {
+      margin: 0 auto;
+      font-size: 0.7rem;
+      width: 60%;
     }
   }
 }
