@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>Alpine.jsがそれなりによい、という話 - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="Alpine.jsがそれなりによい、という話 - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2025-05-21-alpine-js.html" />
+        <meta property="og:description" content="
+    Posted on 2025-05-21
+    
+    
+    , Tags: Alpine.js, JavaScript
+    
+
+
+業務でAlpine.jsを使いはじめたので所感などを書いておく。
+" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="Alpine.jsがそれなりによい、という話 - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="
+    Posted on 2025-05-21
+    
+    
+    , Tags: Alpine.js, JavaScript
+    
+
+
+業務でAlpine.jsを使いはじめたので所感などを書いておく。
+" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>Alpine.jsがそれなりによい、という話</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on 2025-05-21</span>
+    
+    
+    <span class="tags">, Tags: <a title="All pages tagged 'Alpine.js'." href="../tags/Alpine.js.html" rel="tag">Alpine.js</a>, <a title="All pages tagged 'JavaScript'." href="../tags/JavaScript.html" rel="tag">JavaScript</a></span>
+    
+</div>
+
+<p>業務で<a href="https://alpinejs.dev/">Alpine.js</a>を使いはじめたので所感などを書いておく。</p>
+<!--more-->
+<p><a href="../posts/2025-04-09-memory-barrier.html">前回の記事</a>で、業務でRustを使いはじめたと書いたが、引き続きRuby on Railsのアプリケーションも触っている。とあるプロダクトで、Alpine.jsを使ってみている。</p>
+<h2 id="コンテキスト">コンテキスト</h2>
+<p>以下の前提がある。</p>
+<ul>
+<li>Ruby on Railsのアプリケーション</li>
+<li>まだProduct Market Fitを探している段階で、変更が常に発生する</li>
+<li>業務アプリケーションで、C向けではない</li>
+</ul>
+<p>以上より、初期的にはJSについてはフレームワークを導入せず、Ruby on Railsの通常のviewのレンダリングを使って、素朴なJavaScriptだけで実装してきた。むしろ、それで済むように仕様側を調整しつつ対応してきた。
+<br>
+ただ、顧客の要件が見えてくるにつれて、フォームがリッチになってきており、たとえば、あるフォーム群を「種別」をあらわすセレクトボックスの内容できりかえる、などの実装も増えてきた。そうなると素朴なJavaScriptの手続き的なコードではだいぶつらくなってくる。簡単な具体例をあげておくと、</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">select</span><span class="ot"> name</span><span class="op">=</span><span class="st">&quot;category&quot;</span><span class="ot"> id</span><span class="op">=</span><span class="st">&quot;category-select-form&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">option</span><span class="ot"> value</span><span class="op">=</span><span class="st">&quot;A&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">option</span><span class="ot"> value</span><span class="op">=</span><span class="st">&quot;B&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">option</span><span class="ot"> value</span><span class="op">=</span><span class="st">&quot;C&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">select</span><span class="dt">&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">&quot;for-a&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">&quot;text&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">&quot;for-b&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">&quot;text&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">&quot;for-c&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">&quot;text&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> categorySelectForm <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&quot;.category-select-form&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> formsForA <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&quot;.for-a&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> formsForB <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&quot;.for-b&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> formsForC <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&quot;.for-c&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>categorySelectForm<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">&quot;change&quot;</span><span class="op">,</span> (<span class="bu">event</span>) <span class="kw">=&gt;</span> {</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="bu">event</span><span class="op">.</span><span class="at">target</span><span class="op">.</span><span class="at">value</span> <span class="op">===</span> <span class="st">&quot;A&quot;</span>) {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    formForA<span class="op">.</span><span class="at">classList</span><span class="op">.</span><span class="fu">remove</span>(<span class="st">&quot;hidden&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    formForA<span class="op">.</span><span class="at">classList</span><span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;hidden&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    formForA<span class="op">.</span><span class="at">classList</span><span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;hidden&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="bu">event</span><span class="op">.</span><span class="at">target</span><span class="op">.</span><span class="at">value</span> <span class="op">===</span> <span class="st">&quot;B&quot;</span>) {</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<p>のようなイメージで、これだけでも結構手間がかかることがわかるかと思う。実際にはさらに条件が複雑で、種別がAで、選択肢XがYのとき、など、2つ以上の条件を考慮しないといけないことも多い。また、あるフォームの内容に基づいて他のフォームの内容を補完する、などの制御も必要になっている。</p>
+<h2 id="検討">検討</h2>
+<p>以上のような状況を解決するために、JavaScriptのフレームワークを導入することにした。導入にあたって、以下の点を重視した。</p>
+<ul>
+<li>少人数で開発しているので、SPAとして別に開発などは行わない。あくまで主役はRailsのアプリケーションとなる。</li>
+<li>上と共通しているが、Ruby on Railsとの統合性を考えたい。Railsのviewの拡張のような形で使えるようにしたい。</li>
+<li>あまり独自の概念を学習しないといけないようなものは避けたい。</li>
+<li>手続き的なコードでのフォームの切り替えがわずらわしいことを解消したいので、リアクティブで宣言的な書き方ができるようにしたい。</li>
+</ul>
+<p>このような観点で考えて、以下のフレームワークを検討した。</p>
+<ul>
+<li><a href="https://react.dev/">React</a>
+<ul>
+<li>いわずと知れた、現在のデファクトのようなフレームワークだが、Railsとの統合の観点など今回重視したい観点からするとあまりマッチしていなさそうに思えた。</li>
+</ul></li>
+<li><a href="https://vuejs.org/">Vue</a>
+<ul>
+<li>今の会社はVueのSPAでのプロダクトがメインになっているので、会社との親和性も高そうであり、上の観点もそれなりに満たしていそうに思えたため候補の一つとして検討した。</li>
+</ul></li>
+<li><a href="https://hotwired.dev/">Hotwire</a>
+<ul>
+<li>最近のRailsといえばこれだが、ちょっと書いてみたところあまりリアクティブに書けるとはいえず、既存のペインポイントが解消されるのかかなり疑問だったため見送った。</li>
+</ul></li>
+<li>Alpine.js
+<ul>
+<li>リアクティブであるものの、覚えることがかなり少なく、とっつきやすそうだった。</li>
+<li>HTMLに埋め込むような形での運用がメインの機能の一つになるので、Railsとも統合できそうだった。</li>
+</ul></li>
+</ul>
+<p>最終的に、VueとAlpine.jsを検討して、今回はAlpine.jsのメリットが勝ちそうだ、と判断した。</p>
+<h2 id="alpine.jsとは">Alpine.jsとは</h2>
+<p>詳しくは<a href="https://alpinejs.dev/">公式のページ</a>や<a href="https://alpinejs.dev/start-here">ドキュメント</a>を見てもらうとよいが、</p>
+<ul>
+<li>覚えることがかなり少ない
+<ul>
+<li>“15 attributes, 6 properties, and 2 methods”</li>
+</ul></li>
+<li>HTMLの属性で表示制御などを行える
+<ul>
+<li>公式ページの冒頭の例にもあるが</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> x-data</span><span class="op">=</span><span class="st">&quot;{ open: false }&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> </span><span class="er">@</span><span class="ot">click</span><span class="op">=</span><span class="st">&quot;open = true&quot;</span><span class="dt">&gt;</span>Expand<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> x-show</span><span class="op">=</span><span class="st">&quot;open&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      Content...</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span></code></pre></div>
+このような形で書ける。VueやReactを触ったことがある人なら雰囲気でわかるかと思うが、buttonをクリックすることで <code>open</code> という内部的なデータが <code>false</code> から <code>true</code> になり、<code>span</code> の内容が表示される。</li>
+</ul>
+<h2 id="使ってみた所感">使ってみた所感</h2>
+<p>たとえば、冒頭の例をAlpine.jsを使って書き換えてみると、</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> x-data</span><span class="op">=</span><span class="st">&quot;{ category: 'A' }&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">select</span><span class="ot"> name</span><span class="op">=</span><span class="st">&quot;category&quot;</span><span class="ot"> x-model</span><span class="op">=</span><span class="st">&quot;category&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">option</span><span class="ot"> value</span><span class="op">=</span><span class="st">&quot;A&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">option</span><span class="ot"> value</span><span class="op">=</span><span class="st">&quot;B&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">option</span><span class="ot"> value</span><span class="op">=</span><span class="st">&quot;C&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">select</span><span class="dt">&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> x-show</span><span class="op">=</span><span class="st">&quot;category === 'A'&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">&quot;text&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> x-show</span><span class="op">=</span><span class="st">&quot;category === 'B'&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">&quot;text&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> x-show</span><span class="op">=</span><span class="st">&quot;category === 'C'&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">&quot;text&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span></code></pre></div>
+<p>となり、JSのコードは不要となる。既存コードを一部このように書き換えてみたところ、</p>
+<ul>
+<li>だいぶJSのコードが少なくなった。
+<ul>
+<li>上の例のようにHTMLに直接表示するかどうかのロジックは書けるようになるので、JS側のロジックは減った。</li>
+</ul></li>
+<li>宣言的に書けるので、見通しがよくなった。
+<ul>
+<li>手続き的に「Aの場合はXXXを表示してYYYを非表示にして…」のようにするよりは <code>x-if</code> で書くほうがだいぶ見通しがよい。</li>
+</ul></li>
+<li>既存のviewをそのまま使えるので書いた資産が無駄にならない。</li>
+<li>ある程度複雑なこともできる
+<ul>
+<li><p>ComponentとしてJSやTSファイルに書き出すやりかたもできる。</p>
+<ul>
+<li><code>x-data</code> にメソッドを定義しておくと、それを <code>click</code> のタイミングなどに呼出すようにできる。たとえば、</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Alpine<span class="op">.</span><span class="fu">data</span>(<span class="st">'sampleComponent'</span><span class="op">,</span> (initData) <span class="kw">=&gt;</span> {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">open</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">toggle</span>() {</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">open</span> <span class="op">=</span> <span class="op">!</span><span class="kw">this</span><span class="op">.</span><span class="at">open</span><span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>としておき、</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> x-data</span><span class="op">=</span><span class="st">&quot;sampleComponent&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> </span><span class="er">@</span><span class="ot">click</span><span class="op">=</span><span class="st">&quot;toggle()&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> x-show</span><span class="op">=</span><span class="st">&quot;open&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    Content</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span></code></pre></div>
+<p>のように書くことができる。HTMLに直接大量のコードを書くのが気持ち悪い場合はこのようにしてロジックをまとめられる。</p></li>
+<li><p>プラグイン機構があり、たとえば、 <a href="https://alpinejs.dev/plugins/mask">Mask plugin</a>をいれると、<code>x-mask</code> でフォームのフォーマットを強制できるなど、ちょっとリッチなこともできるようになっている</p></li>
+</ul></li>
+</ul>
+<p>総じて、おおむねよかった。もちろんReactやVueのような複雑なことはできないので、そこは割り切りが必要になる。そのため、万人におすすめできるものではないと思う。ただ、今回のような特定の状況にはよくマッチし、いわば「貧者のリアクティブフレームワーク」としてはだいぶよいのでは、と感じた。</p>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2025-05-21-alpine-js.html" class="hatena-bookmark-button" data-hatena-bookmark-title="Alpine.jsがそれなりによい、という話 - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+                <div class="privacy">
+                  This site uses <a href href="https://blog.cloudflare.com/privacy-first-web-analytics/" target="_blank">Cloudflare Web Analytics</a>. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">Cloudflare’s Privacy Policy</a> for more details.
+                </div>
+            </footer>
+      </div>
+    </body>
+</html>
