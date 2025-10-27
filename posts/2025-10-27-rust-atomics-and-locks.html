@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>「詳解 Rustアトミック操作とロック」を読んだ - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="「詳解 Rustアトミック操作とロック」を読んだ - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2025-10-27-rust-atomics-and-locks.html" />
+        <meta property="og:description" content="
+    Posted on 2025-10-27
+    
+    
+    , Tags: Rust, Memory Ordering
+    
+
+
+詳解 Rustアトミック操作とロック / Mara Bosを読了したので印象に残った点を中心にまとめる。
+" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="「詳解 Rustアトミック操作とロック」を読んだ - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="
+    Posted on 2025-10-27
+    
+    
+    , Tags: Rust, Memory Ordering
+    
+
+
+詳解 Rustアトミック操作とロック / Mara Bosを読了したので印象に残った点を中心にまとめる。
+" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <link rel="author" href="https://www.hatena.ne.jp/k0yoshitsugu">
+        <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <div id="content">
+                    <h1>「詳解 Rustアトミック操作とロック」を読んだ</h1>
+                    
+                    <div class="info">
+    <span class="date">Posted on 2025-10-27</span>
+    
+    
+    <span class="tags">, Tags: <a title="All pages tagged 'Rust'." href="../tags/Rust.html" rel="tag">Rust</a>, <a title="All pages tagged 'Memory Ordering'." href="../tags/Memory%20Ordering.html" rel="tag">Memory Ordering</a></span>
+    
+</div>
+
+<p><a href="https://www.oreilly.co.jp/books/9784814400515/">詳解 Rustアトミック操作とロック / Mara Bos</a>を読了したので印象に残った点を中心にまとめる。</p>
+<!--more-->
+<p><a href="https://bootcamp.fjord.jp/">フィヨルドブートキャンプ</a>のDiscord上で<a href="https://x.com/udzura"><span class="citation" data-cites="udzura">@udzura</span></a>さんにおすすめいただき、読んだ。</p>
+<h2 id="内容の概要">内容の概要</h2>
+<p>この書籍は低レイヤーの並行プログラミングに関連する知識をRustをベースにして学べるものだ。Rust固有の話が多いが、原理となる知識や考え方は他のプログラミング言語にも活かせるのではないかと思う。</p>
+<p>章立てとしては、1章でRustの基本に簡単に触れた後、2章ではアトミック操作の概要に触れる。3章で重要な概念であるメモリオーダリングについての解説が1章まるごとある。4章から6章はスピンロック、チャンネル、Arcの実装を実際のRust標準ライブラリ実装に近い形で組み立てていく。さらに7章以降ではアセンブリなどさらに低レイヤ部分を掘り下げていく。</p>
+<h2 id="気になった部分">気になった部分</h2>
+<h3 id="メモリオーダリングの使い分け">メモリオーダリングの使い分け</h3>
+<p><a href="../posts/2025-04-09-memory-barrier.html">以前の記事</a>で、メモリオーダリングについては自分なりにまとめていた。
+ただ、このときは</p>
+<blockquote>
+<p><code>Ordering::SeqCst</code> などの「シンプルな」(おそらくここではコードを読んで理解する素朴な実行順序に近いものがシンプルと表現されている)ものをまず使うようにする。その後計測してボトルネックとなるところを最適化していく。という流れが推奨されている。</p>
+</blockquote>
+<p>と <code>Ordering::SeqCst</code> を「とりあえず」使っておけばOK、という結論にとどまっていた。そのあたりの理解の浅さをこの書籍である程度補完できたように思う。
+本書によれば</p>
+<blockquote>
+<p>一番わかりやすいメモリオーダリングのように思うかもしれないが、SeqCst オーダリングが実際に必要になることはほとんどない。ほとんどすべての場合において、通常の Acquire/Releaseオーダリングで十分だ。</p>
+</blockquote>
+<p>と言われている。以前の記事でも書いたが、 <code>Ordering::SeqCst</code> はコストが高いので避けられるのなら避けるに越したことはない。本書を読むことで、そのあたりの理解の解像度が上がったように思う。</p>
+<h3 id="メモリオーダリングの形式定義">メモリオーダリングの形式定義</h3>
+<p>また、本文中に</p>
+<blockquote>
+<p>個々のメモリオーダリングは、それぞれ厳密に形式的に定義されている。</p>
+</blockquote>
+<p>という記述があり、気になった。「先行発生関係(happens-before relationships)」について簡易的に<a href="https://en.wikipedia.org/wiki/Happened-before">Wikipediaの記述</a>を参照すると、</p>
+<blockquote>
+<p>The happened-before relation is formally defined as the least strict partial order on events such that: …</p>
+</blockquote>
+<p>とあり、strict partial order(強半順序関係)、つまり</p>
+<ul>
+<li>非反射律(Irreflexivity)
+<ul>
+<li>自分自身とは順序関係がない。つまり自分自身の先行発生関係については成立しない</li>
+</ul></li>
+<li>推移律(Transitivity)
+<ul>
+<li>ある操作a, 操作b, 操作cについて先行発生関係が a -&gt; b かつ b -&gt; cとなっているときには a -&gt; c が成り立つ</li>
+</ul></li>
+<li>反対称律(Asymmetry)
+<ul>
+<li>ある操作aと操作bについてa -&gt; bという先行発生関係があるならb -&gt; a は成立しない</li>
+</ul></li>
+</ul>
+<p>ということが定義されているようだ。半順序なので順序関係がない場合がある。普段コードを書いていると上から下に実行順序が決まっているように思えるため、この「順序が決まらない」という部分が直感に反し、難しいポイントだと感じた。</p>
+<h3 id="ロックの実装">ロックの実装</h3>
+<p>4章ではスピンロックの実装に <code>Guard</code> という概念が登場する。この <code>Guard</code> 型がdropされるときにあわせてロックを開放することで、 <code>Guard</code> が生存している限りは安全に値を参照できることを保証するものだ。
+これは実際の <code>Mutex</code> が <code>MutexGuard</code> を返すことの仕組みをあらためて実感できたように思う。</p>
+<h3 id="その他">その他</h3>
+<p>OSプリミティブを使ったロック実装の最適化なども後半で出てくる。一通りは読んで、理解したつもりになった。ただ、実際に実務で使えるレベルかといわれるとそうでもないところも多いので、折に触れて読み返したい。<br />
+x86-64のアセンブリだとRelaxedとAcquire/Releaseが同じになる、というのは豆知識として面白かった。</p>
+<h2 id="まとめ">まとめ</h2>
+<p>総じて、今までより一段深いところまで理解が進んだように感じるよい書籍だった。すすめてくださったudzuraさんに感謝。</p>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2025-10-27-rust-atomics-and-locks.html" class="hatena-bookmark-button" data-hatena-bookmark-title="「詳解 Rustアトミック操作とロック」を読んだ - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+</div>
+
+                    
+                </div>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+                <div class="privacy">
+                  This site uses <a href href="https://blog.cloudflare.com/privacy-first-web-analytics/" target="_blank">Cloudflare Web Analytics</a>. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">Cloudflare’s Privacy Policy</a> for more details.
+                </div>
+            </footer>
+      </div>
+    </body>
+</html>
