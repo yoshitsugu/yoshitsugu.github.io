@@ -107,10 +107,12 @@ body {
       }
       .pure-menu-link {
         background-color: var(--background-color);
+        color: var(--menu-link-color);
         &:hover,
         &:focus,
         &:active {
           background-color: var(--menu-link-background-color);
+          color: var(--link-active-color);
         }
       }
       border-bottom: 2px #777 solid;
@@ -123,6 +125,14 @@ body {
       color: var(--color);
       line-height: 2;
       font-size: 1rem;
+      a {
+        border-bottom: 1px dashed #989898;
+        padding-bottom: 0.1em;
+      }
+      a:hover,
+      a:focus {
+        text-decoration-thickness: 0.2em;
+      }
       h1 {
         font-size: 1.6rem;
         color: var(--main-color);
