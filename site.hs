@@ -150,6 +150,7 @@ postCtx :: Context String
 postCtx =
   dateField "date" "%Y-%m-%d"
     `mappend` descriptionField "description" "content"
+    `mappend` constField "isPost" "isPost"
     `mappend` defaultCtx
 
 postCtxWithTags :: Tags -> Context String

@@ -23,9 +23,13 @@
         <link rel="stylesheet" href="/css/pure-min.css">
         <link rel="stylesheet" href="/css/grids-responsive-min.css">
         <link rel="stylesheet" href="/css/blog.css">
+        $if(isPost)$
         <link rel="stylesheet" href="/css/highlight.css">
+        $endif$
         <link rel="author" href="https://www.hatena.ne.jp/k0yoshitsugu/" />
-        <script type="text/javascript" id="MathJax-script" async src="/js/tex-chtml.js"></script>
+        $if(isPost)$
+        <script type="text/javascript" id="MathJax-script" defer src="/js/tex-chtml.js"></script>
+        $endif$
     </head>
     <body>
         <div id="wrapper">
