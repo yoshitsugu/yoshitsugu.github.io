@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-import qualified Data.Functor
 import           Hakyll
 import qualified Skylighting.Format.HTML  as SF
 import qualified Skylighting.Styles       as SS
@@ -23,14 +22,6 @@ main = hakyll $ do
   match (fromList ["robots.txt"]) $ do
     route idRoute
     compile copyFileCompiler
-
-  match "css/*.scss" $ do
-    route $ setExtension "css"
-    compile $
-      ( getResourceString
-          >>= withItemBody (unixFilter "sass" ["--stdin"])
-      )
-        Data.Functor.<&> fmap compressCss
 
   create ["css/highlight.css"] $ do
     route idRoute
