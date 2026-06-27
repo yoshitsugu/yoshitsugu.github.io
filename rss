@@ -7,8 +7,25 @@
         <description><![CDATA[yoshitsugu's blog]]></description>
         <atom:link href="https://yoshitsugu.net/rss" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Mon, 27 Oct 2025 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sat, 27 Jun 2026 00:00:00 UT</lastBuildDate>
         <item>
+    <title>プログラミング言語をAI駆動で開発した</title>
+    <link>https://yoshitsugu.net/posts/2026-06-27-goby-lang.html</link>
+    <description><![CDATA[
+    Posted on 2026-06-27
+    
+    
+    , Tags: Goby, Codex, Claude Code, AI
+    
+
+
+プログラミング言語をAIツールで開発したので、その経緯や現時点の感想を記録する。
+]]></description>
+    <pubDate>Sat, 27 Jun 2026 00:00:00 UT</pubDate>
+    <guid>https://yoshitsugu.net/posts/2026-06-27-goby-lang.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+<item>
     <title>「詳解 Rustアトミック操作とロック」を読んだ</title>
     <link>https://yoshitsugu.net/posts/2025-10-27-rust-atomics-and-locks.html</link>
     <description><![CDATA[
@@ -159,23 +176,6 @@ A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout
 ]]></description>
     <pubDate>Tue, 20 Apr 2021 00:00:00 UT</pubDate>
     <guid>https://yoshitsugu.net/posts/2021-04-20-effective-retrospective.html</guid>
-    <dc:creator>Kota Yoshitsugu</dc:creator>
-</item>
-<item>
-    <title>HaskellのLinearTypes言語拡張について少し調べた</title>
-    <link>https://yoshitsugu.net/posts/2021-02-13-linear-haskell.html</link>
-    <description><![CDATA[
-    Posted on 2021-02-13
-    
-    
-    , Tags: Linear Haskell, Haskell, LinearTypes
-    
-
-
-最近リリースされた GHC 9.0.1 で使えるようになった LinearTypes 言語拡張について気になったので調べた。
-]]></description>
-    <pubDate>Sat, 13 Feb 2021 00:00:00 UT</pubDate>
-    <guid>https://yoshitsugu.net/posts/2021-02-13-linear-haskell.html</guid>
     <dc:creator>Kota Yoshitsugu</dc:creator>
 </item>
 

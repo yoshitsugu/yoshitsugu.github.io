@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <link rel="preconnect" href="https://yoshitsugu.net">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>プログラミング言語をAI駆動で開発した - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="プログラミング言語をAI駆動で開発した - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2026-06-27-goby-lang.html" />
+        <meta property="og:description" content="
+    Posted on 2026-06-27
+    
+    
+    , Tags: Goby, Codex, Claude Code, AI
+    
+
+
+プログラミング言語をAIツールで開発したので、その経緯や現時点の感想を記録する。
+" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="プログラミング言語をAI駆動で開発した - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="
+    Posted on 2026-06-27
+    
+    
+    , Tags: Goby, Codex, Claude Code, AI
+    
+
+
+プログラミング言語をAIツールで開発したので、その経緯や現時点の感想を記録する。
+" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        
+        <link rel="stylesheet" href="../css/highlight.css">
+        
+        <link rel="author" href="https://www.hatena.ne.jp/k0yoshitsugu/" />
+        
+        <script type="text/javascript" id="MathJax-script" defer src="../js/tex-chtml.js"></script>
+        
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <main id="content" role="main">
+                    <h1>プログラミング言語をAI駆動で開発した</h1>
+
+                    <div class="info">
+    <span class="date">Posted on 2026-06-27</span>
+    
+    
+    <span class="tags">, Tags: <a title="All pages tagged 'Goby'." href="../tags/Goby.html" rel="tag">Goby</a>, <a title="All pages tagged 'Codex'." href="../tags/Codex.html" rel="tag">Codex</a>, <a title="All pages tagged 'Claude Code'." href="../tags/Claude%20Code.html" rel="tag">Claude Code</a>, <a title="All pages tagged 'AI'." href="../tags/AI.html" rel="tag">AI</a></span>
+    
+</div>
+
+<p>プログラミング言語をAIツールで開発したので、その経緯や現時点の感想を記録する。</p>
+<!--more-->
+<h2 id="自作プログラミング言語">自作プログラミング言語</h2>
+<p><a href="https://github.com/yoshitsugu/goby">Goby</a>という言語をAIツールを使って開発した。Gobyは<a href="https://antelang.org/">Ante</a>や<a href="https://gleam.run/">Gleam</a>などの言語の影響を受けた関数型言語になっている。プログラミング言語自体よりは、その開発プロセスをAIにどの程度任せられるかに興味があった。<br />
+ちなみに、Gobyという名前は魚のハゼからとっている。GoとRubyには関係ない。</p>
+<h3 id="言語の特徴">言語の特徴</h3>
+<p>当初以下を目的として指示した。</p>
+<ul>
+<li>静的型付き関数型言語</li>
+<li>Algebraic Effectsをサポート</li>
+<li>あまり複雑でない文法</li>
+<li>ツールなどのエコシステムの充実</li>
+</ul>
+<h3 id="開発状況">開発状況</h3>
+<p>AIツールでの開発で得られる成果と限界は、おおよそ把握できた。
+現在は言語のコンセプトを見直している段階で、開発は一旦止まっている。</p>
+<h4 id="できたこと">できたこと</h4>
+<ul>
+<li><a href="https://github.com/yoshitsugu/goby/tree/main/examples">examples</a>にあるコードは動いている。</li>
+<li><a href="https://adventofcode.com/2025">Advent Of Code 2025</a>のDay 4の問題を<a href="https://github.com/yoshitsugu/aoc2025/tree/main/04">解いた</a>。</li>
+<li><a href="https://github.com/yoshitsugu/goby/tree/main/tooling">tooling</a>にてEmacs, Vim, VSCodeのシンタックスハイライトとVSCode向けのLSPクライアントを実装している</li>
+</ul>
+<h4 id="できていないこと">できていないこと</h4>
+<ul>
+<li>少し複雑なコードではエラーになる場合がある
+<ul>
+<li>配列まわりの動作が不安定である</li>
+</ul></li>
+<li>簡単なツールしかなく「ツールなどのエコシステムの充実」には達していない</li>
+</ul>
+<h2 id="開発プロセス">開発プロセス</h2>
+<p>本記事の主題は、CodexやClaude CodeなどのAIに開発の大部分を任せたとき、どこまで進められるかである。
+やり方としては以下のような開発プロセスをとった。</p>
+<ol type="1">
+<li>まずは言語設計の大枠をAIに伝え、設計書としてドキュメントに書き出してもらうとともに、未決定の論点を書き出してもらう。</li>
+<li>言語設計から、ベースとなる部分をAIにより開発</li>
+<li>その後は各機能や要件ごとに以下のように開発ステップをSKILLとしてまとめて開発をすすめていく</li>
+</ol>
+<p>開発にはCodexとClaude Code両方利用した。(両方一番低価格の有料プランに加入した。)
+3について、1つの機能や要件に対して、以下の通りのプロセスをSKILLとして設定した。</p>
+<ol start="0" type="1">
+<li>リポジトリ用のワークスペース(リポジトリ外)を設定</li>
+<li>計画を内部ワークスペースドキュメントに書き出す。</li>
+<li>計画をレビューする。ここはClaude CodeならCodexにレビューを依頼する、CodexならClaude Codeに依頼するとした。</li>
+<li>レビューの指摘をうけて計画を修正</li>
+<li>開発をすすめる</li>
+<li>テスト、リントなどの品質ゲートを実行する</li>
+<li>コードレビューをする。ここもClaude CodeならCodexにレビューを依頼する、CodexならClaude Codeに依頼するとした。</li>
+<li>レビューをうけて修正する。</li>
+<li>テスト、リントなどの品質ゲートを実行する</li>
+<li>コードレビューを再度する。ここもClaude CodeならCodexにレビューを依頼する、CodexならClaude Codeに依頼するとした。
+<ul>
+<li>ここでは観点を変えてレビューするような指示をした。</li>
+</ul></li>
+<li>レビューをうけて修正する。</li>
+<li>テスト、リントなどの品質ゲートを実行する</li>
+<li>commit &amp; push</li>
+</ol>
+<p>AIの作業状況は人間も定期的に確認しており、方針に問題がありそうな場合は介入してアプローチや計画を修正させた。
+昨今話題の<a href="https://addyosmani.com/blog/loop-engineering/">Loop Engineering</a>のように、勝手にループを繰り返すようにはしていない。</p>
+<h2 id="所感">所感</h2>
+<p>開発をすすめていての現時点の所感を整理する。</p>
+<h3 id="うまく進んだ点">うまく進んだ点</h3>
+<ul>
+<li>最小限の機能が動作する状態までは速い。
+<ul>
+<li>最初のscaffold的な部分や、四則演算が動くところくらいはその日のうちにできた。</li>
+</ul></li>
+<li>Algebraic Effectsの理解が浅いまま開発を開始したが、結果として自分の理解を深める機会にもなった。</li>
+</ul>
+<h3 id="課題">課題</h3>
+<ul>
+<li>ある程度開発が進んでくると、変更が保守的になってくる。
+<ul>
+<li>明示的に長期的な目線での設計をするように、という指示をいれないと局所的なif文追加などに寄りやすい。</li>
+<li>コードベースが増えるにつれ、既存コードの影響が大きくなってくるように感じた。</li>
+</ul></li>
+</ul>
+<h3 id="その他">その他</h3>
+<ul>
+<li>結局何を作らせるかが大事で、指示が曖昧であれば成果物も曖昧になる。Algebraic Effectsの理解が浅いまま設計を指示した部分では、後で問題になることが多かった。</li>
+</ul>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2026-06-27-goby-lang.html" class="hatena-bookmark-button" data-hatena-bookmark-title="プログラミング言語をAI駆動で開発した - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+</div>
+
+
+                </main>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+                <div class="privacy">
+                  This site uses <a href="https://blog.cloudflare.com/privacy-first-web-analytics/" target="_blank">Cloudflare Web Analytics</a>. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">Cloudflare’s Privacy Policy</a> for more details.
+                </div>
+            </footer>
+      </div>
+    </body>
+</html>
