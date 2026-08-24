@@ -7,8 +7,25 @@
         <description><![CDATA[yoshitsugu's blog]]></description>
         <atom:link href="https://yoshitsugu.net/rss" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sat, 27 Jun 2026 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Mon, 24 Aug 2026 00:00:00 UT</lastBuildDate>
         <item>
+    <title>「エンジニアリング戦略の作り方」を読んだ</title>
+    <link>https://yoshitsugu.net/posts/2026-08-24-crafting-engineering-strategy.html</link>
+    <description><![CDATA[
+    Posted on 2026-08-24
+    
+    
+    , Tags: Strategy, Book Review
+    
+
+
+「エンジニアリング戦略の作り方」 / Will Larson (岩瀬 義昌、岩瀬 迪子 訳) を読んだので感想を書く。
+]]></description>
+    <pubDate>Mon, 24 Aug 2026 00:00:00 UT</pubDate>
+    <guid>https://yoshitsugu.net/posts/2026-08-24-crafting-engineering-strategy.html</guid>
+    <dc:creator>Kota Yoshitsugu</dc:creator>
+</item>
+<item>
     <title>プログラミング言語をAI駆動で開発した</title>
     <link>https://yoshitsugu.net/posts/2026-06-27-goby-lang.html</link>
     <description><![CDATA[
@@ -159,23 +176,6 @@ A Philosophy of Software Design, 2nd Edition (English Edition) / John Ousterhout
 ]]></description>
     <pubDate>Tue, 22 Jun 2021 00:00:00 UT</pubDate>
     <guid>https://yoshitsugu.net/posts/2021-06-22-start-learning-category-theory.html</guid>
-    <dc:creator>Kota Yoshitsugu</dc:creator>
-</item>
-<item>
-    <title>ふりかえりで気をつけていること</title>
-    <link>https://yoshitsugu.net/posts/2021-04-20-effective-retrospective.html</link>
-    <description><![CDATA[
-    Posted on 2021-04-20
-    
-    
-    , Tags: ふりかえり, Thinking
-    
-
-
-個人でもチームでも「ふりかえり」をすることは一般的だと思う。今回はその中で個人的に気をつけていることをまとめた。
-]]></description>
-    <pubDate>Tue, 20 Apr 2021 00:00:00 UT</pubDate>
-    <guid>https://yoshitsugu.net/posts/2021-04-20-effective-retrospective.html</guid>
     <dc:creator>Kota Yoshitsugu</dc:creator>
 </item>
 
