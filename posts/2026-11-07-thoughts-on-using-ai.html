@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <link rel="preconnect" href="https://yoshitsugu.net">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>AIを便利に使うために考えていること - TSUGULOG</title>
+        <meta name="description" content="yoshitsugu's blog">
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+        <meta property="og:title" content="AIを便利に使うために考えていること - TSUGULOG" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta property="og:site_name" content="TSUGULOG" />
+        <meta property="og:url" content="https://yoshitsugu.net/posts/2026-11-07-thoughts-on-using-ai.html" />
+        <meta property="og:description" content="
+    Posted on 2026-11-07
+    
+    
+    , Tags: Thinking, AI
+    
+
+
+AIと日々仕事をするようになって感じていることを記録として残しておく。
+" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@_yoshitsugu" />
+        <meta name="twitter:title" content="AIを便利に使うために考えていること - TSUGULOG" />
+        <meta name="twitter:image" content="https://yoshitsugu.net/images/title.png" />
+        <meta name="twitter:description" content="
+    Posted on 2026-11-07
+    
+    
+    , Tags: Thinking, AI
+    
+
+
+AIと日々仕事をするようになって感じていることを記録として残しておく。
+" />
+        <link rel="stylesheet" href="../css/pure-min.css">
+        <link rel="stylesheet" href="../css/grids-responsive-min.css">
+        <link rel="stylesheet" href="../css/blog.css">
+        
+        <link rel="stylesheet" href="../css/highlight.css">
+        
+        <link rel="author" href="https://www.hatena.ne.jp/k0yoshitsugu/" />
+        
+        <script type="text/javascript" id="MathJax-script" defer src="../js/tex-chtml.js"></script>
+        
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <header id="header" class="pure-menu pure-menu-horizontal">
+                    <div id="logo" class="pure-menu-heading pure-menu-link">
+                        <a href="../" class="pure-menu-link">TSUGULOG</a>
+                    </div>
+                    <ul class="pure-menu-list header-menu">
+                        <li class="pure-menu-item"><a href="../" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="../archive.html" class="pure-menu-link">Archive</a></li>
+                        <li class="pure-menu-item"><a href="../about.html" class="pure-menu-link">About</a></li>
+                    </ul>
+                </header>
+                <main id="content" role="main">
+                    <h1>AIを便利に使うために考えていること</h1>
+
+                    <div class="info">
+    <span class="date">Posted on 2026-11-07</span>
+    
+    
+    <span class="tags">, Tags: <a title="All pages tagged 'Thinking'." href="../tags/Thinking.html" rel="tag">Thinking</a>, <a title="All pages tagged 'AI'." href="../tags/AI.html" rel="tag">AI</a></span>
+    
+</div>
+
+<p>AIと日々仕事をするようになって感じていることを記録として残しておく。</p>
+<!--more-->
+<h2 id="生成aiのハルシネーションとポストトゥルース">生成AIのハルシネーションとポストトゥルース</h2>
+<p>先日、<a href="https://www.amazon.co.jp/dp/B09V53VMC1">啓蒙思想2.0〔新版〕 / ジョセフ ヒース</a> という本を読んでいると、以下のような話が出てきた。</p>
+<blockquote>
+<p>オランダでは高齢者は変わったブレスレットをしています。「私を安楽死させるな」と書かれたものです。オランダには安楽死があるけれども、全死亡の10パーセントまでを占め、さらに安楽死の半分は高齢の患者に強要されているんです。だから、オランダの高齢者は病院へ行きたがらず、予算の都合で入院した病院から生きて出られないことを恐れ、他国に行く。<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+</blockquote>
+<p>これは2012年のアメリカ大統領選の共和党予備選挙の時期に、リック・サントラム氏が実際に発言したことだ。
+もちろん、これはほとんどが事実ではない。
+オランダには安楽死の制度があるものの、ここで語られているような実態ではない。</p>
+<p>私はこれを読んで、生成AIのハルシネーションっぽさを感じた。
+それらしいけど事実ではないことを、あたかも事実であるかのように語る様が似ている。
+もちろん、生成AIのハルシネーションを、人間による意図的な扇動と同じものとして扱う意図はない。</p>
+<p>生成AIは、人間による回答の評価などを使って、人間がよいと感じる回答を返すように調整されている。
+その評価が、正確さよりも人間の好みに合うことを優先してしまう場合もある<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>。
+政治家にも、事実に忠実に語るより、有権者が聞きたい話をするほうが支持を得られる場面がある。
+人間は得てして、事実をつきつめることを怠り、それっぽい話に納得することに満足してしまう。</p>
+<p>事実かどうかに加えて、受け手の感情に訴える言説も最近増えているのでは、という個人的な感覚がある。事実かどうかはわからない。
+生成AIはよく「よい質問ですね」「素晴らしい指摘ですね」という空虚な賛辞をいうし、政治家は有権者を政治に巻き込もうと、「あなたは今の政権によって虐げられている」という言説を展開することがある。
+こうした言葉が自分の気分や信念に合っていると、内容まで正しいと感じてしまいやすい。
+事実の正しさよりも、感情や信念に合うかどうかが重く受け止められる、というポストトゥルースの問題は、生成AIとのやりとりにも通じるように思う。</p>
+<h2 id="ai時代に必要な思考力">AI時代に必要な思考力</h2>
+<p>このように、事実でないことを事実のように語る言説が受け入れられることは、ある意味で人間の脆弱性を示している。
+政治家も生成AIも、人間がそれを望むからそうなっている、という面があるのは否定できない。</p>
+<p>これに対抗するためには、感情や「それらしさ」に左右されず、「考え続ける力」が必要になりそうだ。
+これは一旦結論がでたとしても、それを絶対の真理として扱わない、という姿勢も含んでいる。<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>たとえば、「女性は仕事ができない」という古びた価値観に固執するのはおかしい。
+ただ、そのカウンターとして「女性は仕事ができる」と主張するときも、性別だけで個人の能力を判断する枠組みにとどまっていないかは考えたい。
+「そもそも性別で考えるのがおかしいのでは」と根本を問うたり、「男性だけの内輪のカルチャーがある会社に女性を一人放り込んで、その女性が本来のパフォーマンスを出せるのか？」と環境要因やその他のシステムの力学を視野に入れたり、考えることはたくさんある。
+本来、簡単な二元論ではない。</p>
+<p>また、何が事実なのかを、いつでも私たちが一つに確定できるとは限らない。
+ある立場では事実として扱われていることも、他の立場からすると、その前提や確かめ方に異論がある場合もあるだろう。
+同じ事実を共有できても、その解釈や評価が異なることもある。
+だからこそ、「本当はこういう見方もあるのではないか」「他の立場もあるのではないか」と思いを馳せることが必要になってくる。
+その過程では、ネガティブケイパビリティ<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>とも呼ばれるような、結論を出さずに置いておくことに対する耐性も必要になるだろう。</p>
+<h2 id="aiと日々仕事をして感じること">AIと日々仕事をして感じること</h2>
+<p>最近は日々Claude Codeにコードをかかせ、私は指示をしている。コードはほとんど書いていない。
+AIがさまざまなことを考えてくれて、判断まで委ねられるように感じる場面が増えている。
+AIの答えを自分で検討せずに受け入れてしまうことは、認知的降伏（Cognitive surrender）<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>とも呼ばれている。</p>
+<p>このため、AIに対抗してしっかり考えたり、立ち止まったりすることが必要になっているような実感がある。
+AIに促されるままに実装をしていると、いつのまにか不要なことまでやってしまってプロダクトとしての負債となったり、局所最適な機能の集合体ができたりする。
+個々の提案がもっともらしくても、それを積み重ねた結果が、作りたいプロダクトに近づいているとは限らない。
+AIに惑わされないように勤務時間中は気を張って取り組み、常に「眉に唾をつけている状態」を強いられているような感覚がある。</p>
+<p>以前は「あとは実装するだけ」というところまで考えて手を動かす場面も多かったし<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>、少なくとも考える時間と手を動かす時間が多少は分かれていた。
+今は、AIが出してくる提案や実装について、次々と判断することになる。
+既に言及されていることではあるが<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>、仕事の強度が上がっているように感じる。
+それは判断の連続になるから、というのもあるが、「AIがいい加減なことを言っているかもしれない」という疑心による気疲れもあるように思う。
+プライベートで技術書を読んでいると、基本的に受け身でインプットできるので楽に感じる<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>。
+これからのプログラマ/ソフトウェアエンジニアの仕事では、こういう種類の疲労を伴う判断を引き受けることが、対価を得る仕事の大きな部分になるのだろうな、と思う。</p>
+<h2 id="aiを使っても依然として残ること">AIを使っても依然として残ること</h2>
+<p>一方で、AIが書いたコードをどこまで読むのか、という議論も毎日のように目にする。
+会社側が70点の品質で十分と考えているなら、同じ時間で90点の成果物を1つ出すより、70点の成果物を3つ出すほうが評価されるのではないか、という問題提起もある<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>。
+個人的には、たしかに実装の細かいところはあまり見なくなった。
+だが、「何が制約条件なのか？」という実装の前段の部分での読み解き、また、「何を作る/作らないと一番効果的ユーザーの目的を達成できるのか？」という問題は、それが要件レベルだったり実装レベルだったりするものの、日々考えている。
+依然として、作らないで効率化できる方法があるのなら、それが一番なのは変わりがない。作らないことで、未来に選択肢を残せる、というメリットもある。<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
+<p>これからも、何を作るか/作らないかは自分で考えていく必要があるのだろうと感じる。
+AIは学習したことをもとにさまざまな案を出してくれ、様々なアクションもできる。
+しかし、「で、どうしたいの？」という意思の部分は、人間が示していかないといけない。
+もちろん、AIに目標の案を出してもらうこともできる。ただ、それは適切な制約条件を与えないといけないし、最終的には自分で決めないといけない。また、中途半端にAIの知恵を借りるよりは、ゼロベースで自分で考えたあとにAIの案を見るほうが、より自分が大事にしていることを自覚しやすいように感じる。
+「私はこういうコードが書きたい。なぜなら、そこにこういう価値があるからだ」「私はこういう設計にしたい。なぜなら、長期的に見るとこういう成長をしそうだと仮説を立てているからだ」と、AIに主張していくことが必要になる。</p>
+<p>ただし、自分の意思を示すことと、その判断が正しいと決めつけることは違う。
+これも引用の引用で恐縮だが、<a href="https://www.amazon.co.jp/gp/product/B0CFXLKW3B/">〈公正(フェアネス)〉を乗りこなす / 朱 喜哲</a> に、ヨーゼフ・シュンペーターの言葉として以下のように書かれている<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>。</p>
+<blockquote>
+<p>自分のいだく確信というものが相対的な妥当性しかもたないということを自覚し、それでもなおひるまずにその信念を唱えること。それこそが、文明人を野蛮人から区別するのだ。</p>
+</blockquote>
+<p>前述の通り、自分も他人もAIも間違っているかもしれない、という想定はしつつも、「自分はこういう立場をとりたい」「こういう世界にしたい」と主張していかないと、AIの言うがままになってしまう。
+判断を保留する必要がある場面もあれば、不確かさを残したまま、ひとまず方針を決めて進む必要がある場面もあるだろう。
+間違いは真摯に受け入れ、訂正可能性には開かれた姿勢をとりつつ、自分の立場は示していく、という難しいバランス感覚がより求められていきそうだ。</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>『啓蒙思想2.0』の翻訳をそのまま引用。元は <a href="http://www.washingtonpost.com/blogs/fact-checker/post/euthanasia-in-the-netherlands-rick-santorums-bogus-statistics/2012/02/21/gIQAJaRbSR_blog.html">Glenn Kessler, “Euthanasia in the Netherlands: Rick Santorum’s Bogus Statistics,” The Fact Checker, Washington Post (February 22, 2012)</a>。発言内容とその検証は、<a href="https://www.factcheck.org/2012/02/santorums-bogus-euthanasia-claims/">FactCheck.orgの記事</a>でも確認できる。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>人間の評価が事実に忠実な回答よりもユーザーの信念に合う回答を好む場合があることは、<a href="https://arxiv.org/abs/2310.13548">Towards Understanding Sycophancy in Language Models</a> でも報告されている。こうした迎合は、事実と異なる内容を生成するハルシネーションとは区別されるが、両者が重なる場合もある。<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>これは<a href="https://www.amazon.co.jp/gp/product/B0GZTXR2TG/r">バラバラな世界で共に生きる　リチャード・ローティの哲学 / 朱 喜哲</a>でアイロニーとして紹介されていた考え方と基本的には同じだ。<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>ここで私が想定しているのは <a href="https://www.amazon.co.jp/dp/4480441093/">ネガティブケイパビリティで生きる</a>で語られているような在り方だ。<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="https://arstechnica.com/ai/2026/04/research-finds-ai-users-scarily-willing-to-surrender-their-cognition-to-llms/">“Cognitive surrender” leads AI users to abandon logical thinking, research finds</a>。紹介されている研究は、Shaw and Nave, <a href="https://ssrn.com/abstract=6097646">Thinking—Fast, Slow, and Artificial: How AI is Reshaping Human Reasoning and the Rise of Cognitive Surrender</a>。<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>もちろん、手を動かして初めて気づくこともある。<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p><a href="https://steve-yegge.medium.com/the-ai-vampire-eda6e4f07163">The AI Vampire</a><a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>もちろん、中にはでたらめな技術書もある。<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p><a href="https://www.mobtown.jp/article/old-engineer/">自分は旧時代のエンジニアになってしまったのでは</a><a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>Kent Beckの <a href="https://newsletter.kentbeck.com/p/the-cost-yagni-was-never-about">The Cost YAGNI Was Never About</a> では、YAGNIは単にコードを書く労力を節約するためのものではなく、必要な情報が揃うまで設計を確定せず、将来の選択肢を保つためのものだと説明されている。AIでコード生成が安くなっても、先回りした設計によって選択肢を狭めるコストは残る。<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>『〈公正(フェアネス)〉を乗りこなす』の記述をそのまま引用。原典は Schumpeter, J. (1942), Capitalism, Socialism, and Democracy, Harper &amp; Brothers, p.243。<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+<div class="social-buttons">
+<a href="http://b.hatena.ne.jp/entry/https://yoshitsugu.net/posts/2026-11-07-thoughts-on-using-ai.html" class="hatena-bookmark-button" data-hatena-bookmark-title="AIを便利に使うために考えていること - TSUGULOG" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+</div>
+
+
+                </main>
+            </div>
+            <footer id="footer">
+                &copy; 2016 Kota Yoshitsugu <br>
+                This site is powered by
+                <a href="http://jaspervdj.be/hakyll" target="_blank">Hakyll</a>
+                , <a href="http://purecss.io/" target="_blank">Pure.css</a>
+                <div class="privacy">
+                  This site uses <a href="https://blog.cloudflare.com/privacy-first-web-analytics/" target="_blank">Cloudflare Web Analytics</a>. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">Cloudflare’s Privacy Policy</a> for more details.
+                </div>
+            </footer>
+      </div>
+    </body>
+</html>
